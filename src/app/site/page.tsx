@@ -12,11 +12,12 @@ import clsx from 'clsx'
 import { Check } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link';
-import localFont from "next/font/local";
-
-const novaSquare = localFont({
-  src: "./fonts/NovaSquare.ttf"
-});
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { BackgroundBeams } from '@/components/modules/BackgroundBeams'
+import { HeroContainerScroll } from '@/components/modules/HeroContainerScroll'
+import MaxWidthWrapper from '@/components/ui/max-width-wrapper'
+import { StickyScroll } from '@/components/modules/StickyScrollReveal'
 
 export default async function Home() {
   // const prices = await stripe.prices.list({
@@ -34,28 +35,12 @@ export default async function Home() {
   }
 
   return (
-    <>
+    <div className='h-full'>
       <section className="h-full w-full md:pt-44 mt-[-70px] relative flex items-center justify-center flex-col ">
-        {/* grid */}
-
-        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#161616_1px,transparent_1px),linear-gradient(to_bottom,#161616_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)] -z-10" />
-
-        <p className="text-center">Run your agency, in one place</p>
-        <div className="bg-gradient-to-r from-primary to-secondary-foreground text-transparent bg-clip-text relative">
-          <h1 className={`text-9xl font-bold text-center md:text-[300px] ${novaSquare.className}`}>
-            Biznex
-          </h1>
-        </div>
-        {/* <div className="flex justify-center items-center relative md:mt-[-70px]">
-          <Image
-            src={'/assets/preview.png'}
-            alt="banner image"
-            height={1200}
-            width={1200}
-            className="rounded-tl-2xl rounded-tr-2xl border-2 border-muted"
-          />
-          <div className="bottom-0 top-[50%] bg-gradient-to-t dark:from-background left-0 right-0 absolute z-10"></div>
-        </div> */}
+        <MaxWidthWrapper>
+          <HeroContainerScroll />
+        </MaxWidthWrapper>
+        <BackgroundBeams />
       </section>
       <section className="flex justify-center items-center flex-col gap-4 md:!mt-20 mt-[-60px]">
         <h2 className="text-4xl text-center"> Choose what fits you right</h2>
@@ -128,6 +113,47 @@ export default async function Home() {
           ))}
         </div>
       </section>
-    </>
+      <section className="w-full mt-10 md:mt-20">
+        <MaxWidthWrapper>
+          <div className="flex flex-col gap-4 items-center">
+            <h2 className="text-4xl text-center font-medium">
+              Explore new features
+            </h2>
+            <div className="text-muted-foreground text-center">
+              <p>
+                Plura does everything possible to provide you with a convenient
+                tool for managing your agency.
+              </p>
+              <p>Here are just a few tools that may interest you.</p>
+            </div>
+          </div>
+        </MaxWidthWrapper>
+        <div className="py-10">
+          <StickyScroll />
+        </div>
+      </section>
+      <div className="h-[40rem] w-full rounded-md relative flex flex-col items-center justify-center antialiased">
+        <div className="max-w-2xl mx-auto p-4">
+          <h1 className="relative z-10 text-lg md:text-7xl  bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-600  text-center font-sans font-bold">
+            Join Biznex
+          </h1>
+          <p></p>
+          <p className="text-neutral-500 max-w-lg mx-auto my-2 text-sm text-center relative z-10">
+            Discover the power of seamless agency management with Biznex Agency
+            CRM. Experience the difference today and revolutionize the way you
+            manage your agency with Plura.
+          </p>
+          <div className="flex justify-center mt-8">
+            <Link
+              href="/agency"
+              className={cn(buttonVariants({ variant: "secondary" }), "w-20")}
+            >
+              Join
+            </Link>
+          </div>
+        </div>
+        <BackgroundBeams />
+      </div>
+    </div>
   )
 }

@@ -17,7 +17,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Plura',
+  title: 'Biznex',
   description: 'All in one Agency Solution',
 }
 
