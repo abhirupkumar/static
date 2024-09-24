@@ -36,13 +36,13 @@ export default async function Home() {
 
   return (
     <div className='h-full'>
-      <section className="h-full w-full md:pt-44 mt-[-70px] relative flex items-center justify-center flex-col ">
+      <section className="w-full relative">
         <MaxWidthWrapper>
           <HeroContainerScroll />
         </MaxWidthWrapper>
         <BackgroundBeams />
       </section>
-      <section className="flex justify-center items-center flex-col gap-4 md:!mt-20 mt-[-60px]">
+      <MaxWidthWrapper className="flex justify-center items-center flex-col gap-4 md:!mt-20 mt-[-60px]">
         <h2 className="text-4xl text-center"> Choose what fits you right</h2>
         <p className="text-muted-foreground text-center">
           Our straightforward pricing plans are tailored to meet your needs. If
@@ -112,7 +112,7 @@ export default async function Home() {
             </Card>
           ))}
         </div>
-      </section>
+      </MaxWidthWrapper >
       <section className="w-full mt-10 md:mt-20">
         <MaxWidthWrapper>
           <div className="flex flex-col gap-4 items-center">
