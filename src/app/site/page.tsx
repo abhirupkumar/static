@@ -102,7 +102,7 @@ export default async function Home() {
                     "w-full",
                     buttonVariants({
                       variant:
-                        card.title !== "Unlimited Saas"
+                        card.id !== "Unlimited Saas"
                           ? "secondary"
                           : "default",
                     })
