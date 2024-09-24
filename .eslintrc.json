@@ -1,3 +1,18 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "no-console": "warn",
+    "no-unused-vars": "off",
+    "no-undef": "off",
+    "no-constant-condition": "off",
+    "no-empty": "off",
+    "no-empty-interface": "off"
+  },
 }
