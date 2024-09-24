@@ -10,7 +10,6 @@ import { pricingCards } from '@/lib/constants'
 // import { stripe } from '@/lib/stripe'
 import clsx from 'clsx'
 import { Check } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -24,7 +23,7 @@ export default async function Home() {
   //   product: process.env.NEXT_PLURA_PRODUCT_ID,
   //   active: true,
   // })
-  let prices = {
+  const prices = {
     data: pricingCards.map((card) => ({
       nickname: card.title,
       unit_amount: 0,
