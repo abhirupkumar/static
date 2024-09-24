@@ -14,5 +14,5 @@
     "no-constant-condition": "off",
     "no-empty": "off",
     "no-empty-interface": "off"
-  },
+  }
 }
