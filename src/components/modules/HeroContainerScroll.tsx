@@ -81,7 +81,7 @@ export const HeroContainerScroll: React.FC<HeroContainerScrollProps> = ({ }) => 
                     <div className="text-center font-medium mt-4 z-[99999]">
                         <TypewriterEffect />
                     </div>
-                    <div className="bg-gradient-to-r from-primary to-secondary-foreground text-transparent bg-clip-text relative">
+                    <div className="bg-gradient-to-r from-teal-500 via-cyan-500 to-secondary-foreground text-transparent bg-clip-text relative">
                         <h1 className={`text-9xl font-bold text-center lg:text-[300px] md:text-[240px] ${novaSquare.className}`}>
                             Biznex
                         </h1>
