@@ -98,12 +98,14 @@ export default async function Home() {
                 </div>
                 <Link
                   href={`/agency?plan=${card.id}`}
-                  className={clsx(
-                    'w-full text-center bg-primary p-2 rounded-md',
-                    {
-                      '!bg-muted-foreground':
-                        card.nickname !== 'Unlimited Saas',
-                    }
+                  className={cn(
+                    "w-full",
+                    buttonVariants({
+                      variant:
+                        card.title !== "Unlimited Saas"
+                          ? "secondary"
+                          : "default",
+                    })
                   )}
                 >
                   Get Started
