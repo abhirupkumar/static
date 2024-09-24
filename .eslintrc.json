@@ -15,6 +15,6 @@
     "no-empty": "off",
     "no-empty-interface": "off",
     "prefer-const": "off",
-    "prefer-interface": "on"
+    "prefer-interface": "off"
   }
 }
