@@ -21,7 +21,7 @@ B (255 */
     --background: 216 100% 98.04%;
     --foreground: 213.6 100% 4.9%;
 
-    --primary: 214.12 100% 50%;
+    --primary: 260 100% 50%;
     --primary-foreground: 0 0% 100%;
 
     --card: 216 100% 98.04%;
@@ -65,6 +65,9 @@ B (255 */
     --background: 220 65% 3.52%;
     --foreground: 220 10% 97.2%;
 
+    --primary: 260 100% 44%;
+    --primary-foreground: 220 10% 97.2%;
+
     --muted: 220 50% 13.2%;
     --muted-foreground: 220 10% 54.4%;
 
@@ -76,9 +79,6 @@ B (255 */
 
     --border: 240 3.7% 15.9%;
     --input: 220 50% 13.2%;
-
-    --primary: 220 100% 44%;
-    --primary-foreground: 220 10% 97.2%;
 
     --secondary: 220 50% 13.2%;
     --secondary-foreground: 220 10% 97.2%;
