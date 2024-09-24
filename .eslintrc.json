@@ -13,6 +13,7 @@
     "no-undef": "off",
     "no-constant-condition": "off",
     "no-empty": "off",
-    "no-empty-interface": "off"
+    "no-empty-interface": "off",
+    "prefer-const": "off"
   }
 }
