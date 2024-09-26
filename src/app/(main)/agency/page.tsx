@@ -4,6 +4,7 @@ import { currentUser } from '@clerk/nextjs/server';
 import { Plan } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import React from 'react'
+import { constructMetadata } from "@/lib/utils";
 
 const Page = async ({
     searchParams,
@@ -39,7 +40,7 @@ const Page = async ({
 
     return (
         <div className="flex justify-center items-center mt-4">
-            <div className="max-w-[850px] border-[1px] p-4 rounded-xl">
+            <div className="max-w-[850px] flex flex-col gap-8">
                 <h1 className="text-4xl"> Create An Agency</h1>
                 <AgencyDetails
                     data={{ companyEmail: authUser?.emailAddresses[0].emailAddress }}
@@ -49,4 +50,9 @@ const Page = async ({
     )
 }
 
-export default Page
+export default Page;
+
+
+export const metadata = constructMetadata({
+    title: "Agency - Plura",
+});
