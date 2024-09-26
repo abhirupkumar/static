@@ -1,21 +1,18 @@
 import { ModeToggle } from '@/components/global/mode-toggle'
 import { UserButton } from '@clerk/nextjs'
-import { User } from '@clerk/nextjs/server'
+import { currentUser } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import React from 'react'
 import localFont from "next/font/local";
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 
-type Props = {
-  user?: null | User
-}
-
 const novaSquare = localFont({
   src: "../../../app/fonts/NovaSquare.ttf"
 });
 
-const Navigation = ({ user }: Props) => {
+const Navigation = async () => {
+  const user = await currentUser();
   return (
     <header className="p-4 flex items-center justify-between backdrop-blur-sm relative">
       <aside className="flex items-center gap-2">
@@ -60,9 +57,9 @@ const Navigation = ({ user }: Props) => {
       </nav>
       <aside className="flex items-center gap-2">
         <Link href="/agency" className={cn(buttonVariants())}>
-          Get Started
+          {user ? "Dashboard" : "Get Started"}
         </Link>
-        <UserButton />
+        {user && <UserButton />}
         <ModeToggle />
       </aside>
     </header>
