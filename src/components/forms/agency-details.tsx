@@ -66,7 +66,7 @@ const AgencyDetails = ({ data }: Props) => {
         <AlertDialog>
             <Card className="w-full my-10">
                 <CardHeader>
-                    <CardTitle>Agency Information</CardTitle>
+                    <CardTitle>Create an Agency</CardTitle>
                     <CardDescription>
                         Lets create an agency for you business. You can edit agency settings
                         later from the agency settings tab.
