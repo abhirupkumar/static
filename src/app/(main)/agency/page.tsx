@@ -53,5 +53,5 @@ export default Page;
 
 
 export const metadata = constructMetadata({
-    title: "Agency - Plura",
+    title: "Agency - Biznex",
 });
