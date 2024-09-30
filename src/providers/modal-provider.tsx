@@ -47,7 +47,9 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
     ) => {
         if (modal) {
             if (fetchData) {
-                setData({ ...data, ...(await fetchData()) })
+                const newData = await fetchData();
+                if (newData) setData({ ...data, ...newData })
+                else setData({})
             }
             setShowingModal(modal)
             setIsOpen(true)
