@@ -115,6 +115,10 @@ B (255 */
   background-size: 25px 25px;
 }
 
+.cl-userButtonPopoverCard {
+  z-index: 99999 !important;
+}
+
 .use-automation-zoom-in {
   animation: automation-zoom-in 0.5s;
 }
