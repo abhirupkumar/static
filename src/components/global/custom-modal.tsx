@@ -3,11 +3,11 @@ import { useModal } from '@/providers/modal-provider'
 import React from 'react'
 import {
     Dialog,
+    DialogTitle,
     DialogContent,
     DialogDescription,
     DialogHeader,
 } from '../ui/dialog'
-import { DialogTitle } from '@radix-ui/react-dialog'
 
 type Props = {
     title: string
