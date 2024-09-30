@@ -43,11 +43,12 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
 
     const setOpen = async (
         modal: React.ReactNode,
-        fetchData?: () => Promise<any>
+        fetchData: () => Promise<any>
     ) => {
         if (modal) {
             if (fetchData) {
                 const newData = await fetchData();
+                // Type error: This kind of expression is always truthy. fix it
                 setData({ ...data, ...newData } || {})
             }
             setShowingModal(modal)
