@@ -118,6 +118,18 @@ B (255 */
   z-index: 99999 !important;
 }
 
+.cl-userButtonPopoverFooter {
+  display: none !important;
+}
+
+.cl-navbar>div:nth-child(3) {
+  display: none !important;
+}
+
+.cl-footer>div:nth-child(2) {
+  display: none !important;
+}
+
 .use-automation-zoom-in {
   animation: automation-zoom-in 0.5s;
 }

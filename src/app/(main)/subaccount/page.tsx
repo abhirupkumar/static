@@ -1,5 +1,6 @@
 import Unauthorized from '@/components/unauthorized'
 import { getAuthUserDetails, verifyAndAcceptInvitation } from '@/lib/queries'
+import { constructMetadata } from '@/lib/utils'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
@@ -8,12 +9,12 @@ type Props = {
 }
 
 const SubAccountMainPage = async ({ searchParams }: Props) => {
-    const agencyId = await verifyAndAcceptInvitation()
+    const agencyId = await verifyAndAcceptInvitation();
     if (!agencyId) {
         return <Unauthorized />
     }
 
-    const user = await getAuthUserDetails()
+    const user = await getAuthUserDetails();
     if (!user) return
 
     const getFirstSubaccountWithAccess = user.Permissions.find(
@@ -37,3 +38,8 @@ const SubAccountMainPage = async ({ searchParams }: Props) => {
 }
 
 export default SubAccountMainPage
+
+
+export const metadata = constructMetadata({
+    title: "Subaacount - Biznex",
+});
