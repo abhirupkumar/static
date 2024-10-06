@@ -10,13 +10,11 @@ export function constructMetadata({
   title = "Plura - run your agency",
   description = "Plura - run your agency in just aone place",
   image = "/assets/preview.png",
-  icons = "/assets/plura-logo.svg",
   noIndex = false,
 }: {
   title?: string;
   description?: string;
   image?: string;
-  icons?: string;
   noIndex?: boolean;
 } = {}): Metadata {
   return {
@@ -36,10 +34,9 @@ export function constructMetadata({
       title,
       description,
       images: [image],
-      creator: "@denvudd",
+      creator: "@abhirupkumar",
     },
-    icons,
-    metadataBase: new URL("https://digital-hippo-production-denvudd.up.railway.app"),
+    metadataBase: new URL("https://biznex.tech"),
     ...(noIndex && {
       robots: {
         index: false,
