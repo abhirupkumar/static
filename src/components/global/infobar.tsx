@@ -63,7 +63,7 @@ const InfoBar = ({ notifications, subAccountId, className, role }: Props) => {
                             <SheetHeader className="text-left">
                                 <SheetTitle>Notifications</SheetTitle>
                                 <SheetDescription>
-                                    {(role === 'AGENCY_ADMIN' || role === 'AGENCY_OWNER') && (
+                                    {(role === 'PROJECT_ADMIN' || role === 'PROJECT_OWNER') && (
                                         <Card className="flex items-center justify-between p-4">
                                             Current Subaccount
                                             <Switch onCheckedChange={handleClick} />

@@ -102,7 +102,7 @@ const TagCreator = ({ getSelectedTags, subAccountId, defaultTags }: Props) => {
             })
 
             await saveActivityLogsNotification({
-                agencyId: undefined,
+                projectId: undefined,
                 description: `Updated a tag | ${response?.name}`,
                 subaccountId: subAccountId,
             })
@@ -129,7 +129,7 @@ const TagCreator = ({ getSelectedTags, subAccountId, defaultTags }: Props) => {
             })
 
             await saveActivityLogsNotification({
-                agencyId: undefined,
+                projectId: undefined,
                 description: `Deleted a tag | ${response?.name}`,
                 subaccountId: subAccountId,
             })

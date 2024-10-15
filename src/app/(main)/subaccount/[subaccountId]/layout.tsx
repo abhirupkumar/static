@@ -17,8 +17,8 @@ type Props = {
 }
 
 const SubaccountLayout = async ({ children, params }: Props) => {
-    const agencyId = await verifyAndAcceptInvitation()
-    if (!agencyId) return <Unauthorized />
+    const projectId = await verifyAndAcceptInvitation()
+    if (!projectId) return <Unauthorized />
     const user = await currentUser()
     if (!user) {
         return redirect('/')
@@ -38,11 +38,11 @@ const SubaccountLayout = async ({ children, params }: Props) => {
             return <Unauthorized />
         }
 
-        const allNotifications = await getNotificationAndUser(agencyId)
+        const allNotifications = await getNotificationAndUser(projectId)
 
         if (
-            user.privateMetadata.role === 'AGENCY_ADMIN' ||
-            user.privateMetadata.role === 'AGENCY_OWNER'
+            user.privateMetadata.role === 'PROJECT_ADMIN' ||
+            user.privateMetadata.role === 'PROJECT_OWNER'
         ) {
             notifications = allNotifications
         } else {

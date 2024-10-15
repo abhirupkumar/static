@@ -1,11 +1,11 @@
-import AgencyDetails from '@/components/forms/agency-details'
+import ProjectDetails from '@/components/forms/project-details'
 import UserDetails from '@/components/forms/user-details'
 import { db } from '@/lib/db'
 import { currentUser } from '@clerk/nextjs/server'
 import React from 'react'
 
 type Props = {
-    params: { agencyId: string }
+    params: { projectId: string }
 }
 
 const SettingsPage = async ({ params }: Props) => {
@@ -19,25 +19,25 @@ const SettingsPage = async ({ params }: Props) => {
     })
 
     if (!userDetails) return null
-    const agencyDetails = await db.agency.findUnique({
+    const projectDetails = await db.project.findUnique({
         where: {
-            id: params.agencyId,
+            id: params.projectId,
         },
         include: {
             SubAccount: true,
         },
     })
 
-    if (!agencyDetails) return null
+    if (!projectDetails) return null
 
-    const subAccounts = agencyDetails.SubAccount
+    const subAccounts = projectDetails.SubAccount
 
     return (
         <div className="flex lg:!flex-row flex-col gap-4">
-            <AgencyDetails data={agencyDetails} />
+            <ProjectDetails data={projectDetails} />
             <UserDetails
-                type="agency"
-                id={params.agencyId}
+                type="project"
+                id={params.projectId}
                 subAccounts={subAccounts}
                 userData={userDetails}
             />

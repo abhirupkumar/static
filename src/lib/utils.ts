@@ -7,8 +7,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function constructMetadata({
-  title = "Plura - run your agency",
-  description = "Plura - run your agency in just aone place",
+  title = "Plura - run your project",
+  description = "Plura - run your project in just aone place",
   image = "/assets/preview.png",
   noIndex = false,
 }: {

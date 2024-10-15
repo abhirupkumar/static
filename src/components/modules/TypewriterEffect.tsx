@@ -21,7 +21,7 @@ export const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
             text: "your",
         },
         {
-            text: "agency",
+            text: "project",
         },
         {
             text: "in",

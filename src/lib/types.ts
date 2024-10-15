@@ -11,7 +11,7 @@ import {
 import {
     _getTicketsWithAllRelations,
     getAuthUserDetails,
-    getFunnels,
+    getSites,
     getMedia,
     getPipelineDetails,
     getTicketsWithTags,
@@ -32,7 +32,7 @@ export type NotificationWithUser =
             createdAt: Date
             updatedAt: Date
             role: Role
-            agencyId: string | null
+            projectId: string | null
         }
     } & Notification)[]
     | undefined
@@ -41,29 +41,29 @@ export type UserWithPermissionsAndSubAccounts = Prisma.PromiseReturnType<
     typeof getUserPermissions
 >
 
-export const FunnelPageSchema = z.object({
+export const SitePageSchema = z.object({
     name: z.string().min(1),
     pathName: z.string().optional(),
 })
 
-const __getUsersWithAgencySubAccountPermissionsSidebarOptions = async (
-    agencyId: string
+const __getUsersWithProjectSubAccountPermissionsSidebarOptions = async (
+    projectId: string
 ) => {
     return await db.user.findFirst({
-        where: { Agency: { id: agencyId } },
+        where: { Project: { id: projectId } },
         include: {
-            Agency: { include: { SubAccount: true } },
+            Project: { include: { SubAccount: true } },
             Permissions: { include: { SubAccount: true } },
         },
     })
 }
 
-export type AuthUserWithAgencySigebarOptionsSubAccounts =
+export type AuthUserWithProjectSigebarOptionsSubAccounts =
     Prisma.PromiseReturnType<typeof getAuthUserDetails>
 
-export type UsersWithAgencySubAccountPermissionsSidebarOptions =
+export type UsersWithProjectSubAccountPermissionsSidebarOptions =
     Prisma.PromiseReturnType<
-        typeof __getUsersWithAgencySubAccountPermissionsSidebarOptions
+        typeof __getUsersWithProjectSubAccountPermissionsSidebarOptions
     >
 
 export type GetMediaFiles = Prisma.PromiseReturnType<typeof getMedia>
@@ -84,7 +84,7 @@ export const CreatePipelineFormSchema = z.object({
     name: z.string().min(1),
 })
 
-export const CreateFunnelFormSchema = z.object({
+export const CreateSiteFormSchema = z.object({
     name: z.string().min(1),
     description: z.string(),
     subDomainName: z.string().optional(),
@@ -142,8 +142,8 @@ export type StripeCustomerType = {
 
 export type PricesList = Stripe.ApiList<Stripe.Price>
 
-export type FunnelsForSubAccount = Prisma.PromiseReturnType<
-    typeof getFunnels
+export type SitesForSubAccount = Prisma.PromiseReturnType<
+    typeof getSites
 >[0]
 
-export type UpsertFunnelPage = Prisma.FunnelPageCreateWithoutFunnelInput
+export type UpsertSitePage = Prisma.SitePageCreateWithoutSiteInput

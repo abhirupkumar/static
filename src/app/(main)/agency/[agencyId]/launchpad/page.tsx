@@ -16,46 +16,46 @@ import React from 'react'
 
 type Props = {
     params: {
-        agencyId: string
+        projectId: string
     }
     searchParams: { code: string }
 }
 
 const LaunchPadPage = async ({ params, searchParams }: Props) => {
-    const agencyDetails = await db.agency.findUnique({
-        where: { id: params.agencyId },
+    const projectDetails = await db.project.findUnique({
+        where: { id: params.projectId },
     })
 
-    if (!agencyDetails) return
+    if (!projectDetails) return
 
     const allDetailsExist =
-        agencyDetails.address &&
-        agencyDetails.address &&
-        agencyDetails.agencyLogo &&
-        agencyDetails.city &&
-        agencyDetails.companyEmail &&
-        agencyDetails.companyPhone &&
-        agencyDetails.country &&
-        agencyDetails.name &&
-        agencyDetails.state &&
-        agencyDetails.zipCode
+        projectDetails.address &&
+        projectDetails.address &&
+        projectDetails.projectLogo &&
+        projectDetails.city &&
+        projectDetails.companyEmail &&
+        projectDetails.companyPhone &&
+        projectDetails.country &&
+        projectDetails.name &&
+        projectDetails.state &&
+        projectDetails.zipCode
 
     // const stripeOAuthLink = getStripeOAuthLink(
-    //     'agency',
-    //     `launchpad___${agencyDetails.id}`
+    //     'project',
+    //     `launchpad___${projectDetails.id}`
     // )
 
     let connectedStripeAccount = false
 
     if (searchParams.code) {
-        // if (!agencyDetails.connectAccountId) {
+        // if (!projectDetails.connectAccountId) {
         //     try {
         //         const response = await stripe.oauth.token({
         //             grant_type: 'authorization_code',
         //             code: searchParams.code,
         //         })
-        //         await db.agency.update({
-        //             where: { id: params.agencyId },
+        //         await db.project.update({
+        //             where: { id: params.projectId },
         //             data: { connectAccountId: response.stripe_user_id },
         //         })
         //         connectedStripeAccount = true
@@ -103,7 +103,7 @@ const LaunchPadPage = async ({ params, searchParams }: Props) => {
                                     dashboard.
                                 </p>
                             </div>
-                            {agencyDetails.connectAccountId || connectedStripeAccount ? (
+                            {projectDetails.connectAccountId || connectedStripeAccount ? (
                                 <CheckCircleIcon
                                     size={50}
                                     className=" text-green-500 p-2 flex-shrink-0"
@@ -126,7 +126,7 @@ const LaunchPadPage = async ({ params, searchParams }: Props) => {
                         <div className="flex justify-between items-center w-full border p-4 rounded-lg gap-2">
                             <div className="flex md:items-center gap-4 flex-col md:!flex-row">
                                 <Image
-                                    src={agencyDetails.agencyLogo}
+                                    src={projectDetails.projectLogo}
                                     alt="app logo"
                                     height={80}
                                     width={80}
@@ -142,7 +142,7 @@ const LaunchPadPage = async ({ params, searchParams }: Props) => {
                             ) : (
                                 <Link
                                     className="bg-primary py-2 px-4 rounded-md text-white"
-                                    href={`/agency/${params.agencyId}/settings`}
+                                    href={`/project/${params.projectId}/settings`}
                                 >
                                     Start
                                 </Link>

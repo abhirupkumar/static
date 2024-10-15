@@ -100,7 +100,7 @@ const PipelineTicket = ({
             })
 
             await saveActivityLogsNotification({
-                agencyId: undefined,
+                projectId: undefined,
                 description: `Deleted a ticket | ${response?.name}`,
                 subaccountId: subaccountId,
             })

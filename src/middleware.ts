@@ -28,7 +28,7 @@ export default clerkMiddleware((auth, req) => {
 
     if (url.pathname === "/sign-in" || url.pathname === "/sign-up") {
         console.log("signin")
-        return NextResponse.redirect(new URL(`/agency/sign-in`, req.url));
+        return NextResponse.redirect(new URL(`/project/sign-in`, req.url));
     }
 
     if (
@@ -40,7 +40,7 @@ export default clerkMiddleware((auth, req) => {
     }
 
     if (
-        url.pathname.startsWith("/agency") ||
+        url.pathname.startsWith("/project") ||
         url.pathname.startsWith("/subaccount")
     ) {
         return NextResponse.rewrite(new URL(`${pathWithSearchParams}`, req.url));

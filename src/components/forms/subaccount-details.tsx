@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/card'
 
 import FileUpload from '../global/file-upload'
-import { Agency, SubAccount } from '@prisma/client'
+import { Project, SubAccount } from '@prisma/client'
 import { useToast } from '../ui/use-toast'
 import { saveActivityLogsNotification, upsertSubAccount } from '@/lib/queries'
 import { useEffect } from 'react'
@@ -50,8 +50,8 @@ const formSchema = z.object({
 //CHALLENGE layout.tsx oonly runs once as a result if you remove permissions for someone and they keep navigating the layout.tsx wont fire again. solution- save the data inside metadata for current user.
 
 interface SubAccountDetailsProps {
-    //To add the sub account to the agency
-    agencyDetails: Agency
+    //To add the sub account to the project
+    projectDetails: Project
     details?: Partial<SubAccount>
     userId: string
     userName: string
@@ -59,7 +59,7 @@ interface SubAccountDetailsProps {
 
 const SubAccountDetails: React.FC<SubAccountDetailsProps> = ({
     details,
-    agencyDetails,
+    projectDetails,
     userId,
     userName,
 }) => {
@@ -96,13 +96,13 @@ const SubAccountDetails: React.FC<SubAccountDetailsProps> = ({
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 companyEmail: values.companyEmail,
-                agencyId: agencyDetails.id,
+                projectId: projectDetails.id,
                 connectAccountId: '',
                 goal: 5000,
             })
             if (!response) throw new Error('No response from server')
             await saveActivityLogsNotification({
-                agencyId: response.agencyId,
+                projectId: response.projectId,
                 description: `${userName} | updated sub account | ${response.name}`,
                 subaccountId: response.id,
             })
@@ -172,7 +172,7 @@ const SubAccountDetails: React.FC<SubAccountDetailsProps> = ({
                                         <FormControl>
                                             <Input
                                                 required
-                                                placeholder="Your agency name"
+                                                placeholder="Your project name"
                                                 {...field}
                                             />
                                         </FormControl>

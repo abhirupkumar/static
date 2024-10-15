@@ -1,6 +1,6 @@
 'use client'
 import {
-    AuthUserWithAgencySigebarOptionsSubAccounts,
+    AuthUserWithProjectSigebarOptionsSubAccounts,
     UserWithPermissionsAndSubAccounts,
 } from '@/lib/types'
 import { useModal } from '@/providers/modal-provider'
@@ -52,7 +52,7 @@ import { v4 } from 'uuid'
 
 type Props = {
     id: string | null
-    type: 'agency' | 'subaccount'
+    type: 'project' | 'subaccount'
     userData?: Partial<User>
     subAccounts?: SubAccount[]
 }
@@ -65,7 +65,7 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
     const [roleState, setRoleState] = useState('')
     const [loadingPermissions, setLoadingPermissions] = useState(false)
     const [authUserData, setAuthUserData] =
-        useState<AuthUserWithAgencySigebarOptionsSubAccounts | null>(null)
+        useState<AuthUserWithProjectSigebarOptionsSubAccounts | null>(null)
     const { toast } = useToast()
     const router = useRouter()
 
@@ -86,8 +86,8 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
         email: z.string().email(),
         avatarUrl: z.string(),
         role: z.enum([
-            'AGENCY_OWNER',
-            'AGENCY_ADMIN',
+            'PROJECT_OWNER',
+            'PROJECT_ADMIN',
             'SUBACCOUNT_USER',
             'SUBACCOUNT_GUEST',
         ]),
@@ -136,9 +136,9 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
             subAccountId,
             val
         )
-        if (type === 'agency') {
+        if (type === 'project') {
             await saveActivityLogsNotification({
-                agencyId: authUserData?.Agency?.id,
+                projectId: authUserData?.Project?.id,
                 description: `Gave ${userData?.name} access to | ${subAccountPermissions?.Permissions.find(
                     (p) => p.subAccountId === subAccountId
                 )?.SubAccount.name
@@ -177,13 +177,13 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
         if (!id) return
         if (userData || data?.user) {
             const updatedUser = await updateUser(values)
-            authUserData?.Agency?.SubAccount.filter((subacc) =>
+            authUserData?.Project?.SubAccount.filter((subacc) =>
                 authUserData.Permissions.find(
                     (p) => p.subAccountId === subacc.id && p.access
                 )
             ).forEach(async (subaccount) => {
                 await saveActivityLogsNotification({
-                    agencyId: undefined,
+                    projectId: undefined,
                     description: `Updated ${userData?.name} information`,
                     subaccountId: subaccount.id,
                 })
@@ -267,7 +267,7 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
                                     <FormControl>
                                         <Input
                                             readOnly={
-                                                userData?.role === 'AGENCY_OWNER' ||
+                                                userData?.role === 'PROJECT_OWNER' ||
                                                 form.formState.isSubmitting
                                             }
                                             placeholder="Email"
@@ -286,7 +286,7 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
                                 <FormItem className="flex-1">
                                     <FormLabel> User Role</FormLabel>
                                     <Select
-                                        disabled={field.value === 'AGENCY_OWNER'}
+                                        disabled={field.value === 'PROJECT_OWNER'}
                                         onValueChange={(value) => {
                                             if (
                                                 value === 'SUBACCOUNT_USER' ||
@@ -308,13 +308,13 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="AGENCY_ADMING">
-                                                Agency Admin
+                                            <SelectItem value="PROJECT_ADMING">
+                                                Project Admin
                                             </SelectItem>
-                                            {(data?.user?.role === 'AGENCY_OWNER' ||
-                                                userData?.role === 'AGENCY_OWNER') && (
-                                                    <SelectItem value="AGENCY_OWNER">
-                                                        Agency Owner
+                                            {(data?.user?.role === 'PROJECT_OWNER' ||
+                                                userData?.role === 'PROJECT_OWNER') && (
+                                                    <SelectItem value="PROJECT_OWNER">
+                                                        Project Owner
                                                     </SelectItem>
                                                 )}
                                             <SelectItem value="SUBACCOUNT_USER">
@@ -336,14 +336,14 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
                         >
                             {form.formState.isSubmitting ? <Loading /> : 'Save User Details'}
                         </Button>
-                        {authUserData?.role === 'AGENCY_OWNER' && (
+                        {authUserData?.role === 'PROJECT_OWNER' && (
                             <div>
                                 <Separator className="my-4" />
                                 <FormLabel> User Permissions</FormLabel>
                                 <FormDescription className="mb-4">
                                     You can give Sub Account access to team member by turning on
                                     access control for each Sub Account. This is only visible to
-                                    agency owners
+                                    project owners
                                 </FormDescription>
                                 <div className="flex flex-col gap-4">
                                     {subAccounts?.map((subAccount) => {

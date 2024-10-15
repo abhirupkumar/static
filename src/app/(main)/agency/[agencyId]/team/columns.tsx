@@ -3,8 +3,8 @@
 import clsx from 'clsx'
 import { ColumnDef } from '@tanstack/react-table'
 import {
-    Agency,
-    AgencySidebarOption,
+    Project,
+    ProjectSidebarOption,
     Permissions,
     Prisma,
     Role,
@@ -42,10 +42,10 @@ import { deleteUser, getUser } from '@/lib/queries'
 import { useToast } from '@/components/ui/use-toast'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { UsersWithAgencySubAccountPermissionsSidebarOptions } from '@/lib/types'
+import { UsersWithProjectSubAccountPermissionsSidebarOptions } from '@/lib/types'
 import CustomModal from '@/components/global/custom-modal'
 
-export const columns: ColumnDef<UsersWithAgencySubAccountPermissionsSidebarOptions>[] =
+export const columns: ColumnDef<UsersWithProjectSubAccountPermissionsSidebarOptions>[] =
     [
         {
             accessorKey: 'id',
@@ -87,17 +87,17 @@ export const columns: ColumnDef<UsersWithAgencySubAccountPermissionsSidebarOptio
             accessorKey: 'SubAccount',
             header: 'Owned Accounts',
             cell: ({ row }) => {
-                const isAgencyOwner = row.getValue('role') === 'AGENCY_OWNER'
+                const isProjectOwner = row.getValue('role') === 'PROJECT_OWNER'
                 const ownedAccounts = row.original?.Permissions.filter(
                     (per) => per.access
                 )
 
-                if (isAgencyOwner)
+                if (isProjectOwner)
                     return (
                         <div className="flex flex-col items-start">
                             <div className="flex flex-col gap-2">
                                 <Badge className="bg-slate-600 whitespace-nowrap">
-                                    Agency - {row?.original?.Agency?.name}
+                                    Project - {row?.original?.Project?.name}
                                 </Badge>
                             </div>
                         </div>
@@ -130,8 +130,8 @@ export const columns: ColumnDef<UsersWithAgencySubAccountPermissionsSidebarOptio
                 return (
                     <Badge
                         className={clsx({
-                            'bg-emerald-500': role === 'AGENCY_OWNER',
-                            'bg-orange-400': role === 'AGENCY_ADMIN',
+                            'bg-emerald-500': role === 'PROJECT_OWNER',
+                            'bg-orange-400': role === 'PROJECT_ADMIN',
                             'bg-primary': role === 'SUBACCOUNT_USER',
                             'bg-muted': role === 'SUBACCOUNT_GUEST',
                         })}
@@ -152,7 +152,7 @@ export const columns: ColumnDef<UsersWithAgencySubAccountPermissionsSidebarOptio
     ]
 
 interface CellActionsProps {
-    rowData: UsersWithAgencySubAccountPermissionsSidebarOptions
+    rowData: UsersWithProjectSubAccountPermissionsSidebarOptions
 }
 
 const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
@@ -161,7 +161,7 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     if (!rowData) return
-    if (!rowData.Agency) return
+    if (!rowData.Project) return
 
     return (
         <AlertDialog>
@@ -193,9 +193,9 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
                                     title="Edit User Details"
                                 >
                                     <UserDetails
-                                        type="agency"
-                                        id={rowData?.Agency?.id || null}
-                                        subAccounts={rowData?.Agency?.SubAccount}
+                                        type="project"
+                                        id={rowData?.Project?.id || null}
+                                        subAccounts={rowData?.Project?.SubAccount}
                                     />
                                 </CustomModal>,
                                 async () => {
@@ -207,7 +207,7 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
                         <Edit size={15} />
                         Edit Details
                     </DropdownMenuItem>
-                    {rowData.role !== 'AGENCY_OWNER' && (
+                    {rowData.role !== 'PROJECT_OWNER' && (
                         <AlertDialogTrigger asChild>
                             <DropdownMenuItem
                                 className="flex gap-2"
@@ -240,7 +240,7 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
                             toast({
                                 title: 'Deleted User',
                                 description:
-                                    'The user has been deleted from this agency they no longer have access to the agency',
+                                    'The user has been deleted from this project they no longer have access to the project',
                             })
                             setLoading(false)
                             router.refresh()

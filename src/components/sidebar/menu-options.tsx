@@ -1,8 +1,8 @@
 'use client'
 
 import {
-    Agency,
-    AgencySidebarOption,
+    Project,
+    ProjectSidebarOption,
     SubAccount,
     SubAccountSidebarOption,
 } from '@prisma/client'
@@ -33,7 +33,7 @@ import { icons } from '@/lib/constants'
 type Props = {
     defaultOpen: boolean
     subAccounts: SubAccount[]
-    sidebarOpt: AgencySidebarOption[] | SubAccountSidebarOption[]
+    sidebarOpt: ProjectSidebarOption[] | SubAccountSidebarOption[]
     sidebarLogo: string
     details: any
     user: any
@@ -133,49 +133,49 @@ const MenuOptions = ({
                             <CommandInput placeholder="Search Accounts..." />
                             <CommandList className="pb-16">
                                 <CommandEmpty> No results found</CommandEmpty>
-                                {(user?.role === 'AGENCY_OWNER' ||
-                                    user?.role === 'AGENCY_ADMIN') &&
-                                    user?.Agency && (
-                                        <CommandGroup heading="Agency">
+                                {(user?.role === 'PROJECT_OWNER' ||
+                                    user?.role === 'PROJECT_ADMIN') &&
+                                    user?.Project && (
+                                        <CommandGroup heading="Project">
                                             <CommandItem className="!bg-transparent my-2 text-primary broder-[1px] border-border p-2 rounded-md hover:!bg-muted cursor-pointer transition-all">
                                                 {defaultOpen ? (
                                                     <Link
-                                                        href={`/agency/${user?.Agency?.id}`}
+                                                        href={`/project/${user?.Project?.id}`}
                                                         className="flex gap-4 w-full h-full"
                                                     >
                                                         <div className="relative w-16">
                                                             <Image
-                                                                src={user?.Agency?.agencyLogo}
-                                                                alt="Agency Logo"
+                                                                src={user?.Project?.projectLogo}
+                                                                alt="Project Logo"
                                                                 fill
                                                                 className="rounded-md object-contain"
                                                             />
                                                         </div>
                                                         <div className="flex flex-col flex-1">
-                                                            {user?.Agency?.name}
+                                                            {user?.Project?.name}
                                                             <span className="text-muted-foreground">
-                                                                {user?.Agency?.address}
+                                                                {user?.Project?.address}
                                                             </span>
                                                         </div>
                                                     </Link>
                                                 ) : (
                                                     <SheetClose asChild>
                                                         <Link
-                                                            href={`/agency/${user?.Agency?.id}`}
+                                                            href={`/project/${user?.Project?.id}`}
                                                             className="flex gap-4 w-full h-full"
                                                         >
                                                             <div className="relative w-16">
                                                                 <Image
-                                                                    src={user?.Agency?.agencyLogo}
-                                                                    alt="Agency Logo"
+                                                                    src={user?.Project?.projectLogo}
+                                                                    alt="Project Logo"
                                                                     fill
                                                                     className="rounded-md object-contain"
                                                                 />
                                                             </div>
                                                             <div className="flex flex-col flex-1">
-                                                                {user?.Agency?.name}
+                                                                {user?.Project?.name}
                                                                 <span className="text-muted-foreground">
-                                                                    {user?.Agency?.address}
+                                                                    {user?.Project?.address}
                                                                 </span>
                                                             </div>
                                                         </Link>
@@ -236,18 +236,18 @@ const MenuOptions = ({
                                         : 'No Accounts'}
                                 </CommandGroup>
                             </CommandList>
-                            {(user?.role === 'AGENCY_OWNER' ||
-                                user?.role === 'AGENCY_ADMIN') && (
+                            {(user?.role === 'PROJECT_OWNER' ||
+                                user?.role === 'PROJECT_ADMIN') && (
                                     // <SheetClose>
                                     <Button
                                         className="w-full flex gap-2"
                                         onClick={() => setOpen(
                                             <CustomModal
                                                 title="Create A Subaccount"
-                                                subheading="You can switch between your agency account and the subaccount from the sidebar"
+                                                subheading="You can switch between your project account and the subaccount from the sidebar"
                                             >
                                                 <SubAccountDetails
-                                                    agencyDetails={user?.Agency as Agency}
+                                                    projectDetails={user?.Project as Project}
                                                     userId={user?.id as string}
                                                     userName={user?.name}
                                                 />

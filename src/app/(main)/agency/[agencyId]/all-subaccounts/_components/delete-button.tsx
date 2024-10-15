@@ -20,7 +20,7 @@ const DeleteButton = ({ subaccountId }: Props) => {
             onClick={async () => {
                 const response = await getSubaccountDetails(subaccountId)
                 await saveActivityLogsNotification({
-                    agencyId: undefined,
+                    projectId: undefined,
                     description: `Deleted a subaccount | ${response?.name}`,
                     subaccountId,
                 })

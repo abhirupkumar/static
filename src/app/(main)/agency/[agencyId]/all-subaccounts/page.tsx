@@ -28,7 +28,7 @@ import DeleteButton from './_components/delete-button'
 import CreateSubaccountButton from './_components/create-subaccount-btn'
 
 type Props = {
-    params: { agencyId: string }
+    params: { projectId: string }
 }
 
 const AllSubaccountsPage = async ({ params }: Props) => {
@@ -40,7 +40,7 @@ const AllSubaccountsPage = async ({ params }: Props) => {
             <div className="flex flex-col ">
                 <CreateSubaccountButton
                     user={user}
-                    id={params.agencyId}
+                    id={params.projectId}
                     className="w-[200px] self-end m-6"
                 />
                 <Command className="rounded-lg bg-transparent">
@@ -48,8 +48,8 @@ const AllSubaccountsPage = async ({ params }: Props) => {
                     <CommandList>
                         <CommandEmpty>No Results Found.</CommandEmpty>
                         <CommandGroup heading="Sub Accounts">
-                            {!!user.Agency?.SubAccount.length ? (
-                                user.Agency.SubAccount.map((subaccount: SubAccount) => (
+                            {!!user.Project?.SubAccount.length ? (
+                                user.Project.SubAccount.map((subaccount: SubAccount) => (
                                     <CommandItem
                                         key={subaccount.id}
                                         className="h-32 !bg-background my-2 text-primary border-[1px] border-border p-4 rounded-lg hover:!bg-background cursor-pointer transition-all"

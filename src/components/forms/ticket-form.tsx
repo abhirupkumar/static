@@ -125,7 +125,7 @@ const TicketForm = ({ getNewTicket, laneId, subaccountId }: Props) => {
             )
 
             await saveActivityLogsNotification({
-                agencyId: undefined,
+                projectId: undefined,
                 description: `Updated a ticket | ${response?.name}`,
                 subaccountId,
             })

@@ -1,7 +1,7 @@
 import BlurPage from '@/components/global/blur-page'
 import CircleProgress from '@/components/global/circle-progress'
 import PipelineValue from '@/components/global/pipeline-value'
-import SubaccountFunnelChart from '@/components/global/subaccount-funnel-chart'
+import SubaccountSiteChart from '@/components/global/subaccount-site-chart'
 import { Badge } from '@/components/ui/badge'
 import {
     Card,
@@ -105,18 +105,18 @@ const SubaccountPageId = async ({ params, searchParams }: Props) => {
     //     ).toFixed(2)
     //   }
 
-    const funnels = await db.funnel.findMany({
+    const sites = await db.site.findMany({
         where: {
             subAccountId: params.subaccountId,
         },
         include: {
-            FunnelPages: true,
+            SitePages: true,
         },
     })
 
-    const funnelPerformanceMetrics = funnels.map((funnel) => ({
-        ...funnel,
-        totalFunnelVisits: funnel.FunnelPages.reduce(
+    const sitePerformanceMetrics = sites.map((site) => ({
+        ...site,
+        totalSiteVisits: site.SitePages.reduce(
             (total, page) => total + page.visits,
             0
         ),
@@ -215,13 +215,13 @@ const SubaccountPageId = async ({ params, searchParams }: Props) => {
                     <div className="flex gap-4 flex-col xl:!flex-row">
                         <Card className="relative">
                             <CardHeader>
-                                <CardDescription>Funnel Performance</CardDescription>
+                                <CardDescription>Site Performance</CardDescription>
                             </CardHeader>
                             <CardContent className=" text-sm text-muted-foreground flex flex-col gap-12 justify-between ">
-                                <SubaccountFunnelChart data={funnelPerformanceMetrics} />
+                                <SubaccountSiteChart data={sitePerformanceMetrics} />
                                 <div className="lg:w-[150px]">
-                                    Total page visits across all funnels. Hover over to get more
-                                    details on funnel page performance.
+                                    Total page visits across all sites. Hover over to get more
+                                    details on site page performance.
                                 </div>
                             </CardContent>
                             <Contact2 className="absolute right-4 top-4 text-muted-foreground" />

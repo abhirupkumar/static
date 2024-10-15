@@ -96,7 +96,7 @@ const MediaCard = ({ file }: Props) => {
                             setLoading(true)
                             const response = await deleteMedia(file.id)
                             await saveActivityLogsNotification({
-                                agencyId: undefined,
+                                projectId: undefined,
                                 description: `Deleted a media file | ${response?.name}`,
                                 subaccountId: response.subAccountId,
                             })

@@ -4,7 +4,7 @@ import { clerkClient, currentUser } from '@clerk/nextjs/server'
 import { db } from './db'
 import { redirect } from 'next/navigation'
 import {
-    Agency,
+    Project,
     Lane,
     Plan,
     Prisma,
@@ -16,9 +16,9 @@ import {
 } from '@prisma/client'
 import { v4 } from 'uuid'
 import {
-    CreateFunnelFormSchema,
+    CreateSiteFormSchema,
     CreateMediaType,
-    UpsertFunnelPage,
+    UpsertSitePage,
 } from './types'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
@@ -34,7 +34,7 @@ export const getAuthUserDetails = async () => {
             email: user.emailAddresses[0].emailAddress,
         },
         include: {
-            Agency: {
+            Project: {
                 include: {
                     SidebarOption: true,
                     SubAccount: {
@@ -52,11 +52,11 @@ export const getAuthUserDetails = async () => {
 }
 
 export const saveActivityLogsNotification = async ({
-    agencyId,
+    projectId,
     description,
     subaccountId,
 }: {
-    agencyId?: string
+    projectId?: string
     description: string
     subaccountId?: string
 }) => {
@@ -65,7 +65,7 @@ export const saveActivityLogsNotification = async ({
     if (!authUser) {
         const response = await db.user.findFirst({
             where: {
-                Agency: {
+                Project: {
                     SubAccount: {
                         some: { id: subaccountId },
                     },
@@ -86,17 +86,17 @@ export const saveActivityLogsNotification = async ({
         return
     }
 
-    let foundAgencyId = agencyId
-    if (!foundAgencyId) {
+    let foundProjectId = projectId
+    if (!foundProjectId) {
         if (!subaccountId) {
             throw new Error(
-                'You need to provide atleast an agency Id or subaccount Id'
+                'You need to provide atleast an project Id or subaccount Id'
             )
         }
         const response = await db.subAccount.findUnique({
             where: { id: subaccountId },
         })
-        if (response) foundAgencyId = response.agencyId
+        if (response) foundProjectId = response.projectId
     }
     if (subaccountId) {
         await db.notification.create({
@@ -107,9 +107,9 @@ export const saveActivityLogsNotification = async ({
                         id: userData.id,
                     },
                 },
-                Agency: {
+                Project: {
                     connect: {
-                        id: foundAgencyId,
+                        id: foundProjectId,
                     },
                 },
                 SubAccount: {
@@ -126,9 +126,9 @@ export const saveActivityLogsNotification = async ({
                         id: userData.id,
                     },
                 },
-                Agency: {
+                Project: {
                     connect: {
-                        id: foundAgencyId,
+                        id: foundProjectId,
                     },
                 },
             },
@@ -136,8 +136,8 @@ export const saveActivityLogsNotification = async ({
     }
 }
 
-export const createTeamUser = async (agencyId: string, user: User) => {
-    if (user.role === 'AGENCY_OWNER') return null
+export const createTeamUser = async (projectId: string, user: User) => {
+    if (user.role === 'PROJECT_OWNER') return null
     const response = await db.user.create({ data: { ...user } })
     return response
 }
@@ -153,9 +153,9 @@ export const verifyAndAcceptInvitation = async () => {
     })
 
     if (invitationExists) {
-        const userDetails = await createTeamUser(invitationExists.agencyId, {
+        const userDetails = await createTeamUser(invitationExists.projectId, {
             email: invitationExists.email,
-            agencyId: invitationExists.agencyId,
+            projectId: invitationExists.projectId,
             avatarUrl: user.imageUrl,
             id: user.id,
             name: `${user.firstName} ${user.lastName}`,
@@ -164,7 +164,7 @@ export const verifyAndAcceptInvitation = async () => {
             updatedAt: new Date(),
         })
         await saveActivityLogsNotification({
-            agencyId: invitationExists?.agencyId,
+            projectId: invitationExists?.projectId,
             description: `Joined`,
             subaccountId: undefined,
         })
@@ -180,31 +180,31 @@ export const verifyAndAcceptInvitation = async () => {
                 where: { email: userDetails.email },
             })
 
-            return userDetails.agencyId
+            return userDetails.projectId
         } else return null
     } else {
-        const agency = await db.user.findUnique({
+        const project = await db.user.findUnique({
             where: {
                 email: user.emailAddresses[0].emailAddress,
             },
         })
-        return agency ? agency.agencyId : null
+        return project ? project.projectId : null
     }
 }
 
-export const updateAgencyDetails = async (
-    agencyId: string,
-    agencyDetails: Partial<Agency>
+export const updateProjectDetails = async (
+    projectId: string,
+    projectDetails: Partial<Project>
 ) => {
-    const response = await db.agency.update({
-        where: { id: agencyId },
-        data: { ...agencyDetails },
+    const response = await db.project.update({
+        where: { id: projectId },
+        data: { ...projectDetails },
     })
     return response
 }
 
-export const deleteAgency = async (agencyId: string) => {
-    const response = await db.agency.delete({ where: { id: agencyId } })
+export const deleteProject = async (projectId: string) => {
+    const response = await db.project.delete({ where: { id: projectId } })
     return response
 }
 
@@ -235,65 +235,65 @@ export const initUser = async (newUser: Partial<User>) => {
     return userData
 }
 
-export const upsertAgency = async (agency: Agency, price?: Plan) => {
-    if (!agency.companyEmail) return null
+export const upsertProject = async (project: Project, price?: Plan) => {
+    if (!project.companyEmail) return null
     try {
-        const agencyDetails = await db.agency.upsert({
+        const projectDetails = await db.project.upsert({
             where: {
-                id: agency.id,
+                id: project.id,
             },
-            update: agency,
+            update: project,
             create: {
                 users: {
-                    connect: { email: agency.companyEmail },
+                    connect: { email: project.companyEmail },
                 },
-                ...agency,
+                ...project,
                 SidebarOption: {
                     create: [
                         {
                             name: 'Dashboard',
                             icon: 'category',
-                            link: `/agency/${agency.id}`,
+                            link: `/project/${project.id}`,
                         },
                         {
                             name: 'Launchpad',
                             icon: 'clipboardIcon',
-                            link: `/agency/${agency.id}/launchpad`,
+                            link: `/project/${project.id}/launchpad`,
                         },
                         {
                             name: 'Billing',
                             icon: 'payment',
-                            link: `/agency/${agency.id}/billing`,
+                            link: `/project/${project.id}/billing`,
                         },
                         {
                             name: 'Settings',
                             icon: 'settings',
-                            link: `/agency/${agency.id}/settings`,
+                            link: `/project/${project.id}/settings`,
                         },
                         {
                             name: 'Sub Accounts',
                             icon: 'person',
-                            link: `/agency/${agency.id}/all-subaccounts`,
+                            link: `/project/${project.id}/all-subaccounts`,
                         },
                         {
                             name: 'Team',
                             icon: 'shield',
-                            link: `/agency/${agency.id}/team`,
+                            link: `/project/${project.id}/team`,
                         },
                     ],
                 },
             },
         })
-        return agencyDetails
+        return projectDetails
     } catch (error) {
         console.log(error)
     }
 }
 
-export const getNotificationAndUser = async (agencyId: string) => {
+export const getNotificationAndUser = async (projectId: string) => {
     try {
         const response = await db.notification.findMany({
-            where: { agencyId },
+            where: { projectId },
             include: { User: true },
             orderBy: {
                 createdAt: 'desc',
@@ -307,15 +307,15 @@ export const getNotificationAndUser = async (agencyId: string) => {
 
 export const upsertSubAccount = async (subAccount: SubAccount) => {
     if (!subAccount.companyEmail) return null
-    const agencyOwner = await db.user.findFirst({
+    const projectOwner = await db.user.findFirst({
         where: {
-            Agency: {
-                id: subAccount.agencyId,
+            Project: {
+                id: subAccount.projectId,
             },
-            role: 'AGENCY_OWNER',
+            role: 'PROJECT_OWNER',
         },
     })
-    if (!agencyOwner) return console.log('🔴Erorr could not create subaccount')
+    if (!projectOwner) return console.log('🔴Erorr could not create subaccount')
     const permissionId = v4()
     const response = await db.subAccount.upsert({
         where: { id: subAccount.id },
@@ -325,7 +325,7 @@ export const upsertSubAccount = async (subAccount: SubAccount) => {
             Permissions: {
                 create: {
                     access: true,
-                    email: agencyOwner.email,
+                    email: projectOwner.email,
                     id: permissionId,
                 },
                 connect: {
@@ -349,9 +349,9 @@ export const upsertSubAccount = async (subAccount: SubAccount) => {
                         link: `/subaccount/${subAccount.id}/settings`,
                     },
                     {
-                        name: 'Funnels',
+                        name: 'Sites',
                         icon: 'pipelines',
-                        link: `/subaccount/${subAccount.id}/funnels`,
+                        link: `/subaccount/${subAccount.id}/sites`,
                     },
                     {
                         name: 'Media',
@@ -473,10 +473,10 @@ export const getUser = async (id: string) => {
 export const sendInvitation = async (
     role: Role,
     email: string,
-    agencyId: string
+    projectId: string
 ) => {
     const resposne = await db.invitation.create({
-        data: { email, agencyId, role },
+        data: { email, projectId, role },
     })
 
     try {
@@ -561,17 +561,17 @@ export const getLanesWithTicketAndTags = async (pipelineId: string) => {
     return response
 }
 
-export const upsertFunnel = async (
+export const upsertSite = async (
     subaccountId: string,
-    funnel: z.infer<typeof CreateFunnelFormSchema> & { liveProducts: string },
-    funnelId: string
+    site: z.infer<typeof CreateSiteFormSchema> & { liveProducts: string },
+    siteId: string
 ) => {
-    const response = await db.funnel.upsert({
-        where: { id: funnelId },
-        update: funnel,
+    const response = await db.site.upsert({
+        where: { id: siteId },
+        update: site,
         create: {
-            ...funnel,
-            id: funnelId || v4(),
+            ...site,
+            id: siteId || v4(),
             subAccountId: subaccountId,
         },
     })
@@ -696,7 +696,7 @@ export const _getTicketsWithAllRelations = async (laneId: string) => {
 export const getSubAccountTeamMembers = async (subaccountId: string) => {
     const subaccountUsersWithAccess = await db.user.findMany({
         where: {
-            Agency: {
+            Project: {
                 SubAccount: {
                     some: {
                         id: subaccountId,
@@ -804,20 +804,20 @@ export const upsertContact = async (
     return response
 }
 
-export const getFunnels = async (subacountId: string) => {
-    const funnels = await db.funnel.findMany({
+export const getSites = async (subacountId: string) => {
+    const sites = await db.site.findMany({
         where: { subAccountId: subacountId },
-        include: { FunnelPages: true },
+        include: { SitePages: true },
     })
 
-    return funnels
+    return sites
 }
 
-export const getFunnel = async (funnelId: string) => {
-    const funnel = await db.funnel.findUnique({
-        where: { id: funnelId },
+export const getSite = async (siteId: string) => {
+    const site = await db.site.findUnique({
+        where: { id: siteId },
         include: {
-            FunnelPages: {
+            SitePages: {
                 orderBy: {
                     order: 'asc',
                 },
@@ -825,33 +825,33 @@ export const getFunnel = async (funnelId: string) => {
         },
     })
 
-    return funnel
+    return site
 }
 
-export const updateFunnelProducts = async (
+export const updateSiteProducts = async (
     products: string,
-    funnelId: string
+    siteId: string
 ) => {
-    const data = await db.funnel.update({
-        where: { id: funnelId },
+    const data = await db.site.update({
+        where: { id: siteId },
         data: { liveProducts: products },
     })
     return data
 }
 
-export const upsertFunnelPage = async (
+export const upsertSitePage = async (
     subaccountId: string,
-    funnelPage: UpsertFunnelPage,
-    funnelId: string
+    sitePage: UpsertSitePage,
+    siteId: string
 ) => {
-    if (!subaccountId || !funnelId) return
-    const response = await db.funnelPage.upsert({
-        where: { id: funnelPage.id || '' },
-        update: { ...funnelPage },
+    if (!subaccountId || !siteId) return
+    const response = await db.sitePage.upsert({
+        where: { id: sitePage.id || '' },
+        update: { ...sitePage },
         create: {
-            ...funnelPage,
-            content: funnelPage.content
-                ? funnelPage.content
+            ...sitePage,
+            content: sitePage.content
+                ? sitePage.content
                 : JSON.stringify([
                     {
                         content: [],
@@ -861,24 +861,24 @@ export const upsertFunnelPage = async (
                         type: '__body',
                     },
                 ]),
-            funnelId,
+            siteId,
         },
     })
 
-    revalidatePath(`/subaccount/${subaccountId}/funnels/${funnelId}`, 'page')
+    revalidatePath(`/subaccount/${subaccountId}/sites/${siteId}`, 'page')
     return response
 }
 
-export const deleteFunnelePage = async (funnelPageId: string) => {
-    const response = await db.funnelPage.delete({ where: { id: funnelPageId } })
+export const deleteSiteePage = async (sitePageId: string) => {
+    const response = await db.sitePage.delete({ where: { id: sitePageId } })
 
     return response
 }
 
-export const getFunnelPageDetails = async (funnelPageId: string) => {
-    const response = await db.funnelPage.findUnique({
+export const getSitePageDetails = async (sitePageId: string) => {
+    const response = await db.sitePage.findUnique({
         where: {
-            id: funnelPageId,
+            id: sitePageId,
         },
     })
 
@@ -886,11 +886,11 @@ export const getFunnelPageDetails = async (funnelPageId: string) => {
 }
 
 export const getDomainContent = async (subDomainName: string) => {
-    const response = await db.funnel.findUnique({
+    const response = await db.site.findUnique({
         where: {
             subDomainName,
         },
-        include: { FunnelPages: true },
+        include: { SitePages: true },
     })
     return response
 }

@@ -12,29 +12,29 @@ import React from 'react'
 
 type Props = {
     children: React.ReactNode
-    params: { agencyId: string }
+    params: { projectId: string }
 }
 
 const layout = async ({ children, params }: Props) => {
-    const agencyId = await verifyAndAcceptInvitation()
+    const projectId = await verifyAndAcceptInvitation()
     const user = await currentUser()
 
     if (!user) {
         return redirect('/')
     }
 
-    if (!agencyId) {
-        return redirect('/agency')
+    if (!projectId) {
+        return redirect('/project')
     }
 
     if (
-        user.privateMetadata.role !== 'AGENCY_OWNER' &&
-        user.privateMetadata.role !== 'AGENCY_ADMIN'
+        user.privateMetadata.role !== 'PROJECT_OWNER' &&
+        user.privateMetadata.role !== 'PROJECT_ADMIN'
     )
         return <Unauthorized />
 
     let allNoti: any = []
-    const notifications = await getNotificationAndUser(agencyId)
+    const notifications = await getNotificationAndUser(projectId)
     if (notifications) allNoti = notifications
 
 
@@ -42,8 +42,8 @@ const layout = async ({ children, params }: Props) => {
     return (
         <div className="h-screen overflow-hidden">
             <Sidebar
-                id={params.agencyId}
-                type="agency"
+                id={params.projectId}
+                type="project"
             />
             <div className="md:pl-[300px]">
                 <InfoBar

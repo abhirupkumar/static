@@ -12,7 +12,7 @@ const content = [
         description: (
             <>
                 <p>
-                    The Website Builder for Agency CRM is a powerful tool designed to
+                    The Website Builder for Project CRM is a powerful tool designed to
                     streamline the process of creating and managing websites for agencies.
                 </p>
                 <p>
@@ -44,7 +44,7 @@ const content = [
         description: (
             <>
                 <p>
-                    The Kanban Board for pipelines in Agency CRM offers a visual and
+                    The Kanban Board for pipelines in Project CRM offers a visual and
                     efficient way for agencies to manage their projects and workflows.
                 </p>
                 <p>
@@ -75,8 +75,8 @@ const content = [
         description: (
             <>
                 <p>
-                    Team Access for Agency CRM provides secure and seamless access control
-                    for agency teams, ensuring efficient collaboration and data
+                    Team Access for Project CRM provides secure and seamless access control
+                    for project teams, ensuring efficient collaboration and data
                     management.
                 </p>
                 <p>
@@ -107,7 +107,7 @@ const content = [
         description: (
             <>
                 <p>
-                    The Leads Dashboard for Agency CRM offers a comprehensive overview of
+                    The Leads Dashboard for Project CRM offers a comprehensive overview of
                     potential opportunities and client interactions, empowering agencies
                     to effectively manage their sales pipeline.
                 </p>

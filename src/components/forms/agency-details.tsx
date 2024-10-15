@@ -1,7 +1,7 @@
 "use client";
 
 import { useToast } from '@/hooks/use-toast';
-import { Agency } from '@prisma/client';
+import { Project } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
@@ -18,19 +18,19 @@ import * as z from 'zod';
 import FileUpload from '../global/file-upload';
 import { v4 } from 'uuid'
 import {
-    deleteAgency,
+    deleteProject,
     initUser,
     saveActivityLogsNotification,
-    updateAgencyDetails,
-    upsertAgency,
+    updateProjectDetails,
+    upsertProject,
 } from '@/lib/queries';
 
 type Props = {
-    data?: Partial<Agency>
+    data?: Partial<Project>
 }
 
 const FormSchema = z.object({
-    name: z.string().min(2, { message: 'Agency name must be atleast 2 chars.' }),
+    name: z.string().min(2, { message: 'Project name must be atleast 2 chars.' }),
     companyEmail: z.string().min(1),
     companyPhone: z.string().min(1),
     whiteLabel: z.boolean(),
@@ -39,13 +39,13 @@ const FormSchema = z.object({
     zipCode: z.string().min(1),
     state: z.string().min(1),
     country: z.string().min(1),
-    agencyLogo: z.string().min(1),
+    projectLogo: z.string().min(1),
 })
 
-const AgencyDetails = ({ data }: Props) => {
+const ProjectDetails = ({ data }: Props) => {
     const { toast } = useToast()
     const router = useRouter()
-    const [deletingAgency, setDeletingAgency] = useState(false)
+    const [deletingProject, setDeletingProject] = useState(false)
     const form = useForm<z.infer<typeof FormSchema>>({
         mode: 'onChange',
         resolver: zodResolver(FormSchema),
@@ -59,7 +59,7 @@ const AgencyDetails = ({ data }: Props) => {
             zipCode: data?.zipCode,
             state: data?.state,
             country: data?.country,
-            agencyLogo: data?.agencyLogo,
+            projectLogo: data?.projectLogo,
         },
     })
 
@@ -110,14 +110,14 @@ const AgencyDetails = ({ data }: Props) => {
                 // custId = customerData.customerId
             }
 
-            newUserData = await initUser({ role: 'AGENCY_OWNER' })
+            newUserData = await initUser({ role: 'PROJECT_OWNER' })
             // if (!data?.customerId && !custId) return
 
-            const response = await upsertAgency({
+            const response = await upsertProject({
                 id: data?.id ? data.id : v4(),
                 customerId: data?.customerId || custId || '',
                 address: values.address,
-                agencyLogo: values.agencyLogo,
+                projectLogo: values.projectLogo,
                 city: values.city,
                 companyPhone: values.companyPhone,
                 country: values.country,
@@ -132,7 +132,7 @@ const AgencyDetails = ({ data }: Props) => {
                 goal: 5,
             })
             toast({
-                title: 'Created Agency',
+                title: 'Created Project',
             })
             if (data?.id) return router.refresh()
             if (response) {
@@ -143,19 +143,19 @@ const AgencyDetails = ({ data }: Props) => {
             toast({
                 variant: 'destructive',
                 title: 'Oppse!',
-                description: 'could not create your agency',
+                description: 'could not create your project',
             })
         }
     }
-    const handleDeleteAgency = async () => {
+    const handleDeleteProject = async () => {
         if (!data?.id) return
-        setDeletingAgency(true)
+        setDeletingProject(true)
         //WIP: discontinue the subscription
         try {
-            const response = await deleteAgency(data.id)
+            const response = await deleteProject(data.id)
             toast({
-                title: 'Deleted Agency',
-                description: 'Deleted your agency and all subaccounts',
+                title: 'Deleted Project',
+                description: 'Deleted your project and all subaccounts',
             })
             router.refresh()
         } catch (error) {
@@ -163,20 +163,20 @@ const AgencyDetails = ({ data }: Props) => {
             toast({
                 variant: 'destructive',
                 title: 'Oppse!',
-                description: 'could not delete your agency ',
+                description: 'could not delete your project ',
             })
         }
-        setDeletingAgency(false)
+        setDeletingProject(false)
     }
 
     return (
         <AlertDialog>
             <Card className="w-full my-10">
                 <CardHeader>
-                    <CardTitle>Create an Agency</CardTitle>
+                    <CardTitle>Create an Project</CardTitle>
                     <CardDescription>
-                        Lets create an agency for you business. You can edit agency settings
-                        later from the agency settings tab.
+                        Lets create an project for you business. You can edit project settings
+                        later from the project settings tab.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -188,13 +188,13 @@ const AgencyDetails = ({ data }: Props) => {
                             <FormField
                                 disabled={isLoading}
                                 control={form.control}
-                                name="agencyLogo"
+                                name="projectLogo"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Agency Logo</FormLabel>
+                                        <FormLabel>Project Logo</FormLabel>
                                         <FormControl>
                                             <FileUpload
-                                                apiEndpoint="agencyLogo"
+                                                apiEndpoint="projectLogo"
                                                 onChange={field.onChange}
                                                 value={field.value}
                                             />
@@ -210,10 +210,10 @@ const AgencyDetails = ({ data }: Props) => {
                                     name="name"
                                     render={({ field }) => (
                                         <FormItem className="flex-1">
-                                            <FormLabel>Agency Name</FormLabel>
+                                            <FormLabel>Project Name</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder="Your agency name"
+                                                    placeholder="Your project name"
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -226,7 +226,7 @@ const AgencyDetails = ({ data }: Props) => {
                                     name="companyEmail"
                                     render={({ field }) => (
                                         <FormItem className="flex-1">
-                                            <FormLabel>Agency Email</FormLabel>
+                                            <FormLabel>Project Email</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     readOnly
@@ -246,7 +246,7 @@ const AgencyDetails = ({ data }: Props) => {
                                     name="companyPhone"
                                     render={({ field }) => (
                                         <FormItem className="flex-1">
-                                            <FormLabel>Agency Phone Number</FormLabel>
+                                            <FormLabel>Project Phone Number</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder="Phone"
@@ -267,9 +267,9 @@ const AgencyDetails = ({ data }: Props) => {
                                     return (
                                         <FormItem className="flex flex-row items-center justify-between rounded-lg border gap-4 p-4">
                                             <div>
-                                                <FormLabel>Whitelabel Agency</FormLabel>
+                                                <FormLabel>Whitelabel Project</FormLabel>
                                                 <FormDescription>
-                                                    Turning on whilelabel mode will show your agency logo
+                                                    Turning on whilelabel mode will show your project logo
                                                     to all sub accounts by default. You can overwrite this
                                                     functionality through sub account settings.
                                                 </FormDescription>
@@ -376,17 +376,17 @@ const AgencyDetails = ({ data }: Props) => {
                                 <div className="flex flex-col gap-2">
                                     <FormLabel>Create A Goal</FormLabel>
                                     <FormDescription>
-                                        ✨ Create a goal for your agency. As your business grows
+                                        ✨ Create a goal for your project. As your business grows
                                         your goals grow too so dont forget to set the bar higher!
                                     </FormDescription>
                                     <NumberInput
                                         defaultValue={data?.goal}
                                         onValueChange={async (val) => {
                                             if (!data?.id) return
-                                            await updateAgencyDetails(data.id, { goal: val })
+                                            await updateProjectDetails(data.id, { goal: val })
                                             await saveActivityLogsNotification({
-                                                agencyId: data.id,
-                                                description: `Updated the agency goal to | ${val} Sub Account`,
+                                                projectId: data.id,
+                                                description: `Updated the project goal to | ${val} Sub Account`,
                                                 subaccountId: undefined,
                                             })
                                             router.refresh()
@@ -401,7 +401,7 @@ const AgencyDetails = ({ data }: Props) => {
                                 type="submit"
                                 disabled={isLoading}
                             >
-                                {isLoading ? <Loading /> : 'Save Agency Information'}
+                                {isLoading ? <Loading /> : 'Save Project Information'}
                             </Button>
                         </form>
                     </Form>
@@ -412,15 +412,15 @@ const AgencyDetails = ({ data }: Props) => {
                                 <div>Danger Zone</div>
                             </div>
                             <div className="text-muted-foreground">
-                                Deleting your agency cannpt be undone. This will also delete all
+                                Deleting your project cannpt be undone. This will also delete all
                                 sub accounts and all data related to your sub accounts. Sub
-                                accounts will no longer have access to funnels, contacts etc.
+                                accounts will no longer have access to sites, contacts etc.
                             </div>
                             <AlertDialogTrigger
-                                disabled={isLoading || deletingAgency}
+                                disabled={isLoading || deletingProject}
                                 className="text-red-600 p-2 text-center mt-2 rounded-md hove:bg-red-600 hover:text-white whitespace-nowrap"
                             >
-                                {deletingAgency ? 'Deleting...' : 'Delete Agency'}
+                                {deletingProject ? 'Deleting...' : 'Delete Project'}
                             </AlertDialogTrigger>
                         </div>
                     )}
@@ -431,15 +431,15 @@ const AgencyDetails = ({ data }: Props) => {
                             </AlertDialogTitle>
                             <AlertDialogDescription className="text-left">
                                 This action cannot be undone. This will permanently delete the
-                                Agency account and all related sub accounts.
+                                Project account and all related sub accounts.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter className="flex items-center">
                             <AlertDialogCancel className="mb-2">Cancel</AlertDialogCancel>
                             <AlertDialogAction
-                                disabled={deletingAgency}
+                                disabled={deletingProject}
                                 className="bg-destructive hover:bg-destructive"
-                                onClick={handleDeleteAgency}
+                                onClick={handleDeleteProject}
                             >
                                 Delete
                             </AlertDialogAction>
@@ -451,4 +451,4 @@ const AgencyDetails = ({ data }: Props) => {
     )
 }
 
-export default AgencyDetails
+export default ProjectDetails

@@ -18,7 +18,7 @@ import {
     CardContent,
 } from '@/components/ui/card'
 import { useForm } from 'react-hook-form'
-import { Funnel, Lane, Pipeline } from '@prisma/client'
+import { Site, Lane, Pipeline } from '@prisma/client'
 import { Input } from '../ui/input'
 
 import { Button } from '../ui/button'
@@ -27,7 +27,7 @@ import { LaneFormSchema } from '@/lib/types'
 import {
     getPipelineDetails,
     saveActivityLogsNotification,
-    upsertFunnel,
+    upsertSite,
     upsertLane,
     upsertPipeline,
 } from '@/lib/queries'
@@ -80,7 +80,7 @@ const LaneForm: React.FC<CreateLaneFormProps> = ({
             if (!d) return
 
             await saveActivityLogsNotification({
-                agencyId: undefined,
+                projectId: undefined,
                 description: `Updated a lane | ${response?.name}`,
                 subaccountId: d.subAccountId,
             })

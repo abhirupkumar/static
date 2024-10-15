@@ -50,7 +50,7 @@ const UploadMediaForm = ({ subaccountId }: Props) => {
         try {
             const response = await createMedia(subaccountId, values)
             await saveActivityLogsNotification({
-                agencyId: undefined,
+                projectId: undefined,
                 description: `Uploaded a media file | ${response.name}`,
                 subaccountId,
             })
@@ -86,7 +86,7 @@ const UploadMediaForm = ({ subaccountId }: Props) => {
                                     <FormLabel>File Name</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Your agency name"
+                                            placeholder="Your project name"
                                             {...field}
                                         />
                                     </FormControl>

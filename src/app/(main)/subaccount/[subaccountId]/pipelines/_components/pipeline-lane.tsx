@@ -108,7 +108,7 @@ const PipelineLane: React.FC<PipelaneLaneProps> = ({
         try {
             const response = await deleteLane(laneDetails.id)
             await saveActivityLogsNotification({
-                agencyId: undefined,
+                projectId: undefined,
                 description: `Deleted a lane | ${response?.name}`,
                 subaccountId,
             })

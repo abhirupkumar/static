@@ -26,7 +26,7 @@ const Page = async ({
     params,
     searchParams
 }: {
-    params: { agencyId: string }
+    params: { projectId: string }
     searchParams: { code: string }
 }) => {
     let currency = 'USD'
@@ -40,23 +40,23 @@ const Page = async ({
     const startDate = new Date(`${currentYear}-01-01T00:00:00Z`).getTime() / 1000
     const endDate = new Date(`${currentYear}-12-31T23:59:59Z`).getTime() / 1000
 
-    // const agencyDetails = await db.agency.findUnique({
+    // const projectDetails = await db.project.findUnique({
     //     where: {
-    //         id: params.agencyId,
+    //         id: params.projectId,
     //     },
     // })
 
-    // if (!agencyDetails) return
+    // if (!projectDetails) return
 
     const subaccounts = await db.subAccount.findMany({
         where: {
-            agencyId: params.agencyId,
+            projectId: params.projectId,
         },
     })
 
-    // if (agencyDetails.connectAccountId) {
+    // if (projectDetails.connectAccountId) {
     // const response = await stripe.accounts.retrieve({
-    //   stripeAccount: agencyDetails.connectAccountId,
+    //   stripeAccount: projectDetails.connectAccountId,
     // })
 
     // currency = response.default_currency?.toUpperCase() || 'USD'
@@ -65,7 +65,7 @@ const Page = async ({
     //     created: { gte: startDate, lte: endDate },
     //     limit: 100,
     //   },
-    //   { stripeAccount: agencyDetails.connectAccountId }
+    //   { stripeAccount: projectDetails.connectAccountId }
     // )
     // sessions = checkoutSessions.data
     // totalClosedSessions = checkoutSessions.data
@@ -99,7 +99,7 @@ const Page = async ({
 
     return (
         <div className="relative h-full">
-            {/* {!agencyDetails.connectAccountId && (
+            {/* {!projectDetails.connectAccountId && (
                 <div className="absolute -top-10 -left-10 right-0 bottom-0 z-30 flex items-center justify-center backdrop-blur-md bg-background/50">
                     <Card>
                         <CardHeader>
@@ -108,7 +108,7 @@ const Page = async ({
                                 You need to connect your stripe account to see metrics
                             </CardDescription>
                             <Link
-                                href={`/agency/${agencyDetails.id}/launchpad`}
+                                href={`/project/${projectDetails.id}/launchpad`}
                                 className="p-2 w-fit bg-secondary text-white rounded-md flex items-center gap-2"
                             >
                                 <ClipboardIcon />
@@ -166,7 +166,7 @@ const Page = async ({
                     </Card>
                     <Card className="flex-1 relative">
                         <CardHeader>
-                            <CardTitle>Agency Goal</CardTitle>
+                            <CardTitle>Project Goal</CardTitle>
                             <CardDescription className='mt-2'>
                                 Reflects the number of sub accounts you want to own and
                                 manage.
@@ -179,12 +179,12 @@ const Page = async ({
                                         Current: {subaccounts.length}
                                     </span>
                                     <span className="text-muted-foreground text-sm">
-                                        {/* Goal: {agencyDetails.goal} */}
+                                        {/* Goal: {projectDetails.goal} */}
                                         Goal: 100
                                     </span>
                                 </div>
                                 {/* <Progress
-                                    value={(subaccounts.length / agencyDetails.goal) * 100}
+                                    value={(subaccounts.length / projectDetails.goal) * 100}
                                 /> */}
                                 <Progress
                                     value={0}

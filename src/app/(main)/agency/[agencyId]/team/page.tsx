@@ -7,34 +7,34 @@ import { columns } from './columns'
 import SendInvitation from '@/components/forms/send-invitation'
 
 type Props = {
-    params: { agencyId: string }
+    params: { projectId: string }
 }
 
 const TeamPage = async ({ params }: Props) => {
     const authUser = await currentUser()
     const teamMembers = await db.user.findMany({
         where: {
-            Agency: {
-                id: params.agencyId,
+            Project: {
+                id: params.projectId,
             },
         },
         include: {
-            Agency: { include: { SubAccount: true } },
+            Project: { include: { SubAccount: true } },
             Permissions: { include: { SubAccount: true } },
         },
     })
 
     if (!authUser) return null
-    const agencyDetails = await db.agency.findUnique({
+    const projectDetails = await db.project.findUnique({
         where: {
-            id: params.agencyId,
+            id: params.projectId,
         },
         include: {
             SubAccount: true,
         },
     })
 
-    if (!agencyDetails) return
+    if (!projectDetails) return
 
     return (
         <DataTable
@@ -44,7 +44,7 @@ const TeamPage = async ({ params }: Props) => {
                     Add
                 </>
             }
-            modalChildren={<SendInvitation agencyId={agencyDetails.id} />}
+            modalChildren={<SendInvitation projectId={projectDetails.id} />}
             filterValue="name"
             columns={columns}
             data={teamMembers}

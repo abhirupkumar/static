@@ -56,7 +56,7 @@ const Navigation = async () => {
         </ul>
       </nav>
       <aside className="flex items-center gap-2">
-        <Link href="/agency" className={cn(buttonVariants())}>
+        <Link href="/project" className={cn(buttonVariants())}>
           {user ? "Dashboard" : "Get Started"}
         </Link>
         {user && <UserButton />}

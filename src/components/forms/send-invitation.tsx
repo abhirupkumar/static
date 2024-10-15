@@ -32,14 +32,14 @@ import { saveActivityLogsNotification, sendInvitation } from '@/lib/queries'
 import { useToast } from '../ui/use-toast'
 
 interface SendInvitationProps {
-    agencyId: string
+    projectId: string
 }
 
-const SendInvitation: React.FC<SendInvitationProps> = ({ agencyId }) => {
+const SendInvitation: React.FC<SendInvitationProps> = ({ projectId }) => {
     const { toast } = useToast()
     const userDataSchema = z.object({
         email: z.string().email(),
-        role: z.enum(['AGENCY_ADMIN', 'SUBACCOUNT_USER', 'SUBACCOUNT_GUEST']),
+        role: z.enum(['PROJECT_ADMIN', 'SUBACCOUNT_USER', 'SUBACCOUNT_GUEST']),
     })
 
     const form = useForm<z.infer<typeof userDataSchema>>({
@@ -53,9 +53,9 @@ const SendInvitation: React.FC<SendInvitationProps> = ({ agencyId }) => {
 
     const onSubmit = async (values: z.infer<typeof userDataSchema>) => {
         try {
-            const res = await sendInvitation(values.role, values.email, agencyId)
+            const res = await sendInvitation(values.role, values.email, projectId)
             await saveActivityLogsNotification({
-                agencyId: agencyId,
+                projectId: projectId,
                 description: `Invited ${res.email}`,
                 subaccountId: undefined,
             })
@@ -123,7 +123,7 @@ const SendInvitation: React.FC<SendInvitationProps> = ({ agencyId }) => {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="AGENCY_ADMIN">Agency Admin</SelectItem>
+                                            <SelectItem value="PROJECT_ADMIN">Project Admin</SelectItem>
                                             <SelectItem value="SUBACCOUNT_USER">
                                                 Sub Account User
                                             </SelectItem>

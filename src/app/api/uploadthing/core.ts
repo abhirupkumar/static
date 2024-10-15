@@ -20,7 +20,7 @@ export const ourFileRouter = {
     avatar: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
         .middleware(authenticateUser)
         .onUploadComplete(() => { }),
-    agencyLogo: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
+    projectLogo: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
         .middleware(authenticateUser)
         .onUploadComplete(() => { }),
     media: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
