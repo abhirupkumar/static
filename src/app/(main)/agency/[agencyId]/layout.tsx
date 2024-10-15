@@ -12,29 +12,29 @@ import React from 'react'
 
 type Props = {
     children: React.ReactNode
-    params: { projectId: string }
+    params: { workspaceId: string }
 }
 
 const layout = async ({ children, params }: Props) => {
-    const projectId = await verifyAndAcceptInvitation()
+    const workspaceId = await verifyAndAcceptInvitation()
     const user = await currentUser()
 
     if (!user) {
         return redirect('/')
     }
 
-    if (!projectId) {
-        return redirect('/project')
+    if (!workspaceId) {
+        return redirect('/workspace')
     }
 
     if (
-        user.privateMetadata.role !== 'PROJECT_OWNER' &&
-        user.privateMetadata.role !== 'PROJECT_ADMIN'
+        user.privateMetadata.role !== 'WORKSPACE_OWNER' &&
+        user.privateMetadata.role !== 'WORKSPACE_ADMIN'
     )
         return <Unauthorized />
 
     let allNoti: any = []
-    const notifications = await getNotificationAndUser(projectId)
+    const notifications = await getNotificationAndUser(workspaceId)
     if (notifications) allNoti = notifications
 
 
@@ -42,8 +42,8 @@ const layout = async ({ children, params }: Props) => {
     return (
         <div className="h-screen overflow-hidden">
             <Sidebar
-                id={params.projectId}
-                type="project"
+                id={params.workspaceId}
+                type="workspace"
             />
             <div className="md:pl-[300px]">
                 <InfoBar

@@ -4,7 +4,7 @@ import React from 'react'
 
 type Props = { data: any }
 
-const SubaccountSiteChart = ({ data }: Props) => {
+const ProjectSiteChart = ({ data }: Props) => {
     return (
         <div className="h-fit flex transition-all items-start">
             <DonutChart
@@ -21,7 +21,7 @@ const SubaccountSiteChart = ({ data }: Props) => {
     )
 }
 
-export default SubaccountSiteChart
+export default ProjectSiteChart
 
 const customTooltip = ({
     payload,

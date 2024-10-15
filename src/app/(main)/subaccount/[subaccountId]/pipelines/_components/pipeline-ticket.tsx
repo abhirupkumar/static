@@ -46,7 +46,7 @@ import { Draggable } from 'react-beautiful-dnd'
 type Props = {
     setAllTickets: Dispatch<SetStateAction<TicketWithTags>>
     ticket: TicketWithTags[0]
-    subaccountId: string
+    projectId: string
     allTickets: TicketWithTags
     index: number
 }
@@ -55,7 +55,7 @@ const PipelineTicket = ({
     allTickets,
     index,
     setAllTickets,
-    subaccountId,
+    projectId,
     ticket,
 }: Props) => {
     const router = useRouter()
@@ -81,7 +81,7 @@ const PipelineTicket = ({
                 <TicketForm
                     getNewTicket={editNewTicket}
                     laneId={ticket.laneId}
-                    subaccountId={subaccountId}
+                    projectId={projectId}
                 />
             </CustomModal>,
             async () => {
@@ -100,9 +100,9 @@ const PipelineTicket = ({
             })
 
             await saveActivityLogsNotification({
-                projectId: undefined,
+                workspaceId: undefined,
                 description: `Deleted a ticket | ${response?.name}`,
-                subaccountId: subaccountId,
+                projectId: projectId,
             })
 
             router.refresh()

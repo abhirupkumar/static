@@ -80,9 +80,9 @@ const LaneForm: React.FC<CreateLaneFormProps> = ({
             if (!d) return
 
             await saveActivityLogsNotification({
-                projectId: undefined,
+                workspaceId: undefined,
                 description: `Updated a lane | ${response?.name}`,
-                subaccountId: d.subAccountId,
+                projectId: d.projectId,
             })
 
             toast({

@@ -1,30 +1,30 @@
 'use client'
 import {
-    deleteSubAccount,
-    getSubaccountDetails,
+    deleteProject,
+    getProjectDetails,
     saveActivityLogsNotification,
 } from '@/lib/queries'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
 type Props = {
-    subaccountId: string
+    projectId: string
 }
 
-const DeleteButton = ({ subaccountId }: Props) => {
+const DeleteButton = ({ projectId }: Props) => {
     const router = useRouter()
 
     return (
         <div
             className="text-white"
             onClick={async () => {
-                const response = await getSubaccountDetails(subaccountId)
+                const response = await getProjectDetails(projectId)
                 await saveActivityLogsNotification({
-                    projectId: undefined,
-                    description: `Deleted a subaccount | ${response?.name}`,
-                    subaccountId,
+                    workspaceId: undefined,
+                    description: `Deleted a project | ${response?.name}`,
+                    projectId,
                 })
-                await deleteSubAccount(subaccountId)
+                await deleteProject(projectId)
                 router.refresh()
             }}
         >

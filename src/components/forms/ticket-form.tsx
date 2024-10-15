@@ -1,6 +1,6 @@
 'use client'
 import {
-    getSubAccountTeamMembers,
+    getProjectTeamMembers,
     saveActivityLogsNotification,
     searchContacts,
     upsertTicket,
@@ -52,11 +52,11 @@ import TagCreator from '../global/tag-creator'
 
 type Props = {
     laneId: string
-    subaccountId: string
+    projectId: string
     getNewTicket: (ticket: TicketWithTags[0]) => void
 }
 
-const TicketForm = ({ getNewTicket, laneId, subaccountId }: Props) => {
+const TicketForm = ({ getNewTicket, laneId, projectId }: Props) => {
     const { data: defaultData, setClose } = useModal()
     const router = useRouter()
     const [tags, setTags] = useState<Tag[]>([])
@@ -80,14 +80,14 @@ const TicketForm = ({ getNewTicket, laneId, subaccountId }: Props) => {
     const isLoading = form.formState.isLoading
 
     useEffect(() => {
-        if (subaccountId) {
+        if (projectId) {
             const fetchData = async () => {
-                const response = await getSubAccountTeamMembers(subaccountId)
+                const response = await getProjectTeamMembers(projectId)
                 if (response) setAllTeamMembers(response)
             }
             fetchData()
         }
-    }, [subaccountId])
+    }, [projectId])
 
     useEffect(() => {
         if (defaultData.ticket) {
@@ -125,9 +125,9 @@ const TicketForm = ({ getNewTicket, laneId, subaccountId }: Props) => {
             )
 
             await saveActivityLogsNotification({
-                projectId: undefined,
+                workspaceId: undefined,
                 description: `Updated a ticket | ${response?.name}`,
-                subaccountId,
+                projectId,
             })
 
             toast({
@@ -210,7 +210,7 @@ const TicketForm = ({ getNewTicket, laneId, subaccountId }: Props) => {
                         />
                         <h3>Add tags</h3>
                         <TagCreator
-                            subAccountId={subaccountId}
+                            projectId={projectId}
                             getSelectedTags={setTags}
                             defaultTags={defaultData.ticket?.Tags || []}
                         />

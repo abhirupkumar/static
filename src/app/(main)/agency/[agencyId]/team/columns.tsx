@@ -3,12 +3,12 @@
 import clsx from 'clsx'
 import { ColumnDef } from '@tanstack/react-table'
 import {
-    Project,
-    ProjectSidebarOption,
+    Workspace,
+    WorkspaceSidebarOption,
     Permissions,
     Prisma,
     Role,
-    SubAccount,
+    Project,
     User,
 } from '@prisma/client'
 import Image from 'next/image'
@@ -42,10 +42,10 @@ import { deleteUser, getUser } from '@/lib/queries'
 import { useToast } from '@/components/ui/use-toast'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { UsersWithProjectSubAccountPermissionsSidebarOptions } from '@/lib/types'
+import { UsersWithWorkspaceProjectPermissionsSidebarOptions } from '@/lib/types'
 import CustomModal from '@/components/global/custom-modal'
 
-export const columns: ColumnDef<UsersWithProjectSubAccountPermissionsSidebarOptions>[] =
+export const columns: ColumnDef<UsersWithWorkspaceProjectPermissionsSidebarOptions>[] =
     [
         {
             accessorKey: 'id',
@@ -84,20 +84,20 @@ export const columns: ColumnDef<UsersWithProjectSubAccountPermissionsSidebarOpti
         { accessorKey: 'email', header: 'Email' },
 
         {
-            accessorKey: 'SubAccount',
+            accessorKey: 'Project',
             header: 'Owned Accounts',
             cell: ({ row }) => {
-                const isProjectOwner = row.getValue('role') === 'PROJECT_OWNER'
+                const isWorkspaceOwner = row.getValue('role') === 'WORKSPACE_OWNER'
                 const ownedAccounts = row.original?.Permissions.filter(
                     (per) => per.access
                 )
 
-                if (isProjectOwner)
+                if (isWorkspaceOwner)
                     return (
                         <div className="flex flex-col items-start">
                             <div className="flex flex-col gap-2">
                                 <Badge className="bg-slate-600 whitespace-nowrap">
-                                    Project - {row?.original?.Project?.name}
+                                    Workspace - {row?.original?.Workspace?.name}
                                 </Badge>
                             </div>
                         </div>
@@ -111,7 +111,7 @@ export const columns: ColumnDef<UsersWithProjectSubAccountPermissionsSidebarOpti
                                         key={account.id}
                                         className="bg-slate-600 w-fit whitespace-nowrap"
                                     >
-                                        Sub Account - {account.SubAccount.name}
+                                        Sub Account - {account.Project.name}
                                     </Badge>
                                 ))
                             ) : (
@@ -130,10 +130,10 @@ export const columns: ColumnDef<UsersWithProjectSubAccountPermissionsSidebarOpti
                 return (
                     <Badge
                         className={clsx({
-                            'bg-emerald-500': role === 'PROJECT_OWNER',
-                            'bg-orange-400': role === 'PROJECT_ADMIN',
-                            'bg-primary': role === 'SUBACCOUNT_USER',
-                            'bg-muted': role === 'SUBACCOUNT_GUEST',
+                            'bg-emerald-500': role === 'WORKSPACE_OWNER',
+                            'bg-orange-400': role === 'WORKSPACE_ADMIN',
+                            'bg-primary': role === 'PROJECT_USER',
+                            'bg-muted': role === 'PROJECT_GUEST',
                         })}
                     >
                         {role}
@@ -152,7 +152,7 @@ export const columns: ColumnDef<UsersWithProjectSubAccountPermissionsSidebarOpti
     ]
 
 interface CellActionsProps {
-    rowData: UsersWithProjectSubAccountPermissionsSidebarOptions
+    rowData: UsersWithWorkspaceProjectPermissionsSidebarOptions
 }
 
 const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
@@ -161,7 +161,7 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     if (!rowData) return
-    if (!rowData.Project) return
+    if (!rowData.Workspace) return
 
     return (
         <AlertDialog>
@@ -189,13 +189,13 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
                         onClick={() => {
                             setOpen(
                                 <CustomModal
-                                    subheading="You can change permissions only when the user has an owned subaccount"
+                                    subheading="You can change permissions only when the user has an owned project"
                                     title="Edit User Details"
                                 >
                                     <UserDetails
-                                        type="project"
-                                        id={rowData?.Project?.id || null}
-                                        subAccounts={rowData?.Project?.SubAccount}
+                                        type="workspace"
+                                        id={rowData?.Workspace?.id || null}
+                                        projects={rowData?.Workspace?.Project}
                                     />
                                 </CustomModal>,
                                 async () => {
@@ -207,7 +207,7 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
                         <Edit size={15} />
                         Edit Details
                     </DropdownMenuItem>
-                    {rowData.role !== 'PROJECT_OWNER' && (
+                    {rowData.role !== 'WORKSPACE_OWNER' && (
                         <AlertDialogTrigger asChild>
                             <DropdownMenuItem
                                 className="flex gap-2"
@@ -240,7 +240,7 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
                             toast({
                                 title: 'Deleted User',
                                 description:
-                                    'The user has been deleted from this project they no longer have access to the project',
+                                    'The user has been deleted from this workspace they no longer have access to the workspace',
                             })
                             setLoading(false)
                             router.refresh()

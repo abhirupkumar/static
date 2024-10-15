@@ -83,7 +83,7 @@ const MediaCard = ({ file }: Props) => {
                         Are you absolutely sure?
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-left">
-                        Are you sure you want to delete this file? All subaccount using this
+                        Are you sure you want to delete this file? All project using this
                         file will no longer have access to it!
                     </AlertDialogDescription>
                 </AlertDialogHeader>
@@ -96,9 +96,9 @@ const MediaCard = ({ file }: Props) => {
                             setLoading(true)
                             const response = await deleteMedia(file.id)
                             await saveActivityLogsNotification({
-                                projectId: undefined,
+                                workspaceId: undefined,
                                 description: `Deleted a media file | ${response?.name}`,
-                                subaccountId: response.subAccountId,
+                                projectId: response.projectId,
                             })
                             toast({
                                 title: 'Deleted File',

@@ -21,11 +21,11 @@ import { useRouter } from 'next/navigation'
 
 const PipelineSettings = ({
     pipelineId,
-    subaccountId,
+    projectId,
     pipelines,
 }: {
     pipelineId: string
-    subaccountId: string
+    projectId: string
     pipelines: Pipeline[]
 }) => {
     const router = useRouter()
@@ -55,7 +55,7 @@ const PipelineSettings = ({
                                             title: 'Deleted',
                                             description: 'Pipeline is deleted',
                                         })
-                                        router.replace(`/subaccount/${subaccountId}/pipelines`)
+                                        router.replace(`/project/${projectId}/pipelines`)
                                     } catch (error) {
                                         toast({
                                             variant: 'destructive',
@@ -72,7 +72,7 @@ const PipelineSettings = ({
                 </div>
 
                 <CreatePipelineForm
-                    subAccountId={subaccountId}
+                    projectId={projectId}
                     defaultData={pipelines.find((p) => p.id === pipelineId)}
                 />
             </div>

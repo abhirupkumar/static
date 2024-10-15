@@ -1,5 +1,5 @@
 datasource db {
-  provider     = "postgresql"
+  provider     = "mysql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -9,10 +9,10 @@ generator client {
 }
 
 enum Role {
-  PROJECT_OWNER
-  PROJECT_ADMIN
-  SUBACCOUNT_USER
-  SUBACCOUNT_GUEST
+  WORKSPACE_OWNER
+  WORKSPACE_ADMIN
+  PROJECT_USER
+  PROJECT_GUEST
 }
 
 enum Icon {
@@ -55,55 +55,74 @@ model User {
   email        String         @unique
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  role         Role           @default(SUBACCOUNT_USER)
-  Projects     Project[]
+  role         Role           @default(PROJECT_USER)
+  workspaceId  String?
+  Workspace    Workspace?     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  Permissions  Permissions[]
   Ticket       Ticket[]
   Notification Notification[]
+
+  @@index([workspaceId])
 }
 
-model Project {
-  id               String         @id @default(uuid())
-  connectAccountId String?        @default("")
-  customerId       String         @default("")
+model Permissions {
+  id        String  @id @default(uuid())
+  email     String
+  User      User    @relation(fields: [email], references: [email], onDelete: Cascade)
+  projectId String
+  Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  access    Boolean
+
+  @@index([projectId])
+  @@index([email])
+}
+
+model Workspace {
+  id               String                   @id @default(uuid())
+  connectAccountId String?                  @default("")
+  customerId       String                   @default("")
   name             String
-  projectLogo      String         @db.Text
-  companyEmail     String         @db.Text
+  workspaceLogo    String                   @db.Text
+  companyEmail     String                   @db.Text
   companyPhone     String
-  whiteLabel       Boolean        @default(true)
+  whiteLabel       Boolean                  @default(true)
   address          String
   city             String
   zipCode          String
   state            String
   country          String
-  goal             Int            @default(5)
+  goal             Int                      @default(5)
   users            User[]
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  SubAccount       SubAccount[]
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  Project          Project[]
+  SidebarOption    WorkspaceSidebarOption[]
   Invitation       Invitation[]
   Notification     Notification[]
   Subscription     Subscription?
   AddOns           AddOns[]
 }
 
-model SubAccount {
-  id               String         @id @default(uuid())
-  connectAccountId String?        @default("")
+model Project {
+  id               String                 @id @default(uuid())
+  connectAccountId String?                @default("")
   name             String
-  subAccountLogo   String         @db.Text
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  companyEmail     String         @db.Text
+  projectLogo      String                 @db.Text
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  companyEmail     String                 @db.Text
   companyPhone     String
-  goal             Int            @default(5)
+  goal             Int                    @default(5)
   address          String
   city             String
   zipCode          String
   state            String
   country          String
-  projectId        String
-  Project          Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  Sites            Site[]
+  workspaceId      String
+  Workspace        Workspace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  SidebarOption    ProjectSidebarOption[]
+  Permissions      Permissions[]
+  Funnels          Funnel[]
   Media            Media[]
   Contact          Contact[]
   Trigger          Trigger[]
@@ -112,33 +131,33 @@ model SubAccount {
   Tags             Tag[]
   Notification     Notification[]
 
-  @@index([projectId])
+  @@index([workspaceId])
 }
 
 model Tag {
-  id           String   @id @default(uuid())
-  name         String
-  color        String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  subAccountId String
+  id        String   @id @default(uuid())
+  name      String
+  color     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projectId String
 
-  SubAccount SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
-  Ticket     Ticket[]
+  Project Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Ticket  Ticket[]
 
-  @@index([subAccountId])
+  @@index([projectId])
 }
 
 model Pipeline {
-  id           String     @id @default(uuid())
-  name         String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  Lane         Lane[]
-  SubAccount   SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
-  subAccountId String
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Lane      Lane[]
+  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
 
-  @@index([subAccountId])
+  @@index([projectId])
 }
 
 model Lane {
@@ -182,16 +201,16 @@ enum TriggerTypes {
 }
 
 model Trigger {
-  id           String       @id @default(uuid())
-  name         String
-  type         TriggerTypes
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  subAccountId String
-  Subaccount   SubAccount   @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
-  Automations  Automation[]
+  id          String       @id @default(uuid())
+  name        String
+  type        TriggerTypes
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  projectId   String
+  Project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Automations Automation[]
 
-  @@index([subAccountId])
+  @@index([projectId])
 }
 
 model Automation {
@@ -202,13 +221,13 @@ model Automation {
   triggerId          String?
   published          Boolean              @default(false)
   Trigger            Trigger?             @relation(fields: [triggerId], references: [id], onDelete: Cascade)
-  subAccountId       String
-  Subaccount         SubAccount           @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+  projectId          String
+  Project            Project              @relation(fields: [projectId], references: [id], onDelete: Cascade)
   Action             Action[]
   AutomationInstance AutomationInstance[]
 
   @@index([triggerId])
-  @@index([subAccountId])
+  @@index([projectId])
 }
 
 model AutomationInstance {
@@ -241,48 +260,48 @@ model Action {
 }
 
 model Contact {
-  id           String   @id @default(uuid())
-  name         String
-  email        String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  subAccountId String
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projectId String
 
-  Subaccount SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
-  Ticket     Ticket[]
+  Project Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Ticket  Ticket[]
 
-  @@index([subAccountId])
+  @@index([projectId])
 }
 
 model Media {
-  id           String     @id @default(uuid())
-  type         String?
-  name         String
-  link         String     @unique
-  subAccountId String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  Subaccount   SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid())
+  type      String?
+  name      String
+  link      String   @unique
+  projectId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  @@index([subAccountId])
+  @@index([projectId])
 }
 
-model Site {
-  id            String      @id @default(uuid())
+model Funnel {
+  id            String       @id @default(uuid())
   name          String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   description   String?
-  published     Boolean     @default(false)
-  subDomainName String?     @unique
-  favicon       String?     @db.Text
-  subAccountId  String
-  SubAccount    SubAccount  @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
-  SitePages     SitePage[]
-  liveProducts  String?     @default("[]")
+  published     Boolean      @default(false)
+  subDomainName String?      @unique
+  favicon       String?      @db.Text
+  projectId     String
+  Project       Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  FunnelPages   FunnelPage[]
+  liveProducts  String?      @default("[]")
   ClassName     ClassName[]
 
-  @@index([subAccountId])
+  @@index([projectId])
 }
 
 model ClassName {
@@ -291,27 +310,53 @@ model ClassName {
   color      String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  siteId     String
-  customData String?  @db.Text
-  Site       Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  funnelId   String
+  customData String?  @db.LongText
+  Funnel     Funnel   @relation(fields: [funnelId], references: [id], onDelete: Cascade)
 
-  @@index([siteId])
+  @@index([funnelId])
 }
 
-model SitePage {
+model FunnelPage {
   id           String   @id @default(uuid())
   name         String
   pathName     String   @default("")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   visits       Int      @default(0)
-  content      String?  @db.Text
+  content      String?  @db.LongText
   order        Int
   previewImage String?  @db.Text
-  siteId       String
-  Site         Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  funnelId     String
+  Funnel       Funnel   @relation(fields: [funnelId], references: [id], onDelete: Cascade)
 
-  @@index([siteId])
+  @@index([funnelId])
+}
+
+model WorkspaceSidebarOption {
+  id          String     @id @default(uuid())
+  name        String     @default("Menu")
+  link        String     @default("#")
+  icon        Icon       @default(info)
+  workspaceId String
+  Workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([workspaceId])
+}
+
+model ProjectSidebarOption {
+  id        String   @id @default(uuid())
+  name      String   @default("Menu")
+  link      String   @default("#")
+  icon      Icon     @default(info)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String?
+
+  @@index([projectId])
 }
 
 enum InvitationStatus {
@@ -321,32 +366,32 @@ enum InvitationStatus {
 }
 
 model Invitation {
-  id        String           @id @default(uuid())
-  email     String           @unique
-  projectId String
-  Project   Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  status    InvitationStatus @default(PENDING)
-  role      Role             @default(SUBACCOUNT_USER)
+  id          String           @id @default(uuid())
+  email       String           @unique
+  workspaceId String
+  Workspace   Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  status      InvitationStatus @default(PENDING)
+  role        Role             @default(PROJECT_USER)
 
-  @@index([projectId])
+  @@index([workspaceId])
 }
 
 model Notification {
   id           String  @id @default(uuid())
   notification String
-  projectId    String
-  subAccountId String?
+  workspaceId  String
+  projectId    String?
   userId       String
 
-  User       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  SubAccount SubAccount? @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  Project   Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([workspaceId])
   @@index([projectId])
-  @@index([subAccountId])
   @@index([userId])
 }
 
@@ -368,21 +413,21 @@ model Subscription {
   currentPeriodEndDate DateTime
   subscritiptionId     String   @unique
 
-  projectId String?  @unique
-  Project   Project? @relation(fields: [projectId], references: [id])
+  workspaceId String?    @unique
+  Workspace   Workspace? @relation(fields: [workspaceId], references: [id])
 
   @@index([customerId])
 }
 
 model AddOns {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  active    Boolean  @default(false)
-  priceId   String   @unique
-  projectId String?
-  Project   Project? @relation(fields: [projectId], references: [id])
+  id          String     @id @default(uuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  name        String
+  active      Boolean    @default(false)
+  priceId     String     @unique
+  workspaceId String?
+  Workspace   Workspace? @relation(fields: [workspaceId], references: [id])
 
-  @@index([projectId])
+  @@index([workspaceId])
 }

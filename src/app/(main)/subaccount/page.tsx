@@ -8,36 +8,36 @@ type Props = {
     searchParams: { state: string; code: string }
 }
 
-const SubAccountMainPage = async ({ searchParams }: Props) => {
-    const projectId = await verifyAndAcceptInvitation();
-    if (!projectId) {
+const ProjectMainPage = async ({ searchParams }: Props) => {
+    const workspaceId = await verifyAndAcceptInvitation();
+    if (!workspaceId) {
         return <Unauthorized />
     }
 
     const user = await getAuthUserDetails();
     if (!user) return
 
-    const getFirstSubaccountWithAccess = user.Permissions.find(
+    const getFirstProjectWithAccess = user.Permissions.find(
         (permission) => permission.access === true
     )
 
     if (searchParams.state) {
         const statePath = searchParams.state.split('___')[0]
-        const stateSubaccountId = searchParams.state.split('___')[1]
-        if (!stateSubaccountId) return <Unauthorized />
+        const stateProjectId = searchParams.state.split('___')[1]
+        if (!stateProjectId) return <Unauthorized />
         return redirect(
-            `/subaccount/${stateSubaccountId}/${statePath}?code=${searchParams.code}`
+            `/project/${stateProjectId}/${statePath}?code=${searchParams.code}`
         )
     }
 
-    if (getFirstSubaccountWithAccess) {
-        return redirect(`/subaccount/${getFirstSubaccountWithAccess.subAccountId}`)
+    if (getFirstProjectWithAccess) {
+        return redirect(`/project/${getFirstProjectWithAccess.projectId}`)
     }
 
     return <Unauthorized />
 }
 
-export default SubAccountMainPage
+export default ProjectMainPage
 
 
 export const metadata = constructMetadata({

@@ -18,7 +18,7 @@ import PipelineLane from './pipeline-lane'
 type Props = {
     lanes: LaneDetail[]
     pipelineId: string
-    subaccountId: string
+    projectId: string
     pipelineDetails: PipelineDetailsWithLanesCardsTagsTickets
     updateLanesOrder: (lanes: Lane[]) => Promise<void>
     updateTicketsOrder: (tickets: Ticket[]) => Promise<void>
@@ -28,7 +28,7 @@ const PipelineView = ({
     lanes,
     pipelineDetails,
     pipelineId,
-    subaccountId,
+    projectId,
     updateLanesOrder,
     updateTicketsOrder,
 }: Props) => {
@@ -163,7 +163,7 @@ const PipelineView = ({
                                     <PipelineLane
                                         allTickets={allTickets}
                                         setAllTickets={setAllTickets}
-                                        subaccountId={subaccountId}
+                                        projectId={projectId}
                                         pipelineId={pipelineId}
                                         tickets={lane.Tickets}
                                         laneDetails={lane}

@@ -96,7 +96,7 @@ export default async function Home() {
                     ))}
                 </div>
                 <Link
-                  href={`/project?plan=${card.id}`}
+                  href={`/workspace?plan=${card.id}`}
                   className={cn(
                     "w-full",
                     buttonVariants({
@@ -123,7 +123,7 @@ export default async function Home() {
             <div className="text-muted-foreground text-center">
               <p>
                 Plura does everything possible to provide you with a convenient
-                tool for managing your project.
+                tool for managing your workspace.
               </p>
               <p>Here are just a few tools that may interest you.</p>
             </div>
@@ -140,13 +140,13 @@ export default async function Home() {
           </h1>
           <p></p>
           <p className="text-neutral-500 max-w-lg mx-auto my-2 text-sm text-center relative z-10">
-            Discover the power of seamless project management with Zyper Project
+            Discover the power of seamless workspace management with Zyper Workspace
             CRM. Experience the difference today and revolutionize the way you
-            manage your project with Zyper.
+            manage your workspace with Zyper.
           </p>
           <div className="flex justify-center mt-8">
             <Link
-              href="/project"
+              href="/workspace"
               className={cn(buttonVariants({ variant: "secondary" }), "w-20")}
             >
               Join

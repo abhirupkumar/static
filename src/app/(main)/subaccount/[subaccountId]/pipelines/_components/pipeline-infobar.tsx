@@ -22,12 +22,12 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 
 type Props = {
-    subAccountId: string
+    projectId: string
     pipelines: Pipeline[]
     pipelineId: string
 }
 
-const PipelineInfoBar = ({ pipelineId, pipelines, subAccountId }: Props) => {
+const PipelineInfoBar = ({ pipelineId, pipelines, projectId }: Props) => {
     const { setOpen: setOpenModal, setClose } = useModal()
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(pipelineId)
@@ -39,7 +39,7 @@ const PipelineInfoBar = ({ pipelineId, pipelines, subAccountId }: Props) => {
                 title="Create A Pipeline"
                 subheading="Pipelines allows you to group tickets into lanes and track your business processes all in one place."
             >
-                <CreatePipelineForm subAccountId={subAccountId} />
+                <CreatePipelineForm projectId={projectId} />
             </CustomModal>
         )
     }
@@ -72,7 +72,7 @@ const PipelineInfoBar = ({ pipelineId, pipelines, subAccountId }: Props) => {
                                     {pipelines.map((pipeline) => (
                                         <Link
                                             key={pipeline.id}
-                                            href={`/subaccount/${subAccountId}/pipelines/${pipeline.id}`}
+                                            href={`/project/${projectId}/pipelines/${pipeline.id}`}
                                         >
                                             <CommandItem
                                                 key={pipeline.id}

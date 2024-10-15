@@ -14,13 +14,13 @@ const authenticateUser = () => {
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
     // Define as many FileRoutes as you like, each with a unique routeSlug
-    subaccountLogo: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
+    projectLogo: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
         .middleware(authenticateUser)
         .onUploadComplete(() => { }),
     avatar: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
         .middleware(authenticateUser)
         .onUploadComplete(() => { }),
-    projectLogo: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
+    workspaceLogo: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
         .middleware(authenticateUser)
         .onUploadComplete(() => { }),
     media: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })

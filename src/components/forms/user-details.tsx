@@ -1,10 +1,10 @@
 'use client'
 import {
-    AuthUserWithProjectSigebarOptionsSubAccounts,
-    UserWithPermissionsAndSubAccounts,
+    AuthUserWithWorkspaceSigebarOptionsProjects,
+    UserWithPermissionsAndProjects,
 } from '@/lib/types'
 import { useModal } from '@/providers/modal-provider'
-import { SubAccount, User } from '@prisma/client'
+import { Project, User } from '@prisma/client'
 import React, { useEffect, useState } from 'react'
 import { useToast } from '../ui/use-toast'
 import { useRouter } from 'next/navigation'
@@ -52,20 +52,20 @@ import { v4 } from 'uuid'
 
 type Props = {
     id: string | null
-    type: 'project' | 'subaccount'
+    type: 'workspace' | 'project'
     userData?: Partial<User>
-    subAccounts?: SubAccount[]
+    projects?: Project[]
 }
 
-const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
-    const [subAccountPermissions, setSubAccountsPermissions] =
-        useState<UserWithPermissionsAndSubAccounts | null>(null)
+const UserDetails = ({ id, type, projects, userData }: Props) => {
+    const [projectPermissions, setProjectsPermissions] =
+        useState<UserWithPermissionsAndProjects | null>(null)
 
     const { data, setClose } = useModal()
     const [roleState, setRoleState] = useState('')
     const [loadingPermissions, setLoadingPermissions] = useState(false)
     const [authUserData, setAuthUserData] =
-        useState<AuthUserWithProjectSigebarOptionsSubAccounts | null>(null)
+        useState<AuthUserWithWorkspaceSigebarOptionsProjects | null>(null)
     const { toast } = useToast()
     const router = useRouter()
 
@@ -86,10 +86,10 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
         email: z.string().email(),
         avatarUrl: z.string(),
         role: z.enum([
-            'PROJECT_OWNER',
-            'PROJECT_ADMIN',
-            'SUBACCOUNT_USER',
-            'SUBACCOUNT_GUEST',
+            'WORKSPACE_OWNER',
+            'WORKSPACE_ADMIN',
+            'PROJECT_USER',
+            'PROJECT_GUEST',
         ]),
     })
 
@@ -109,7 +109,7 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
         const getPermissions = async () => {
             if (!data.user) return
             const permission = await getUserPermissions(data.user.id)
-            setSubAccountsPermissions(permission)
+            setProjectsPermissions(permission)
         }
         getPermissions()
     }, [data, form])
@@ -124,7 +124,7 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
     }, [userData, data])
 
     const onChangePermission = async (
-        subAccountId: string,
+        projectId: string,
         val: boolean,
         permissionsId: string | undefined
     ) => {
@@ -133,19 +133,19 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
         const response = await changeUserPermissions(
             permissionsId ? permissionsId : v4(),
             data.user.email,
-            subAccountId,
+            projectId,
             val
         )
-        if (type === 'project') {
+        if (type === 'workspace') {
             await saveActivityLogsNotification({
-                projectId: authUserData?.Project?.id,
-                description: `Gave ${userData?.name} access to | ${subAccountPermissions?.Permissions.find(
-                    (p) => p.subAccountId === subAccountId
-                )?.SubAccount.name
+                workspaceId: authUserData?.Workspace?.id,
+                description: `Gave ${userData?.name} access to | ${projectPermissions?.Permissions.find(
+                    (p) => p.projectId === projectId
+                )?.Project.name
                     } `,
-                subaccountId: subAccountPermissions?.Permissions.find(
-                    (p) => p.subAccountId === subAccountId
-                )?.SubAccount.id,
+                projectId: projectPermissions?.Permissions.find(
+                    (p) => p.projectId === projectId
+                )?.Project.id,
             })
         }
 
@@ -154,9 +154,9 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
                 title: 'Success',
                 description: 'The request was successfull',
             })
-            if (subAccountPermissions) {
-                subAccountPermissions.Permissions.find((perm) => {
-                    if (perm.subAccountId === subAccountId) {
+            if (projectPermissions) {
+                projectPermissions.Permissions.find((perm) => {
+                    if (perm.projectId === projectId) {
                         return { ...perm, access: !perm.access }
                     }
                     return perm
@@ -177,15 +177,15 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
         if (!id) return
         if (userData || data?.user) {
             const updatedUser = await updateUser(values)
-            authUserData?.Project?.SubAccount.filter((subacc) =>
+            authUserData?.Workspace?.Project.filter((subacc) =>
                 authUserData.Permissions.find(
-                    (p) => p.subAccountId === subacc.id && p.access
+                    (p) => p.projectId === subacc.id && p.access
                 )
-            ).forEach(async (subaccount) => {
+            ).forEach(async (project) => {
                 await saveActivityLogsNotification({
-                    projectId: undefined,
+                    workspaceId: undefined,
                     description: `Updated ${userData?.name} information`,
-                    subaccountId: subaccount.id,
+                    projectId: project.id,
                 })
             })
 
@@ -267,7 +267,7 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
                                     <FormControl>
                                         <Input
                                             readOnly={
-                                                userData?.role === 'PROJECT_OWNER' ||
+                                                userData?.role === 'WORKSPACE_OWNER' ||
                                                 form.formState.isSubmitting
                                             }
                                             placeholder="Email"
@@ -286,14 +286,14 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
                                 <FormItem className="flex-1">
                                     <FormLabel> User Role</FormLabel>
                                     <Select
-                                        disabled={field.value === 'PROJECT_OWNER'}
+                                        disabled={field.value === 'WORKSPACE_OWNER'}
                                         onValueChange={(value) => {
                                             if (
-                                                value === 'SUBACCOUNT_USER' ||
-                                                value === 'SUBACCOUNT_GUEST'
+                                                value === 'PROJECT_USER' ||
+                                                value === 'PROJECT_GUEST'
                                             ) {
                                                 setRoleState(
-                                                    'You need to have subaccounts to assign Subaccount access to team members.'
+                                                    'You need to have projects to assign Project access to team members.'
                                                 )
                                             } else {
                                                 setRoleState('')
@@ -308,19 +308,19 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="PROJECT_ADMING">
-                                                Project Admin
+                                            <SelectItem value="WORKSPACE_ADMING">
+                                                Workspace Admin
                                             </SelectItem>
-                                            {(data?.user?.role === 'PROJECT_OWNER' ||
-                                                userData?.role === 'PROJECT_OWNER') && (
-                                                    <SelectItem value="PROJECT_OWNER">
-                                                        Project Owner
+                                            {(data?.user?.role === 'WORKSPACE_OWNER' ||
+                                                userData?.role === 'WORKSPACE_OWNER') && (
+                                                    <SelectItem value="WORKSPACE_OWNER">
+                                                        Workspace Owner
                                                     </SelectItem>
                                                 )}
-                                            <SelectItem value="SUBACCOUNT_USER">
+                                            <SelectItem value="PROJECT_USER">
                                                 Sub Account User
                                             </SelectItem>
-                                            <SelectItem value="SUBACCOUNT_GUEST">
+                                            <SelectItem value="PROJECT_GUEST">
                                                 Sub Account Guest
                                             </SelectItem>
                                         </SelectContent>
@@ -336,37 +336,37 @@ const UserDetails = ({ id, type, subAccounts, userData }: Props) => {
                         >
                             {form.formState.isSubmitting ? <Loading /> : 'Save User Details'}
                         </Button>
-                        {authUserData?.role === 'PROJECT_OWNER' && (
+                        {authUserData?.role === 'WORKSPACE_OWNER' && (
                             <div>
                                 <Separator className="my-4" />
                                 <FormLabel> User Permissions</FormLabel>
                                 <FormDescription className="mb-4">
                                     You can give Sub Account access to team member by turning on
                                     access control for each Sub Account. This is only visible to
-                                    project owners
+                                    workspace owners
                                 </FormDescription>
                                 <div className="flex flex-col gap-4">
-                                    {subAccounts?.map((subAccount) => {
-                                        const subAccountPermissionsDetails =
-                                            subAccountPermissions?.Permissions.find(
-                                                (p) => p.subAccountId === subAccount.id
+                                    {projects?.map((project) => {
+                                        const projectPermissionsDetails =
+                                            projectPermissions?.Permissions.find(
+                                                (p) => p.projectId === project.id
                                             )
                                         return (
                                             <div
-                                                key={subAccount.id}
+                                                key={project.id}
                                                 className="flex items-center justify-between rounded-lg border p-4"
                                             >
                                                 <div>
-                                                    <p>{subAccount.name}</p>
+                                                    <p>{project.name}</p>
                                                 </div>
                                                 <Switch
                                                     disabled={loadingPermissions}
-                                                    checked={subAccountPermissionsDetails?.access}
+                                                    checked={projectPermissionsDetails?.access}
                                                     onCheckedChange={(permission) => {
                                                         onChangePermission(
-                                                            subAccount.id,
+                                                            project.id,
                                                             permission,
-                                                            subAccountPermissionsDetails?.id
+                                                            projectPermissionsDetails?.id
                                                         )
                                                     }}
                                                 />

@@ -5,43 +5,43 @@ import MenuOptions from './menu-options'
 
 type Props = {
     id: string
-    type: 'project' | 'subaccount'
+    type: 'workspace' | 'project'
 }
 
 const Sidebar = async ({ id, type }: Props) => {
     const user = await getAuthUserDetails()
     if (!user) return null
 
-    if (!user.Project) return
+    if (!user.Workspace) return
 
     const details =
-        type === 'project'
-            ? user?.Project
-            : user?.Project.SubAccount.find((subaccount) => subaccount.id === id)
+        type === 'workspace'
+            ? user?.Workspace
+            : user?.Workspace.Project.find((project) => project.id === id)
 
-    const isWhiteLabeledProject = user.Project.whiteLabel
+    const isWhiteLabeledWorkspace = user.Workspace.whiteLabel
     if (!details) return
 
-    let sideBarLogo = user.Project.projectLogo || '/assets/plura-logo.svg'
+    let sideBarLogo = user.Workspace.workspaceLogo || '/assets/plura-logo.svg'
 
-    if (!isWhiteLabeledProject) {
-        if (type === 'subaccount') {
+    if (!isWhiteLabeledWorkspace) {
+        if (type === 'project') {
             sideBarLogo =
-                user?.Project.SubAccount.find((subaccount) => subaccount.id === id)
-                    ?.subAccountLogo || user.Project.projectLogo
+                user?.Workspace.Project.find((project) => project.id === id)
+                    ?.projectLogo || user.Workspace.workspaceLogo
         }
     }
 
     const sidebarOpt =
-        type === 'project'
-            ? user.Project.SidebarOption || []
-            : user.Project.SubAccount.find((subaccount) => subaccount.id === id)
+        type === 'workspace'
+            ? user.Workspace.SidebarOption || []
+            : user.Workspace.Project.find((project) => project.id === id)
                 ?.SidebarOption || []
 
-    const subaccounts = user.Project.SubAccount.filter((subaccount) =>
+    const projects = user.Workspace.Project.filter((project) =>
         user.Permissions.find(
             (permission) =>
-                permission.subAccountId === subaccount.id && permission.access
+                permission.projectId === project.id && permission.access
         )
     )
 
@@ -53,7 +53,7 @@ const Sidebar = async ({ id, type }: Props) => {
                 id={id}
                 sidebarLogo={sideBarLogo}
                 sidebarOpt={sidebarOpt}
-                subAccounts={subaccounts}
+                projects={projects}
                 user={user}
             />
             <MenuOptions
@@ -62,7 +62,7 @@ const Sidebar = async ({ id, type }: Props) => {
                 id={id}
                 sidebarLogo={sideBarLogo}
                 sidebarOpt={sidebarOpt}
-                subAccounts={subaccounts}
+                projects={projects}
                 user={user}
             />
         </>

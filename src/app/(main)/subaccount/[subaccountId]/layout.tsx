@@ -13,12 +13,12 @@ import React from 'react'
 
 type Props = {
     children: React.ReactNode
-    params: { subaccountId: string }
+    params: { projectId: string }
 }
 
-const SubaccountLayout = async ({ children, params }: Props) => {
-    const projectId = await verifyAndAcceptInvitation()
-    if (!projectId) return <Unauthorized />
+const ProjectLayout = async ({ children, params }: Props) => {
+    const workspaceId = await verifyAndAcceptInvitation()
+    if (!workspaceId) return <Unauthorized />
     const user = await currentUser()
     if (!user) {
         return redirect('/')
@@ -32,22 +32,22 @@ const SubaccountLayout = async ({ children, params }: Props) => {
         const allPermissions = await getAuthUserDetails()
         const hasPermission = allPermissions?.Permissions.find(
             (permissions) =>
-                permissions.access && permissions.subAccountId === params.subaccountId
+                permissions.access && permissions.projectId === params.projectId
         )
         if (!hasPermission) {
             return <Unauthorized />
         }
 
-        const allNotifications = await getNotificationAndUser(projectId)
+        const allNotifications = await getNotificationAndUser(workspaceId)
 
         if (
-            user.privateMetadata.role === 'PROJECT_ADMIN' ||
-            user.privateMetadata.role === 'PROJECT_OWNER'
+            user.privateMetadata.role === 'WORKSPACE_ADMIN' ||
+            user.privateMetadata.role === 'WORKSPACE_OWNER'
         ) {
             notifications = allNotifications
         } else {
             const filteredNoti = allNotifications?.filter(
-                (item) => item.subAccountId === params.subaccountId
+                (item) => item.projectId === params.projectId
             )
             if (filteredNoti) notifications = filteredNoti
         }
@@ -56,15 +56,15 @@ const SubaccountLayout = async ({ children, params }: Props) => {
     return (
         <div className="h-screen overflow-hidden">
             <Sidebar
-                id={params.subaccountId}
-                type="subaccount"
+                id={params.projectId}
+                type="project"
             />
 
             <div className="md:pl-[300px]">
                 <InfoBar
                     notifications={notifications}
                     role={user.privateMetadata.role as Role}
-                    subAccountId={params.subaccountId as string}
+                    projectId={params.projectId as string}
                 />
                 <div className="relative">{children}</div>
             </div>
@@ -72,4 +72,4 @@ const SubaccountLayout = async ({ children, params }: Props) => {
     )
 }
 
-export default SubaccountLayout
+export default ProjectLayout

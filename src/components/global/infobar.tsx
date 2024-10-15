@@ -22,10 +22,10 @@ type Props = {
     notifications: NotificationWithUser | []
     role?: Role
     className?: string
-    subAccountId?: string
+    projectId?: string
 }
 
-const InfoBar = ({ notifications, subAccountId, className, role }: Props) => {
+const InfoBar = ({ notifications, projectId, className, role }: Props) => {
     const [allNotifications, setAllNotifications] = useState(notifications)
     const [showAll, setShowAll] = useState(true)
 
@@ -35,7 +35,7 @@ const InfoBar = ({ notifications, subAccountId, className, role }: Props) => {
         } else {
             if (notifications?.length !== 0) {
                 setAllNotifications(
-                    notifications?.filter((item) => item.subAccountId === subAccountId) ??
+                    notifications?.filter((item) => item.projectId === projectId) ??
                     []
                 )
             }
@@ -63,9 +63,9 @@ const InfoBar = ({ notifications, subAccountId, className, role }: Props) => {
                             <SheetHeader className="text-left">
                                 <SheetTitle>Notifications</SheetTitle>
                                 <SheetDescription>
-                                    {(role === 'PROJECT_ADMIN' || role === 'PROJECT_OWNER') && (
+                                    {(role === 'WORKSPACE_ADMIN' || role === 'WORKSPACE_OWNER') && (
                                         <Card className="flex items-center justify-between p-4">
-                                            Current Subaccount
+                                            Current Project
                                             <Switch onCheckedChange={handleClick} />
                                         </Card>
                                     )}

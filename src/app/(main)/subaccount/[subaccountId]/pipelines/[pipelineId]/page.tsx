@@ -14,16 +14,16 @@ import PipelineSettings from '../_components/pipeline-settings'
 import PipelineView from '../_components/pipeline-view'
 
 type Props = {
-    params: { subaccountId: string; pipelineId: string }
+    params: { projectId: string; pipelineId: string }
 }
 
 const PipelinePage = async ({ params }: Props) => {
     const pipelineDetails = await getPipelineDetails(params.pipelineId)
     if (!pipelineDetails)
-        return redirect(`/subaccount/${params.subaccountId}/pipelines`)
+        return redirect(`/project/${params.projectId}/pipelines`)
 
     const pipelines = await db.pipeline.findMany({
-        where: { subAccountId: params.subaccountId },
+        where: { projectId: params.projectId },
     })
 
     const lanes = (await getLanesWithTicketAndTags(
@@ -38,7 +38,7 @@ const PipelinePage = async ({ params }: Props) => {
             <TabsList className="bg-transparent border-b-2 h-16 w-full justify-between mb-4">
                 <PipelineInfoBar
                     pipelineId={params.pipelineId}
-                    subAccountId={params.subaccountId}
+                    projectId={params.projectId}
                     pipelines={pipelines}
                 />
                 <div>
@@ -51,7 +51,7 @@ const PipelinePage = async ({ params }: Props) => {
                     lanes={lanes}
                     pipelineDetails={pipelineDetails}
                     pipelineId={params.pipelineId}
-                    subaccountId={params.subaccountId}
+                    projectId={params.projectId}
                     updateLanesOrder={updateLanesOrder}
                     updateTicketsOrder={updateTicketsOrder}
                 />
@@ -60,7 +60,7 @@ const PipelinePage = async ({ params }: Props) => {
                 <PipelineSettings
                     pipelineId={params.pipelineId}
                     pipelines={pipelines}
-                    subaccountId={params.subaccountId}
+                    projectId={params.projectId}
                 />
             </TabsContent>
         </Tabs>

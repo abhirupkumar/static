@@ -26,9 +26,9 @@ import {
 } from '@/components/ui/card'
 
 import FileUpload from '../global/file-upload'
-import { Project, SubAccount } from '@prisma/client'
+import { Workspace, Project } from '@prisma/client'
 import { useToast } from '../ui/use-toast'
-import { saveActivityLogsNotification, upsertSubAccount } from '@/lib/queries'
+import { saveActivityLogsNotification, upsertProject } from '@/lib/queries'
 import { useEffect } from 'react'
 import Loading from '../global/loading'
 import { useModal } from '@/providers/modal-provider'
@@ -39,27 +39,27 @@ const formSchema = z.object({
     companyPhone: z.string().min(1),
     address: z.string(),
     city: z.string(),
-    subAccountLogo: z.string(),
+    projectLogo: z.string(),
     zipCode: z.string(),
     state: z.string(),
     country: z.string(),
 })
 
-//CHALLENGE Give access for Subaccount Guest they should see a different view maybe a form that allows them to create tickets
+//CHALLENGE Give access for Project Guest they should see a different view maybe a form that allows them to create tickets
 
 //CHALLENGE layout.tsx oonly runs once as a result if you remove permissions for someone and they keep navigating the layout.tsx wont fire again. solution- save the data inside metadata for current user.
 
-interface SubAccountDetailsProps {
-    //To add the sub account to the project
-    projectDetails: Project
-    details?: Partial<SubAccount>
+interface ProjectDetailsProps {
+    //To add the sub account to the workspace
+    workspaceDetails: Workspace
+    details?: Partial<Project>
     userId: string
     userName: string
 }
 
-const SubAccountDetails: React.FC<SubAccountDetailsProps> = ({
+const ProjectDetails: React.FC<ProjectDetailsProps> = ({
     details,
-    projectDetails,
+    workspaceDetails,
     userId,
     userName,
 }) => {
@@ -77,16 +77,16 @@ const SubAccountDetails: React.FC<SubAccountDetailsProps> = ({
             zipCode: details?.zipCode,
             state: details?.state,
             country: details?.country,
-            subAccountLogo: details?.subAccountLogo,
+            projectLogo: details?.projectLogo,
         },
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            const response = await upsertSubAccount({
+            const response = await upsertProject({
                 id: details?.id ? details.id : v4(),
                 address: values.address,
-                subAccountLogo: values.subAccountLogo,
+                projectLogo: values.projectLogo,
                 city: values.city,
                 companyPhone: values.companyPhone,
                 country: values.country,
@@ -96,20 +96,20 @@ const SubAccountDetails: React.FC<SubAccountDetailsProps> = ({
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 companyEmail: values.companyEmail,
-                projectId: projectDetails.id,
+                workspaceId: workspaceDetails.id,
                 connectAccountId: '',
                 goal: 5000,
             })
             if (!response) throw new Error('No response from server')
             await saveActivityLogsNotification({
-                projectId: response.projectId,
+                workspaceId: response.workspaceId,
                 description: `${userName} | updated sub account | ${response.name}`,
-                subaccountId: response.id,
+                projectId: response.id,
             })
 
             toast({
-                title: 'Subaccount details saved',
-                description: 'Successfully saved your subaccount details.',
+                title: 'Project details saved',
+                description: 'Successfully saved your project details.',
             })
 
             setClose()
@@ -146,13 +146,13 @@ const SubAccountDetails: React.FC<SubAccountDetailsProps> = ({
                         <FormField
                             disabled={isLoading}
                             control={form.control}
-                            name="subAccountLogo"
+                            name="projectLogo"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Account Logo</FormLabel>
                                     <FormControl>
                                         <FileUpload
-                                            apiEndpoint="subaccountLogo"
+                                            apiEndpoint="projectLogo"
                                             value={field.value}
                                             onChange={field.onChange}
                                         />
@@ -172,7 +172,7 @@ const SubAccountDetails: React.FC<SubAccountDetailsProps> = ({
                                         <FormControl>
                                             <Input
                                                 required
-                                                placeholder="Your project name"
+                                                placeholder="Your workspace name"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -324,4 +324,4 @@ const SubAccountDetails: React.FC<SubAccountDetailsProps> = ({
     )
 }
 
-export default SubAccountDetails
+export default ProjectDetails

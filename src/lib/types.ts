@@ -32,12 +32,12 @@ export type NotificationWithUser =
             createdAt: Date
             updatedAt: Date
             role: Role
-            projectId: string | null
+            workspaceId: string | null
         }
     } & Notification)[]
     | undefined
 
-export type UserWithPermissionsAndSubAccounts = Prisma.PromiseReturnType<
+export type UserWithPermissionsAndProjects = Prisma.PromiseReturnType<
     typeof getUserPermissions
 >
 
@@ -46,29 +46,29 @@ export const SitePageSchema = z.object({
     pathName: z.string().optional(),
 })
 
-const __getUsersWithProjectSubAccountPermissionsSidebarOptions = async (
-    projectId: string
+const __getUsersWithWorkspaceProjectPermissionsSidebarOptions = async (
+    workspaceId: string
 ) => {
     return await db.user.findFirst({
-        where: { Project: { id: projectId } },
+        where: { Workspace: { id: workspaceId } },
         include: {
-            Project: { include: { SubAccount: true } },
-            Permissions: { include: { SubAccount: true } },
+            Workspace: { include: { Project: true } },
+            Permissions: { include: { Project: true } },
         },
     })
 }
 
-export type AuthUserWithProjectSigebarOptionsSubAccounts =
+export type AuthUserWithWorkspaceSigebarOptionsProjects =
     Prisma.PromiseReturnType<typeof getAuthUserDetails>
 
-export type UsersWithProjectSubAccountPermissionsSidebarOptions =
+export type UsersWithWorkspaceProjectPermissionsSidebarOptions =
     Prisma.PromiseReturnType<
-        typeof __getUsersWithProjectSubAccountPermissionsSidebarOptions
+        typeof __getUsersWithWorkspaceProjectPermissionsSidebarOptions
     >
 
 export type GetMediaFiles = Prisma.PromiseReturnType<typeof getMedia>
 
-export type CreateMediaType = Prisma.MediaCreateWithoutSubaccountInput
+export type CreateMediaType = Prisma.MediaCreateWithoutProjectInput
 
 export type TicketAndTags = Ticket & {
     Tags: Tag[]
@@ -142,7 +142,7 @@ export type StripeCustomerType = {
 
 export type PricesList = Stripe.ApiList<Stripe.Price>
 
-export type SitesForSubAccount = Prisma.PromiseReturnType<
+export type SitesForProject = Prisma.PromiseReturnType<
     typeof getSites
 >[0]
 

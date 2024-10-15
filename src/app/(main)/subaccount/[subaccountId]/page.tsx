@@ -1,7 +1,7 @@
 import BlurPage from '@/components/global/blur-page'
 import CircleProgress from '@/components/global/circle-progress'
 import PipelineValue from '@/components/global/pipeline-value'
-import SubaccountSiteChart from '@/components/global/subaccount-site-chart'
+import ProjectSiteChart from '@/components/global/project-site-chart'
 import { Badge } from '@/components/ui/badge'
 import {
     Card,
@@ -29,13 +29,13 @@ import Link from 'next/link'
 import React from 'react'
 
 type Props = {
-    params: { subaccountId: string }
+    params: { projectId: string }
     searchParams: {
         code: string
     }
 }
 
-const SubaccountPageId = async ({ params, searchParams }: Props) => {
+const ProjectPageId = async ({ params, searchParams }: Props) => {
     let currency = 'USD'
     let sessions
     let totalClosedSessions
@@ -44,9 +44,9 @@ const SubaccountPageId = async ({ params, searchParams }: Props) => {
     let potentialIncome = 0
     let closingRate = 0
 
-    const subaccountDetails = await db.subAccount.findUnique({
+    const projectDetails = await db.project.findUnique({
         where: {
-            id: params.subaccountId,
+            id: params.projectId,
         },
     })
 
@@ -54,17 +54,17 @@ const SubaccountPageId = async ({ params, searchParams }: Props) => {
     const startDate = new Date(`${currentYear}-01-01T00:00:00Z`).getTime() / 1000
     const endDate = new Date(`${currentYear}-12-31T23:59:59Z`).getTime() / 1000
 
-    if (!subaccountDetails) return
+    if (!projectDetails) return
 
-    //   if (subaccountDetails.connectAccountId) {
+    //   if (projectDetails.connectAccountId) {
     //     const response = await stripe.accounts.retrieve({
-    //       stripeAccount: subaccountDetails.connectAccountId,
+    //       stripeAccount: projectDetails.connectAccountId,
     //     })
     //     currency = response.default_currency?.toUpperCase() || 'USD'
     //     const checkoutSessions = await stripe.checkout.sessions.list(
     //       { created: { gte: startDate, lte: endDate }, limit: 100 },
     //       {
-    //         stripeAccount: subaccountDetails.connectAccountId,
+    //         stripeAccount: projectDetails.connectAccountId,
     //       }
     //     )
     //     sessions = checkoutSessions.data.map((session) => ({
@@ -107,7 +107,7 @@ const SubaccountPageId = async ({ params, searchParams }: Props) => {
 
     const sites = await db.site.findMany({
         where: {
-            subAccountId: params.subaccountId,
+            projectId: params.projectId,
         },
         include: {
             SitePages: true,
@@ -125,7 +125,7 @@ const SubaccountPageId = async ({ params, searchParams }: Props) => {
     return (
         <BlurPage>
             <div className="relative h-full">
-                {/* {!subaccountDetails.connectAccountId && (
+                {/* {!projectDetails.connectAccountId && (
                     <div className="absolute -top-10 -left-10 right-0 bottom-0 z-30 flex items-center justify-center backdrop-blur-md bg-background/50">
                         <Card>
                             <CardHeader>
@@ -134,7 +134,7 @@ const SubaccountPageId = async ({ params, searchParams }: Props) => {
                                     You need to connect your stripe account to see metrics
                                 </CardDescription>
                                 <Link
-                                    href={`/subaccount/${subaccountDetails.id}/launchpad`}
+                                    href={`/project/${projectDetails.id}/launchpad`}
                                     className="p-2 w-fit bg-secondary text-white rounded-md flex items-center gap-2"
                                 >
                                     <ClipboardIcon />
@@ -178,7 +178,7 @@ const SubaccountPageId = async ({ params, searchParams }: Props) => {
                             </CardContent>
                             <Contact2 className="absolute right-4 top-4 text-muted-foreground" />
                         </Card>
-                        <PipelineValue subaccountId={params.subaccountId} />
+                        <PipelineValue projectId={params.projectId} />
 
                         <Card className="xl:w-fit">
                             <CardHeader>
@@ -218,7 +218,7 @@ const SubaccountPageId = async ({ params, searchParams }: Props) => {
                                 <CardDescription>Site Performance</CardDescription>
                             </CardHeader>
                             <CardContent className=" text-sm text-muted-foreground flex flex-col gap-12 justify-between ">
-                                <SubaccountSiteChart data={sitePerformanceMetrics} />
+                                <ProjectSiteChart data={sitePerformanceMetrics} />
                                 <div className="lg:w-[150px]">
                                     Total page visits across all sites. Hover over to get more
                                     details on site page performance.
@@ -300,7 +300,7 @@ const SubaccountPageId = async ({ params, searchParams }: Props) => {
     )
 }
 
-export default SubaccountPageId;
+export default ProjectPageId;
 
 export const metadata = constructMetadata({
     title: "Subaacount - Zyper",

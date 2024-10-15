@@ -4,12 +4,12 @@ import { clerkClient, currentUser } from '@clerk/nextjs/server'
 import { db } from './db'
 import { redirect } from 'next/navigation'
 import {
-    Project,
+    Workspace,
     Lane,
     Plan,
     Prisma,
     Role,
-    SubAccount,
+    Project,
     Tag,
     Ticket,
     User,
@@ -34,10 +34,10 @@ export const getAuthUserDetails = async () => {
             email: user.emailAddresses[0].emailAddress,
         },
         include: {
-            Project: {
+            Workspace: {
                 include: {
                     SidebarOption: true,
-                    SubAccount: {
+                    Project: {
                         include: {
                             SidebarOption: true,
                         },
@@ -52,22 +52,22 @@ export const getAuthUserDetails = async () => {
 }
 
 export const saveActivityLogsNotification = async ({
-    projectId,
+    workspaceId,
     description,
-    subaccountId,
+    projectId,
 }: {
-    projectId?: string
+    workspaceId?: string
     description: string
-    subaccountId?: string
+    projectId?: string
 }) => {
     const authUser = await currentUser()
     let userData
     if (!authUser) {
         const response = await db.user.findFirst({
             where: {
-                Project: {
-                    SubAccount: {
-                        some: { id: subaccountId },
+                Workspace: {
+                    Project: {
+                        some: { id: projectId },
                     },
                 },
             },
@@ -86,19 +86,19 @@ export const saveActivityLogsNotification = async ({
         return
     }
 
-    let foundProjectId = projectId
-    if (!foundProjectId) {
-        if (!subaccountId) {
+    let foundWorkspaceId = workspaceId
+    if (!foundWorkspaceId) {
+        if (!projectId) {
             throw new Error(
-                'You need to provide atleast an project Id or subaccount Id'
+                'You need to provide atleast an workspace Id or project Id'
             )
         }
-        const response = await db.subAccount.findUnique({
-            where: { id: subaccountId },
+        const response = await db.project.findUnique({
+            where: { id: projectId },
         })
-        if (response) foundProjectId = response.projectId
+        if (response) foundWorkspaceId = response.workspaceId
     }
-    if (subaccountId) {
+    if (projectId) {
         await db.notification.create({
             data: {
                 notification: `${userData.name} | ${description}`,
@@ -107,13 +107,13 @@ export const saveActivityLogsNotification = async ({
                         id: userData.id,
                     },
                 },
-                Project: {
+                Workspace: {
                     connect: {
-                        id: foundProjectId,
+                        id: foundWorkspaceId,
                     },
                 },
-                SubAccount: {
-                    connect: { id: subaccountId },
+                Project: {
+                    connect: { id: projectId },
                 },
             },
         })
@@ -126,9 +126,9 @@ export const saveActivityLogsNotification = async ({
                         id: userData.id,
                     },
                 },
-                Project: {
+                Workspace: {
                     connect: {
-                        id: foundProjectId,
+                        id: foundWorkspaceId,
                     },
                 },
             },
@@ -136,8 +136,8 @@ export const saveActivityLogsNotification = async ({
     }
 }
 
-export const createTeamUser = async (projectId: string, user: User) => {
-    if (user.role === 'PROJECT_OWNER') return null
+export const createTeamUser = async (workspaceId: string, user: User) => {
+    if (user.role === 'WORKSPACE_OWNER') return null
     const response = await db.user.create({ data: { ...user } })
     return response
 }
@@ -153,9 +153,9 @@ export const verifyAndAcceptInvitation = async () => {
     })
 
     if (invitationExists) {
-        const userDetails = await createTeamUser(invitationExists.projectId, {
+        const userDetails = await createTeamUser(invitationExists.workspaceId, {
             email: invitationExists.email,
-            projectId: invitationExists.projectId,
+            workspaceId: invitationExists.workspaceId,
             avatarUrl: user.imageUrl,
             id: user.id,
             name: `${user.firstName} ${user.lastName}`,
@@ -164,15 +164,15 @@ export const verifyAndAcceptInvitation = async () => {
             updatedAt: new Date(),
         })
         await saveActivityLogsNotification({
-            projectId: invitationExists?.projectId,
+            workspaceId: invitationExists?.workspaceId,
             description: `Joined`,
-            subaccountId: undefined,
+            projectId: undefined,
         })
 
         if (userDetails) {
             await clerkClient.users.updateUserMetadata(user.id, {
                 privateMetadata: {
-                    role: userDetails.role || 'SUBACCOUNT_USER',
+                    role: userDetails.role || 'PROJECT_USER',
                 },
             })
 
@@ -180,31 +180,31 @@ export const verifyAndAcceptInvitation = async () => {
                 where: { email: userDetails.email },
             })
 
-            return userDetails.projectId
+            return userDetails.workspaceId
         } else return null
     } else {
-        const project = await db.user.findUnique({
+        const workspace = await db.user.findUnique({
             where: {
                 email: user.emailAddresses[0].emailAddress,
             },
         })
-        return project ? project.projectId : null
+        return workspace ? workspace.workspaceId : null
     }
 }
 
-export const updateProjectDetails = async (
-    projectId: string,
-    projectDetails: Partial<Project>
+export const updateWorkspaceDetails = async (
+    workspaceId: string,
+    workspaceDetails: Partial<Workspace>
 ) => {
-    const response = await db.project.update({
-        where: { id: projectId },
-        data: { ...projectDetails },
+    const response = await db.workspace.update({
+        where: { id: workspaceId },
+        data: { ...workspaceDetails },
     })
     return response
 }
 
-export const deleteProject = async (projectId: string) => {
-    const response = await db.project.delete({ where: { id: projectId } })
+export const deleteWorkspace = async (workspaceId: string) => {
+    const response = await db.workspace.delete({ where: { id: workspaceId } })
     return response
 }
 
@@ -222,78 +222,78 @@ export const initUser = async (newUser: Partial<User>) => {
             avatarUrl: user.imageUrl,
             email: user.emailAddresses[0].emailAddress,
             name: `${user.firstName} ${user.lastName}`,
-            role: newUser.role || 'SUBACCOUNT_USER',
+            role: newUser.role || 'PROJECT_USER',
         },
     })
 
     await clerkClient.users.updateUserMetadata(user.id, {
         privateMetadata: {
-            role: newUser.role || 'SUBACCOUNT_USER',
+            role: newUser.role || 'PROJECT_USER',
         },
     })
 
     return userData
 }
 
-export const upsertProject = async (project: Project, price?: Plan) => {
-    if (!project.companyEmail) return null
+export const upsertWorkspace = async (workspace: Workspace, price?: Plan) => {
+    if (!workspace.companyEmail) return null
     try {
-        const projectDetails = await db.project.upsert({
+        const workspaceDetails = await db.workspace.upsert({
             where: {
-                id: project.id,
+                id: workspace.id,
             },
-            update: project,
+            update: workspace,
             create: {
                 users: {
-                    connect: { email: project.companyEmail },
+                    connect: { email: workspace.companyEmail },
                 },
-                ...project,
+                ...workspace,
                 SidebarOption: {
                     create: [
                         {
                             name: 'Dashboard',
                             icon: 'category',
-                            link: `/project/${project.id}`,
+                            link: `/workspace/${workspace.id}`,
                         },
                         {
                             name: 'Launchpad',
                             icon: 'clipboardIcon',
-                            link: `/project/${project.id}/launchpad`,
+                            link: `/workspace/${workspace.id}/launchpad`,
                         },
                         {
                             name: 'Billing',
                             icon: 'payment',
-                            link: `/project/${project.id}/billing`,
+                            link: `/workspace/${workspace.id}/billing`,
                         },
                         {
                             name: 'Settings',
                             icon: 'settings',
-                            link: `/project/${project.id}/settings`,
+                            link: `/workspace/${workspace.id}/settings`,
                         },
                         {
                             name: 'Sub Accounts',
                             icon: 'person',
-                            link: `/project/${project.id}/all-subaccounts`,
+                            link: `/workspace/${workspace.id}/all-projects`,
                         },
                         {
                             name: 'Team',
                             icon: 'shield',
-                            link: `/project/${project.id}/team`,
+                            link: `/workspace/${workspace.id}/team`,
                         },
                     ],
                 },
             },
         })
-        return projectDetails
+        return workspaceDetails
     } catch (error) {
         console.log(error)
     }
 }
 
-export const getNotificationAndUser = async (projectId: string) => {
+export const getNotificationAndUser = async (workspaceId: string) => {
     try {
         const response = await db.notification.findMany({
-            where: { projectId },
+            where: { workspaceId },
             include: { User: true },
             orderBy: {
                 createdAt: 'desc',
@@ -305,31 +305,31 @@ export const getNotificationAndUser = async (projectId: string) => {
     }
 }
 
-export const upsertSubAccount = async (subAccount: SubAccount) => {
-    if (!subAccount.companyEmail) return null
-    const projectOwner = await db.user.findFirst({
+export const upsertProject = async (project: Project) => {
+    if (!project.companyEmail) return null
+    const workspaceOwner = await db.user.findFirst({
         where: {
-            Project: {
-                id: subAccount.projectId,
+            Workspace: {
+                id: project.workspaceId,
             },
-            role: 'PROJECT_OWNER',
+            role: 'WORKSPACE_OWNER',
         },
     })
-    if (!projectOwner) return console.log('🔴Erorr could not create subaccount')
+    if (!workspaceOwner) return console.log('🔴Erorr could not create project')
     const permissionId = v4()
-    const response = await db.subAccount.upsert({
-        where: { id: subAccount.id },
-        update: subAccount,
+    const response = await db.project.upsert({
+        where: { id: project.id },
+        update: project,
         create: {
-            ...subAccount,
+            ...project,
             Permissions: {
                 create: {
                     access: true,
-                    email: projectOwner.email,
+                    email: workspaceOwner.email,
                     id: permissionId,
                 },
                 connect: {
-                    subAccountId: subAccount.id,
+                    projectId: project.id,
                     id: permissionId,
                 },
             },
@@ -341,42 +341,42 @@ export const upsertSubAccount = async (subAccount: SubAccount) => {
                     {
                         name: 'Launchpad',
                         icon: 'clipboardIcon',
-                        link: `/subaccount/${subAccount.id}/launchpad`,
+                        link: `/project/${project.id}/launchpad`,
                     },
                     {
                         name: 'Settings',
                         icon: 'settings',
-                        link: `/subaccount/${subAccount.id}/settings`,
+                        link: `/project/${project.id}/settings`,
                     },
                     {
                         name: 'Sites',
                         icon: 'pipelines',
-                        link: `/subaccount/${subAccount.id}/sites`,
+                        link: `/project/${project.id}/sites`,
                     },
                     {
                         name: 'Media',
                         icon: 'database',
-                        link: `/subaccount/${subAccount.id}/media`,
+                        link: `/project/${project.id}/media`,
                     },
                     {
                         name: 'Automations',
                         icon: 'chip',
-                        link: `/subaccount/${subAccount.id}/automations`,
+                        link: `/project/${project.id}/automations`,
                     },
                     {
                         name: 'Pipelines',
                         icon: 'flag',
-                        link: `/subaccount/${subAccount.id}/pipelines`,
+                        link: `/project/${project.id}/pipelines`,
                     },
                     {
                         name: 'Contacts',
                         icon: 'person',
-                        link: `/subaccount/${subAccount.id}/contacts`,
+                        link: `/project/${project.id}/contacts`,
                     },
                     {
                         name: 'Dashboard',
                         icon: 'category',
-                        link: `/subaccount/${subAccount.id}`,
+                        link: `/project/${project.id}`,
                     },
                 ],
             },
@@ -388,7 +388,7 @@ export const upsertSubAccount = async (subAccount: SubAccount) => {
 export const getUserPermissions = async (userId: string) => {
     const response = await db.user.findUnique({
         where: { id: userId },
-        select: { Permissions: { include: { SubAccount: true } } },
+        select: { Permissions: { include: { Project: true } } },
     })
 
     return response
@@ -402,7 +402,7 @@ export const updateUser = async (user: Partial<User>) => {
 
     await clerkClient.users.updateUserMetadata(response.id, {
         privateMetadata: {
-            role: user.role || 'SUBACCOUNT_USER',
+            role: user.role || 'PROJECT_USER',
         },
     })
 
@@ -412,7 +412,7 @@ export const updateUser = async (user: Partial<User>) => {
 export const changeUserPermissions = async (
     permissionId: string | undefined,
     userEmail: string,
-    subAccountId: string,
+    projectId: string,
     permission: boolean
 ) => {
     try {
@@ -422,7 +422,7 @@ export const changeUserPermissions = async (
             create: {
                 access: permission,
                 email: userEmail,
-                subAccountId: subAccountId,
+                projectId: projectId,
             },
         })
         return response
@@ -431,19 +431,19 @@ export const changeUserPermissions = async (
     }
 }
 
-export const getSubaccountDetails = async (subaccountId: string) => {
-    const response = await db.subAccount.findUnique({
+export const getProjectDetails = async (projectId: string) => {
+    const response = await db.project.findUnique({
         where: {
-            id: subaccountId,
+            id: projectId,
         },
     })
     return response
 }
 
-export const deleteSubAccount = async (subaccountId: string) => {
-    const response = await db.subAccount.delete({
+export const deleteProject = async (projectId: string) => {
+    const response = await db.project.delete({
         where: {
-            id: subaccountId,
+            id: projectId,
         },
     })
     return response
@@ -473,10 +473,10 @@ export const getUser = async (id: string) => {
 export const sendInvitation = async (
     role: Role,
     email: string,
-    projectId: string
+    workspaceId: string
 ) => {
     const resposne = await db.invitation.create({
-        data: { email, projectId, role },
+        data: { email, workspaceId, role },
     })
 
     try {
@@ -496,10 +496,10 @@ export const sendInvitation = async (
     return resposne
 }
 
-export const getMedia = async (subaccountId: string) => {
-    const mediafiles = await db.subAccount.findUnique({
+export const getMedia = async (projectId: string) => {
+    const mediafiles = await db.project.findUnique({
         where: {
-            id: subaccountId,
+            id: projectId,
         },
         include: { Media: true },
     })
@@ -507,14 +507,14 @@ export const getMedia = async (subaccountId: string) => {
 }
 
 export const createMedia = async (
-    subaccountId: string,
+    projectId: string,
     mediaFile: CreateMediaType
 ) => {
     const response = await db.media.create({
         data: {
             link: mediaFile.link,
             name: mediaFile.name,
-            subAccountId: subaccountId,
+            projectId: projectId,
         },
     })
 
@@ -562,7 +562,7 @@ export const getLanesWithTicketAndTags = async (pipelineId: string) => {
 }
 
 export const upsertSite = async (
-    subaccountId: string,
+    projectId: string,
     site: z.infer<typeof CreateSiteFormSchema> & { liveProducts: string },
     siteId: string
 ) => {
@@ -572,7 +572,7 @@ export const upsertSite = async (
         create: {
             ...site,
             id: siteId || v4(),
-            subAccountId: subaccountId,
+            projectId: projectId,
         },
     })
 
@@ -693,26 +693,26 @@ export const _getTicketsWithAllRelations = async (laneId: string) => {
     return response
 }
 
-export const getSubAccountTeamMembers = async (subaccountId: string) => {
-    const subaccountUsersWithAccess = await db.user.findMany({
+export const getProjectTeamMembers = async (projectId: string) => {
+    const projectUsersWithAccess = await db.user.findMany({
         where: {
-            Project: {
-                SubAccount: {
+            Workspace: {
+                Project: {
                     some: {
-                        id: subaccountId,
+                        id: projectId,
                     },
                 },
             },
-            role: 'SUBACCOUNT_USER',
+            role: 'PROJECT_USER',
             Permissions: {
                 some: {
-                    subAccountId: subaccountId,
+                    projectId: projectId,
                     access: true,
                 },
             },
         },
     })
-    return subaccountUsersWithAccess
+    return projectUsersWithAccess
 }
 
 export const searchContacts = async (searchTerms: string) => {
@@ -768,21 +768,21 @@ export const deleteTicket = async (ticketId: string) => {
 }
 
 export const upsertTag = async (
-    subaccountId: string,
+    projectId: string,
     tag: Prisma.TagUncheckedCreateInput
 ) => {
     const response = await db.tag.upsert({
-        where: { id: tag.id || v4(), subAccountId: subaccountId },
+        where: { id: tag.id || v4(), projectId: projectId },
         update: tag,
-        create: { ...tag, subAccountId: subaccountId },
+        create: { ...tag, projectId: projectId },
     })
 
     return response
 }
 
-export const getTagsForSubaccount = async (subaccountId: string) => {
-    const response = await db.subAccount.findUnique({
-        where: { id: subaccountId },
+export const getTagsForProject = async (projectId: string) => {
+    const response = await db.project.findUnique({
+        where: { id: projectId },
         select: { Tags: true },
     })
     return response
@@ -806,7 +806,7 @@ export const upsertContact = async (
 
 export const getSites = async (subacountId: string) => {
     const sites = await db.site.findMany({
-        where: { subAccountId: subacountId },
+        where: { projectId: subacountId },
         include: { SitePages: true },
     })
 
@@ -840,11 +840,11 @@ export const updateSiteProducts = async (
 }
 
 export const upsertSitePage = async (
-    subaccountId: string,
+    projectId: string,
     sitePage: UpsertSitePage,
     siteId: string
 ) => {
-    if (!subaccountId || !siteId) return
+    if (!projectId || !siteId) return
     const response = await db.sitePage.upsert({
         where: { id: sitePage.id || '' },
         update: { ...sitePage },
@@ -865,7 +865,7 @@ export const upsertSitePage = async (
         },
     })
 
-    revalidatePath(`/subaccount/${subaccountId}/sites/${siteId}`, 'page')
+    revalidatePath(`/project/${projectId}/sites/${siteId}`, 'page')
     return response
 }
 
@@ -895,9 +895,9 @@ export const getDomainContent = async (subDomainName: string) => {
     return response
 }
 
-export const getPipelines = async (subaccountId: string) => {
+export const getPipelines = async (projectId: string) => {
     const response = await db.pipeline.findMany({
-        where: { subAccountId: subaccountId },
+        where: { projectId: projectId },
         include: {
             Lane: {
                 include: { Tickets: true },

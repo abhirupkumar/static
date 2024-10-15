@@ -40,7 +40,7 @@ interface PipelaneLaneProps {
     tickets: TicketWithTags
     pipelineId: string
     laneDetails: LaneDetail
-    subaccountId: string
+    projectId: string
     index: number
 }
 
@@ -49,7 +49,7 @@ const PipelineLane: React.FC<PipelaneLaneProps> = ({
     tickets,
     pipelineId,
     laneDetails,
-    subaccountId,
+    projectId,
     allTickets,
     index,
 }) => {
@@ -84,7 +84,7 @@ const PipelineLane: React.FC<PipelaneLaneProps> = ({
                 <TicketForm
                     getNewTicket={addNewTicket}
                     laneId={laneDetails.id}
-                    subaccountId={subaccountId}
+                    projectId={projectId}
                 />
             </CustomModal>
         )
@@ -108,9 +108,9 @@ const PipelineLane: React.FC<PipelaneLaneProps> = ({
         try {
             const response = await deleteLane(laneDetails.id)
             await saveActivityLogsNotification({
-                projectId: undefined,
+                workspaceId: undefined,
                 description: `Deleted a lane | ${response?.name}`,
-                subaccountId,
+                projectId,
             })
             router.refresh()
         } catch (error) {
@@ -190,7 +190,7 @@ const PipelineLane: React.FC<PipelaneLaneProps> = ({
                                                         <PipelineTicket
                                                             allTickets={allTickets}
                                                             setAllTickets={setAllTickets}
-                                                            subaccountId={subaccountId}
+                                                            projectId={projectId}
                                                             ticket={ticket}
                                                             key={ticket.id.toString()}
                                                             index={index}

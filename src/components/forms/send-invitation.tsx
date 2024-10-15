@@ -32,14 +32,14 @@ import { saveActivityLogsNotification, sendInvitation } from '@/lib/queries'
 import { useToast } from '../ui/use-toast'
 
 interface SendInvitationProps {
-    projectId: string
+    workspaceId: string
 }
 
-const SendInvitation: React.FC<SendInvitationProps> = ({ projectId }) => {
+const SendInvitation: React.FC<SendInvitationProps> = ({ workspaceId }) => {
     const { toast } = useToast()
     const userDataSchema = z.object({
         email: z.string().email(),
-        role: z.enum(['PROJECT_ADMIN', 'SUBACCOUNT_USER', 'SUBACCOUNT_GUEST']),
+        role: z.enum(['WORKSPACE_ADMIN', 'PROJECT_USER', 'PROJECT_GUEST']),
     })
 
     const form = useForm<z.infer<typeof userDataSchema>>({
@@ -47,17 +47,17 @@ const SendInvitation: React.FC<SendInvitationProps> = ({ projectId }) => {
         mode: 'onChange',
         defaultValues: {
             email: '',
-            role: 'SUBACCOUNT_USER',
+            role: 'PROJECT_USER',
         },
     })
 
     const onSubmit = async (values: z.infer<typeof userDataSchema>) => {
         try {
-            const res = await sendInvitation(values.role, values.email, projectId)
+            const res = await sendInvitation(values.role, values.email, workspaceId)
             await saveActivityLogsNotification({
-                projectId: projectId,
+                workspaceId: workspaceId,
                 description: `Invited ${res.email}`,
-                subaccountId: undefined,
+                projectId: undefined,
             })
             toast({
                 title: 'Success',
@@ -123,11 +123,11 @@ const SendInvitation: React.FC<SendInvitationProps> = ({ projectId }) => {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="PROJECT_ADMIN">Project Admin</SelectItem>
-                                            <SelectItem value="SUBACCOUNT_USER">
+                                            <SelectItem value="WORKSPACE_ADMIN">Workspace Admin</SelectItem>
+                                            <SelectItem value="PROJECT_USER">
                                                 Sub Account User
                                             </SelectItem>
-                                            <SelectItem value="SUBACCOUNT_GUEST">
+                                            <SelectItem value="PROJECT_GUEST">
                                                 Sub Account Guest
                                             </SelectItem>
                                         </SelectContent>

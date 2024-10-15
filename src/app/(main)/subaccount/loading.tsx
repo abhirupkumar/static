@@ -1,7 +1,7 @@
 import Loading from '@/components/global/loading'
 import React from 'react'
 
-const LoadingProjectPage = () => {
+const LoadingWorkspacePage = () => {
     return (
         <div className="h-screen w-screen flex justify-center items-center">
             <Loading></Loading>
@@ -9,4 +9,4 @@ const LoadingProjectPage = () => {
     )
 }
 
-export default LoadingProjectPage
+export default LoadingWorkspacePage

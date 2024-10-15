@@ -20,46 +20,46 @@ type Props = {
         state: string
         code: string
     }
-    params: { subaccountId: string }
+    params: { projectId: string }
 }
 
 const LaunchPad = async ({ params, searchParams }: Props) => {
-    const subaccountDetails = await db.subAccount.findUnique({
+    const projectDetails = await db.project.findUnique({
         where: {
-            id: params.subaccountId,
+            id: params.projectId,
         },
     })
 
-    if (!subaccountDetails) {
+    if (!projectDetails) {
         return
     }
 
     const allDetailsExist =
-        subaccountDetails.address &&
-        subaccountDetails.subAccountLogo &&
-        subaccountDetails.city &&
-        subaccountDetails.companyEmail &&
-        subaccountDetails.companyPhone &&
-        subaccountDetails.country &&
-        subaccountDetails.name &&
-        subaccountDetails.state
+        projectDetails.address &&
+        projectDetails.projectLogo &&
+        projectDetails.city &&
+        projectDetails.companyEmail &&
+        projectDetails.companyPhone &&
+        projectDetails.country &&
+        projectDetails.name &&
+        projectDetails.state
 
     //   const stripeOAuthLink = getStripeOAuthLink(
-    //     'subaccount',
-    //     `launchpad___${subaccountDetails.id}`
+    //     'project',
+    //     `launchpad___${projectDetails.id}`
     //   )
 
     let connectedStripeAccount = false
 
     //   if (searchParams.code) {
-    //     if (!subaccountDetails.connectAccountId) {
+    //     if (!projectDetails.connectAccountId) {
     //       try {
     //         const response = await stripe.oauth.token({
     //           grant_type: 'authorization_code',
     //           code: searchParams.code,
     //         })
-    //         await db.subAccount.update({
-    //           where: { id: params.subaccountId },
+    //         await db.project.update({
+    //           where: { id: params.projectId },
     //           data: { connectAccountId: response.stripe_user_id },
     //         })
     //         connectedStripeAccount = true
@@ -108,7 +108,7 @@ const LaunchPad = async ({ params, searchParams }: Props) => {
                                         used to run payouts.
                                     </p>
                                 </div>
-                                {subaccountDetails.connectAccountId ||
+                                {projectDetails.connectAccountId ||
                                     connectedStripeAccount ? (
                                     <CheckCircleIcon
                                         size={50}
@@ -130,7 +130,7 @@ const LaunchPad = async ({ params, searchParams }: Props) => {
                             <div className="flex justify-between items-center w-full h-20 border p-4 rounded-lg">
                                 <div className="flex items-center gap-4">
                                     <Image
-                                        src={subaccountDetails.subAccountLogo}
+                                        src={projectDetails.projectLogo}
                                         alt="App logo"
                                         height={80}
                                         width={80}
@@ -146,7 +146,7 @@ const LaunchPad = async ({ params, searchParams }: Props) => {
                                 ) : (
                                     <Link
                                         className="bg-primary py-2 px-4 rounded-md text-white"
-                                        href={`/subaccount/${subaccountDetails.id}/settings`}
+                                        href={`/project/${projectDetails.id}/settings`}
                                     >
                                         Start
                                     </Link>

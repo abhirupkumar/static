@@ -26,7 +26,7 @@ const Page = async ({
     params,
     searchParams
 }: {
-    params: { projectId: string }
+    params: { workspaceId: string }
     searchParams: { code: string }
 }) => {
     let currency = 'USD'
@@ -40,23 +40,23 @@ const Page = async ({
     const startDate = new Date(`${currentYear}-01-01T00:00:00Z`).getTime() / 1000
     const endDate = new Date(`${currentYear}-12-31T23:59:59Z`).getTime() / 1000
 
-    // const projectDetails = await db.project.findUnique({
+    // const workspaceDetails = await db.workspace.findUnique({
     //     where: {
-    //         id: params.projectId,
+    //         id: params.workspaceId,
     //     },
     // })
 
-    // if (!projectDetails) return
+    // if (!workspaceDetails) return
 
-    const subaccounts = await db.subAccount.findMany({
+    const projects = await db.project.findMany({
         where: {
-            projectId: params.projectId,
+            workspaceId: params.workspaceId,
         },
     })
 
-    // if (projectDetails.connectAccountId) {
+    // if (workspaceDetails.connectAccountId) {
     // const response = await stripe.accounts.retrieve({
-    //   stripeAccount: projectDetails.connectAccountId,
+    //   stripeAccount: workspaceDetails.connectAccountId,
     // })
 
     // currency = response.default_currency?.toUpperCase() || 'USD'
@@ -65,7 +65,7 @@ const Page = async ({
     //     created: { gte: startDate, lte: endDate },
     //     limit: 100,
     //   },
-    //   { stripeAccount: projectDetails.connectAccountId }
+    //   { stripeAccount: workspaceDetails.connectAccountId }
     // )
     // sessions = checkoutSessions.data
     // totalClosedSessions = checkoutSessions.data
@@ -99,7 +99,7 @@ const Page = async ({
 
     return (
         <div className="relative h-full">
-            {/* {!projectDetails.connectAccountId && (
+            {/* {!workspaceDetails.connectAccountId && (
                 <div className="absolute -top-10 -left-10 right-0 bottom-0 z-30 flex items-center justify-center backdrop-blur-md bg-background/50">
                     <Card>
                         <CardHeader>
@@ -108,7 +108,7 @@ const Page = async ({
                                 You need to connect your stripe account to see metrics
                             </CardDescription>
                             <Link
-                                href={`/project/${projectDetails.id}/launchpad`}
+                                href={`/workspace/${workspaceDetails.id}/launchpad`}
                                 className="p-2 w-fit bg-secondary text-white rounded-md flex items-center gap-2"
                             >
                                 <ClipboardIcon />
@@ -157,7 +157,7 @@ const Page = async ({
                     <Card className="flex-1 relative">
                         <CardHeader>
                             <CardDescription>Active Clients</CardDescription>
-                            <CardTitle className="text-4xl">{subaccounts.length}</CardTitle>
+                            <CardTitle className="text-4xl">{projects.length}</CardTitle>
                         </CardHeader>
                         <CardContent className="text-sm text-muted-foreground">
                             Reflects the number of sub accounts you own and manage.
@@ -166,7 +166,7 @@ const Page = async ({
                     </Card>
                     <Card className="flex-1 relative">
                         <CardHeader>
-                            <CardTitle>Project Goal</CardTitle>
+                            <CardTitle>Workspace Goal</CardTitle>
                             <CardDescription className='mt-2'>
                                 Reflects the number of sub accounts you want to own and
                                 manage.
@@ -176,15 +176,15 @@ const Page = async ({
                             <div className="flex flex-col w-full">
                                 <div className="flex justify-between items-center">
                                     <span className="text-muted-foreground text-sm">
-                                        Current: {subaccounts.length}
+                                        Current: {projects.length}
                                     </span>
                                     <span className="text-muted-foreground text-sm">
-                                        {/* Goal: {projectDetails.goal} */}
+                                        {/* Goal: {workspaceDetails.goal} */}
                                         Goal: 100
                                     </span>
                                 </div>
                                 {/* <Progress
-                                    value={(subaccounts.length / projectDetails.goal) * 100}
+                                    value={(projects.length / workspaceDetails.goal) * 100}
                                 /> */}
                                 <Progress
                                     value={0}

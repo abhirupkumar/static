@@ -1,10 +1,10 @@
 'use client'
 
 import {
+    Workspace,
+    WorkspaceSidebarOption,
     Project,
     ProjectSidebarOption,
-    SubAccount,
-    SubAccountSidebarOption,
 } from '@prisma/client'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '../ui/sheet'
@@ -26,14 +26,14 @@ import Link from 'next/link'
 import { twMerge } from 'tailwind-merge'
 import { useModal } from '@/providers/modal-provider'
 import CustomModal from '../global/custom-modal'
-import SubAccountDetails from '../forms/subaccount-details'
+import ProjectDetails from '../forms/project-details'
 import { Separator } from '../ui/separator'
 import { icons } from '@/lib/constants'
 
 type Props = {
     defaultOpen: boolean
-    subAccounts: SubAccount[]
-    sidebarOpt: ProjectSidebarOption[] | SubAccountSidebarOption[]
+    projects: Project[]
+    sidebarOpt: WorkspaceSidebarOption[] | ProjectSidebarOption[]
     sidebarLogo: string
     details: any
     user: any
@@ -45,7 +45,7 @@ const MenuOptions = ({
     id,
     sidebarLogo,
     sidebarOpt,
-    subAccounts,
+    projects,
     user,
     defaultOpen,
 }: Props) => {
@@ -133,49 +133,49 @@ const MenuOptions = ({
                             <CommandInput placeholder="Search Accounts..." />
                             <CommandList className="pb-16">
                                 <CommandEmpty> No results found</CommandEmpty>
-                                {(user?.role === 'PROJECT_OWNER' ||
-                                    user?.role === 'PROJECT_ADMIN') &&
-                                    user?.Project && (
-                                        <CommandGroup heading="Project">
+                                {(user?.role === 'WORKSPACE_OWNER' ||
+                                    user?.role === 'WORKSPACE_ADMIN') &&
+                                    user?.Workspace && (
+                                        <CommandGroup heading="Workspace">
                                             <CommandItem className="!bg-transparent my-2 text-primary broder-[1px] border-border p-2 rounded-md hover:!bg-muted cursor-pointer transition-all">
                                                 {defaultOpen ? (
                                                     <Link
-                                                        href={`/project/${user?.Project?.id}`}
+                                                        href={`/workspace/${user?.Workspace?.id}`}
                                                         className="flex gap-4 w-full h-full"
                                                     >
                                                         <div className="relative w-16">
                                                             <Image
-                                                                src={user?.Project?.projectLogo}
-                                                                alt="Project Logo"
+                                                                src={user?.Workspace?.workspaceLogo}
+                                                                alt="Workspace Logo"
                                                                 fill
                                                                 className="rounded-md object-contain"
                                                             />
                                                         </div>
                                                         <div className="flex flex-col flex-1">
-                                                            {user?.Project?.name}
+                                                            {user?.Workspace?.name}
                                                             <span className="text-muted-foreground">
-                                                                {user?.Project?.address}
+                                                                {user?.Workspace?.address}
                                                             </span>
                                                         </div>
                                                     </Link>
                                                 ) : (
                                                     <SheetClose asChild>
                                                         <Link
-                                                            href={`/project/${user?.Project?.id}`}
+                                                            href={`/workspace/${user?.Workspace?.id}`}
                                                             className="flex gap-4 w-full h-full"
                                                         >
                                                             <div className="relative w-16">
                                                                 <Image
-                                                                    src={user?.Project?.projectLogo}
-                                                                    alt="Project Logo"
+                                                                    src={user?.Workspace?.workspaceLogo}
+                                                                    alt="Workspace Logo"
                                                                     fill
                                                                     className="rounded-md object-contain"
                                                                 />
                                                             </div>
                                                             <div className="flex flex-col flex-1">
-                                                                {user?.Project?.name}
+                                                                {user?.Workspace?.name}
                                                                 <span className="text-muted-foreground">
-                                                                    {user?.Project?.address}
+                                                                    {user?.Workspace?.address}
                                                                 </span>
                                                             </div>
                                                         </Link>
@@ -185,47 +185,47 @@ const MenuOptions = ({
                                         </CommandGroup>
                                     )}
                                 <CommandGroup heading="Accounts">
-                                    {!!subAccounts
-                                        ? subAccounts.map((subaccount) => (
-                                            <CommandItem key={subaccount.id}>
+                                    {!!projects
+                                        ? projects.map((project) => (
+                                            <CommandItem key={project.id}>
                                                 {defaultOpen ? (
                                                     <Link
-                                                        href={`/subaccount/${subaccount.id}`}
+                                                        href={`/project/${project.id}`}
                                                         className="flex gap-4 w-full h-full"
                                                     >
                                                         <div className="relative w-16">
                                                             <Image
-                                                                src={subaccount.subAccountLogo}
-                                                                alt="subaccount Logo"
+                                                                src={project.projectLogo}
+                                                                alt="project Logo"
                                                                 fill
                                                                 className="rounded-md object-contain"
                                                             />
                                                         </div>
                                                         <div className="flex flex-col flex-1">
-                                                            {subaccount.name}
+                                                            {project.name}
                                                             <span className="text-muted-foreground">
-                                                                {subaccount.address}
+                                                                {project.address}
                                                             </span>
                                                         </div>
                                                     </Link>
                                                 ) : (
                                                     <SheetClose asChild>
                                                         <Link
-                                                            href={`/subaccount/${subaccount.id}`}
+                                                            href={`/project/${project.id}`}
                                                             className="flex gap-4 w-full h-full"
                                                         >
                                                             <div className="relative w-16">
                                                                 <Image
-                                                                    src={subaccount.subAccountLogo}
-                                                                    alt="subaccount Logo"
+                                                                    src={project.projectLogo}
+                                                                    alt="project Logo"
                                                                     fill
                                                                     className="rounded-md object-contain"
                                                                 />
                                                             </div>
                                                             <div className="flex flex-col flex-1">
-                                                                {subaccount.name}
+                                                                {project.name}
                                                                 <span className="text-muted-foreground">
-                                                                    {subaccount.address}
+                                                                    {project.address}
                                                                 </span>
                                                             </div>
                                                         </Link>
@@ -236,18 +236,18 @@ const MenuOptions = ({
                                         : 'No Accounts'}
                                 </CommandGroup>
                             </CommandList>
-                            {(user?.role === 'PROJECT_OWNER' ||
-                                user?.role === 'PROJECT_ADMIN') && (
+                            {(user?.role === 'WORKSPACE_OWNER' ||
+                                user?.role === 'WORKSPACE_ADMIN') && (
                                     // <SheetClose>
                                     <Button
                                         className="w-full flex gap-2"
                                         onClick={() => setOpen(
                                             <CustomModal
-                                                title="Create A Subaccount"
-                                                subheading="You can switch between your project account and the subaccount from the sidebar"
+                                                title="Create A Project"
+                                                subheading="You can switch between your workspace account and the project from the sidebar"
                                             >
-                                                <SubAccountDetails
-                                                    projectDetails={user?.Project as Project}
+                                                <ProjectDetails
+                                                    workspaceDetails={user?.Workspace as Workspace}
                                                     userId={user?.id as string}
                                                     userName={user?.name}
                                                 />

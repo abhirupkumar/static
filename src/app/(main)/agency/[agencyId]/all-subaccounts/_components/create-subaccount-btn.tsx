@@ -1,21 +1,21 @@
 'use client'
-import SubAccountDetails from '@/components/forms/subaccount-details'
+import ProjectDetails from '@/components/forms/project-details'
 import CustomModal from '@/components/global/custom-modal'
 import { Button } from '@/components/ui/button'
 import { useModal } from '@/providers/modal-provider'
-import { Project, ProjectSidebarOption, SubAccount, User } from '@prisma/client'
+import { Workspace, WorkspaceSidebarOption, Project, User } from '@prisma/client'
 import { PlusCircleIcon } from 'lucide-react'
 import React from 'react'
 import { twMerge } from 'tailwind-merge'
 
 type Props = {
     user: User & {
-        Project:
+        Workspace:
         | (
-            | Project
+            | Workspace
             | (null & {
-                SubAccount: SubAccount[]
-                SideBarOption: ProjectSidebarOption[]
+                Project: Project[]
+                SideBarOption: WorkspaceSidebarOption[]
             })
         )
         | null
@@ -24,11 +24,11 @@ type Props = {
     className: string
 }
 
-const CreateSubaccountButton = ({ className, id, user }: Props) => {
+const CreateProjectButton = ({ className, id, user }: Props) => {
     const { setOpen } = useModal()
-    const projectDetails = user.Project
+    const workspaceDetails = user.Workspace
 
-    if (!projectDetails) return
+    if (!workspaceDetails) return
 
     return (
         <Button
@@ -36,11 +36,11 @@ const CreateSubaccountButton = ({ className, id, user }: Props) => {
             onClick={() => {
                 setOpen(
                     <CustomModal
-                        title="Create a Subaccount"
+                        title="Create a Project"
                         subheading="You can switch bettween"
                     >
-                        <SubAccountDetails
-                            projectDetails={projectDetails}
+                        <ProjectDetails
+                            workspaceDetails={workspaceDetails}
                             userId={user.id}
                             userName={user.name}
                         />
@@ -54,4 +54,4 @@ const CreateSubaccountButton = ({ className, id, user }: Props) => {
     )
 }
 
-export default CreateSubaccountButton
+export default CreateProjectButton

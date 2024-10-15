@@ -16,46 +16,46 @@ import React from 'react'
 
 type Props = {
     params: {
-        projectId: string
+        workspaceId: string
     }
     searchParams: { code: string }
 }
 
 const LaunchPadPage = async ({ params, searchParams }: Props) => {
-    const projectDetails = await db.project.findUnique({
-        where: { id: params.projectId },
+    const workspaceDetails = await db.workspace.findUnique({
+        where: { id: params.workspaceId },
     })
 
-    if (!projectDetails) return
+    if (!workspaceDetails) return
 
     const allDetailsExist =
-        projectDetails.address &&
-        projectDetails.address &&
-        projectDetails.projectLogo &&
-        projectDetails.city &&
-        projectDetails.companyEmail &&
-        projectDetails.companyPhone &&
-        projectDetails.country &&
-        projectDetails.name &&
-        projectDetails.state &&
-        projectDetails.zipCode
+        workspaceDetails.address &&
+        workspaceDetails.address &&
+        workspaceDetails.workspaceLogo &&
+        workspaceDetails.city &&
+        workspaceDetails.companyEmail &&
+        workspaceDetails.companyPhone &&
+        workspaceDetails.country &&
+        workspaceDetails.name &&
+        workspaceDetails.state &&
+        workspaceDetails.zipCode
 
     // const stripeOAuthLink = getStripeOAuthLink(
-    //     'project',
-    //     `launchpad___${projectDetails.id}`
+    //     'workspace',
+    //     `launchpad___${workspaceDetails.id}`
     // )
 
     let connectedStripeAccount = false
 
     if (searchParams.code) {
-        // if (!projectDetails.connectAccountId) {
+        // if (!workspaceDetails.connectAccountId) {
         //     try {
         //         const response = await stripe.oauth.token({
         //             grant_type: 'authorization_code',
         //             code: searchParams.code,
         //         })
-        //         await db.project.update({
-        //             where: { id: params.projectId },
+        //         await db.workspace.update({
+        //             where: { id: params.workspaceId },
         //             data: { connectAccountId: response.stripe_user_id },
         //         })
         //         connectedStripeAccount = true
@@ -103,7 +103,7 @@ const LaunchPadPage = async ({ params, searchParams }: Props) => {
                                     dashboard.
                                 </p>
                             </div>
-                            {projectDetails.connectAccountId || connectedStripeAccount ? (
+                            {workspaceDetails.connectAccountId || connectedStripeAccount ? (
                                 <CheckCircleIcon
                                     size={50}
                                     className=" text-green-500 p-2 flex-shrink-0"
@@ -126,7 +126,7 @@ const LaunchPadPage = async ({ params, searchParams }: Props) => {
                         <div className="flex justify-between items-center w-full border p-4 rounded-lg gap-2">
                             <div className="flex md:items-center gap-4 flex-col md:!flex-row">
                                 <Image
-                                    src={projectDetails.projectLogo}
+                                    src={workspaceDetails.workspaceLogo}
                                     alt="app logo"
                                     height={80}
                                     width={80}
@@ -142,7 +142,7 @@ const LaunchPadPage = async ({ params, searchParams }: Props) => {
                             ) : (
                                 <Link
                                     className="bg-primary py-2 px-4 rounded-md text-white"
-                                    href={`/project/${params.projectId}/settings`}
+                                    href={`/workspace/${params.workspaceId}/settings`}
                                 >
                                     Start
                                 </Link>

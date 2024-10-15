@@ -12,7 +12,7 @@ const content = [
         description: (
             <>
                 <p>
-                    The Website Builder for Project CRM is a powerful tool designed to
+                    The Website Builder for Workspace CRM is a powerful tool designed to
                     streamline the process of creating and managing websites for agencies.
                 </p>
                 <p>
@@ -44,18 +44,18 @@ const content = [
         description: (
             <>
                 <p>
-                    The Kanban Board for pipelines in Project CRM offers a visual and
-                    efficient way for agencies to manage their projects and workflows.
+                    The Kanban Board for pipelines in Workspace CRM offers a visual and
+                    efficient way for agencies to manage their workspaces and workflows.
                 </p>
                 <p>
                     By organizing tasks into customizable pipelines, agencies can easily
-                    track the progress of projects from start to finish.
+                    track the progress of workspaces from start to finish.
                 </p>
                 <p>
                     With features like drag-and-drop functionality and customizable
                     columns, this tool enables teams to prioritize tasks, collaborate
                     effectively, and stay organized, ultimately improving productivity and
-                    project delivery.
+                    workspace delivery.
                 </p>
             </>
         ),
@@ -75,8 +75,8 @@ const content = [
         description: (
             <>
                 <p>
-                    Team Access for Project CRM provides secure and seamless access control
-                    for project teams, ensuring efficient collaboration and data
+                    Team Access for Workspace CRM provides secure and seamless access control
+                    for workspace teams, ensuring efficient collaboration and data
                     management.
                 </p>
                 <p>
@@ -107,7 +107,7 @@ const content = [
         description: (
             <>
                 <p>
-                    The Leads Dashboard for Project CRM offers a comprehensive overview of
+                    The Leads Dashboard for Workspace CRM offers a comprehensive overview of
                     potential opportunities and client interactions, empowering agencies
                     to effectively manage their sales pipeline.
                 </p>

@@ -26,7 +26,7 @@ import FileUpload from '../global/file-upload'
 import { Button } from '../ui/button'
 
 type Props = {
-    subaccountId: string
+    projectId: string
 }
 
 const formSchema = z.object({
@@ -34,7 +34,7 @@ const formSchema = z.object({
     name: z.string().min(1, { message: 'Name is required' }),
 })
 
-const UploadMediaForm = ({ subaccountId }: Props) => {
+const UploadMediaForm = ({ projectId }: Props) => {
     const { toast } = useToast()
     const router = useRouter()
     const form = useForm<z.infer<typeof formSchema>>({
@@ -48,11 +48,11 @@ const UploadMediaForm = ({ subaccountId }: Props) => {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            const response = await createMedia(subaccountId, values)
+            const response = await createMedia(projectId, values)
             await saveActivityLogsNotification({
-                projectId: undefined,
+                workspaceId: undefined,
                 description: `Uploaded a media file | ${response.name}`,
-                subaccountId,
+                projectId,
             })
 
             toast({ title: 'Succes', description: 'Uploaded media' })
@@ -86,7 +86,7 @@ const UploadMediaForm = ({ subaccountId }: Props) => {
                                     <FormLabel>File Name</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Your project name"
+                                            placeholder="Your workspace name"
                                             {...field}
                                         />
                                     </FormControl>
@@ -103,7 +103,7 @@ const UploadMediaForm = ({ subaccountId }: Props) => {
                                     <FormLabel>Media File</FormLabel>
                                     <FormControl>
                                         <FileUpload
-                                            apiEndpoint="subaccountLogo"
+                                            apiEndpoint="projectLogo"
                                             value={field.value}
                                             onChange={field.onChange}
                                         />

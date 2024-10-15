@@ -39,7 +39,7 @@ export const pricingCards = [
     },
     {
         title: 'Unlimited Saas',
-        description: 'The ultimate project kit',
+        description: 'The ultimate workspace kit',
         price: '$199',
         duration: 'month',
         highlight: 'Key features',
@@ -48,7 +48,7 @@ export const pricingCards = [
     },
     {
         title: 'Basic',
-        description: 'For serious project owners',
+        description: 'For serious workspace owners',
         price: '$49',
         duration: 'month',
         highlight: 'Everything in Starter, plus',

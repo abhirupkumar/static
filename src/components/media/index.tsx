@@ -14,15 +14,15 @@ import { FolderSearch } from 'lucide-react'
 
 type Props = {
   data: GetMediaFiles
-  subaccountId: string
+  projectId: string
 }
 
-const MediaComponent = ({ data, subaccountId }: Props) => {
+const MediaComponent = ({ data, projectId }: Props) => {
   return (
     <div className="flex flex-col gap-4 h-full w-full">
       <div className="flex justify-between items-center">
         <h1 className="text-4xl">Media Bucket</h1>
-        <MediaUploadButton subaccountId={subaccountId} />
+        <MediaUploadButton projectId={projectId} />
       </div>
       <Command className="bg-transparent">
         <CommandInput placeholder="Search for file name..." />
