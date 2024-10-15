@@ -41,5 +41,5 @@ export default SubAccountMainPage
 
 
 export const metadata = constructMetadata({
-    title: "Subaacount - Biznex",
+    title: "Subaacount - Zyper",
 });

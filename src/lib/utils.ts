@@ -36,7 +36,7 @@ export function constructMetadata({
       images: [image],
       creator: "@abhirupkumar",
     },
-    metadataBase: new URL("https://biznex.tech"),
+    metadataBase: new URL("https://zyper.tech"),
     ...(noIndex && {
       robots: {
         index: false,

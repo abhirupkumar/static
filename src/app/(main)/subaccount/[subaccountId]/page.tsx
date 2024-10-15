@@ -303,5 +303,5 @@ const SubaccountPageId = async ({ params, searchParams }: Props) => {
 export default SubaccountPageId;
 
 export const metadata = constructMetadata({
-    title: "Subaacount - Biznex",
+    title: "Subaacount - Zyper",
 });
