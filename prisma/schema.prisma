@@ -57,21 +57,8 @@ model User {
   updatedAt    DateTime       @updatedAt
   role         Role           @default(SUBACCOUNT_USER)
   Projects     Project[]
-  Permissions  Permissions[]
   Ticket       Ticket[]
   Notification Notification[]
-}
-
-model Permissions {
-  id           String     @id @default(uuid())
-  email        String
-  User         User       @relation(fields: [email], references: [email], onDelete: Cascade)
-  subAccountId String
-  SubAccount   SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
-  access       Boolean
-
-  @@index([subAccountId])
-  @@index([email])
 }
 
 model Project {
@@ -116,7 +103,6 @@ model SubAccount {
   country          String
   projectId        String
   Project          Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  Permissions      Permissions[]
   Sites            Site[]
   Media            Media[]
   Contact          Contact[]
