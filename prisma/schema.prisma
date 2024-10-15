@@ -83,8 +83,8 @@ model Workspace {
   customerId       String                   @default("")
   name             String
   workspaceLogo    String                   @db.Text
-  companyEmail     String                   @db.Text
-  companyPhone     String
+  workEmail        String                   @db.Text
+  workPhone        String
   whiteLabel       Boolean                  @default(true)
   address          String
   city             String
@@ -110,8 +110,8 @@ model Project {
   projectLogo      String                 @db.Text
   createdAt        DateTime               @default(now())
   updatedAt        DateTime               @updatedAt
-  companyEmail     String                 @db.Text
-  companyPhone     String
+  workEmail        String                 @db.Text
+  workPhone        String
   goal             Int                    @default(5)
   address          String
   city             String

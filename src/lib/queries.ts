@@ -236,7 +236,7 @@ export const initUser = async (newUser: Partial<User>) => {
 }
 
 export const upsertWorkspace = async (workspace: Workspace, price?: Plan) => {
-    if (!workspace.companyEmail) return null
+    if (!workspace.workEmail) return null
     try {
         const workspaceDetails = await db.workspace.upsert({
             where: {
@@ -245,7 +245,7 @@ export const upsertWorkspace = async (workspace: Workspace, price?: Plan) => {
             update: workspace,
             create: {
                 users: {
-                    connect: { email: workspace.companyEmail },
+                    connect: { email: workspace.workEmail },
                 },
                 ...workspace,
                 SidebarOption: {
@@ -306,7 +306,7 @@ export const getNotificationAndUser = async (workspaceId: string) => {
 }
 
 export const upsertProject = async (project: Project) => {
-    if (!project.companyEmail) return null
+    if (!project.workEmail) return null
     const workspaceOwner = await db.user.findFirst({
         where: {
             Workspace: {

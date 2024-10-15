@@ -35,8 +35,8 @@ import { useModal } from '@/providers/modal-provider'
 
 const formSchema = z.object({
     name: z.string(),
-    companyEmail: z.string(),
-    companyPhone: z.string().min(1),
+    workEmail: z.string(),
+    workPhone: z.string().min(1),
     address: z.string(),
     city: z.string(),
     projectLogo: z.string(),
@@ -70,8 +70,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: details?.name,
-            companyEmail: details?.companyEmail,
-            companyPhone: details?.companyPhone,
+            workEmail: details?.workEmail,
+            workPhone: details?.workPhone,
             address: details?.address,
             city: details?.city,
             zipCode: details?.zipCode,
@@ -88,14 +88,14 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 address: values.address,
                 projectLogo: values.projectLogo,
                 city: values.city,
-                companyPhone: values.companyPhone,
+                workPhone: values.workPhone,
                 country: values.country,
                 name: values.name,
                 state: values.state,
                 zipCode: values.zipCode,
                 createdAt: new Date(),
                 updatedAt: new Date(),
-                companyEmail: values.companyEmail,
+                workEmail: values.workEmail,
                 workspaceId: workspaceDetails.id,
                 connectAccountId: '',
                 goal: 5000,
@@ -183,7 +183,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                             <FormField
                                 disabled={isLoading}
                                 control={form.control}
-                                name="companyEmail"
+                                name="workEmail"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
                                         <FormLabel>Acount Email</FormLabel>
@@ -202,7 +202,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                             <FormField
                                 disabled={isLoading}
                                 control={form.control}
-                                name="companyPhone"
+                                name="workPhone"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
                                         <FormLabel>Acount Phone Number</FormLabel>

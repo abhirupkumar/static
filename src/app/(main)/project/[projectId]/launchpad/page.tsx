@@ -38,8 +38,8 @@ const LaunchPad = async ({ params, searchParams }: Props) => {
         projectDetails.address &&
         projectDetails.projectLogo &&
         projectDetails.city &&
-        projectDetails.companyEmail &&
-        projectDetails.companyPhone &&
+        projectDetails.workEmail &&
+        projectDetails.workPhone &&
         projectDetails.country &&
         projectDetails.name &&
         projectDetails.state

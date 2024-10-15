@@ -33,8 +33,8 @@ const LaunchPadPage = async ({ params, searchParams }: Props) => {
         workspaceDetails.address &&
         workspaceDetails.workspaceLogo &&
         workspaceDetails.city &&
-        workspaceDetails.companyEmail &&
-        workspaceDetails.companyPhone &&
+        workspaceDetails.workEmail &&
+        workspaceDetails.workPhone &&
         workspaceDetails.country &&
         workspaceDetails.name &&
         workspaceDetails.state &&

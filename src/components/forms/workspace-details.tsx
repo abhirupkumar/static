@@ -31,8 +31,8 @@ type Props = {
 
 const FormSchema = z.object({
     name: z.string().min(2, { message: 'Workspace name must be atleast 2 chars.' }),
-    companyEmail: z.string().min(1),
-    companyPhone: z.string().min(1),
+    workEmail: z.string().min(1),
+    workPhone: z.string().min(1),
     whiteLabel: z.boolean(),
     address: z.string().min(1),
     city: z.string().min(1),
@@ -51,8 +51,8 @@ const WorkspaceDetails = ({ data }: Props) => {
         resolver: zodResolver(FormSchema),
         defaultValues: {
             name: data?.name,
-            companyEmail: data?.companyEmail,
-            companyPhone: data?.companyPhone,
+            workEmail: data?.workEmail,
+            workPhone: data?.workPhone,
             whiteLabel: data?.whiteLabel || false,
             address: data?.address,
             city: data?.city,
@@ -77,7 +77,7 @@ const WorkspaceDetails = ({ data }: Props) => {
             let custId
             if (!data?.id) {
                 const bodyData = {
-                    email: values.companyEmail,
+                    email: values.workEmail,
                     name: values.name,
                     shipping: {
                         address: {
@@ -119,7 +119,7 @@ const WorkspaceDetails = ({ data }: Props) => {
                 address: values.address,
                 workspaceLogo: values.workspaceLogo,
                 city: values.city,
-                companyPhone: values.companyPhone,
+                workPhone: values.workPhone,
                 country: values.country,
                 name: values.name,
                 state: values.state,
@@ -127,7 +127,7 @@ const WorkspaceDetails = ({ data }: Props) => {
                 zipCode: values.zipCode,
                 createdAt: new Date(),
                 updatedAt: new Date(),
-                companyEmail: values.companyEmail,
+                workEmail: values.workEmail,
                 connectAccountId: '',
                 goal: 5,
             })
@@ -223,7 +223,7 @@ const WorkspaceDetails = ({ data }: Props) => {
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="companyEmail"
+                                    name="workEmail"
                                     render={({ field }) => (
                                         <FormItem className="flex-1">
                                             <FormLabel>Workspace Email</FormLabel>
@@ -243,7 +243,7 @@ const WorkspaceDetails = ({ data }: Props) => {
                                 <FormField
                                     disabled={isLoading}
                                     control={form.control}
-                                    name="companyPhone"
+                                    name="workPhone"
                                     render={({ field }) => (
                                         <FormItem className="flex-1">
                                             <FormLabel>Workspace Phone Number</FormLabel>

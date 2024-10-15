@@ -41,7 +41,7 @@ const Page = async ({
         <div className="flex justify-center items-center mt-4">
             <div className="max-w-[850px] flex flex-col">
                 <WorkspaceDetails
-                    data={{ companyEmail: authUser?.emailAddresses[0].emailAddress }}
+                    data={{ workEmail: authUser?.emailAddresses[0].emailAddress }}
                 />
             </div>
         </div>
