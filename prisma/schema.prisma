@@ -1,11 +1,377 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
-generator client {
-  provider = "prisma-client-js"
+model User {
+  id           String         @id @default(uuid())
+  name         String
+  avatarUrl    String
+  email        String         @unique
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  role         Role           @default(PROJECT_USER)
+  workspaceId  String?
+  Workspace    Workspace?     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  Permissions  Permissions[]
+  Ticket       Ticket[]
+  Notification Notification[]
+
+  @@index([workspaceId])
+}
+
+model Permissions {
+  id        String  @id @default(uuid())
+  email     String
+  projectId String
+  access    Boolean
+  User      User    @relation(fields: [email], references: [email], onDelete: Cascade)
+  Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([email])
+}
+
+model Workspace {
+  id               String                   @id @default(uuid())
+  connectAccountId String?                  @default("")
+  customerId       String                   @default("")
+  name             String
+  workspaceLogo    String
+  workEmail        String
+  workPhone        String?
+  whiteLabel       Boolean                  @default(true)
+  address          String?
+  city             String?
+  zipCode          String?
+  state            String?
+  country          String?
+  goal             Int                      @default(5)
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  users            User[]
+  Project          Project[]
+  SidebarOption    WorkspaceSidebarOption[]
+  Invitation       Invitation[]
+  Notification     Notification[]
+  Subscription     Subscription?
+  AddOns           AddOns[]
+}
+
+model Project {
+  id               String                 @id @default(uuid())
+  connectAccountId String?                @default("")
+  name             String
+  projectLogo      String
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  workEmail        String
+  workPhone        String?
+  goal             Int                    @default(5)
+  address          String?
+  city             String?
+  zipCode          String?
+  state            String?
+  country          String?
+  workspaceId      String
+  Workspace        Workspace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  SidebarOption    ProjectSidebarOption[]
+  Permissions      Permissions[]
+  Sites            Site[]
+  Media            Media[]
+  Contact          Contact[]
+  Trigger          Trigger[]
+  Automation       Automation[]
+  Pipeline         Pipeline[]
+  Tags             Tag[]
+  Notification     Notification[]
+
+  @@index([workspaceId])
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String
+  color     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projectId String
+  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Ticket    Ticket[]
+
+  @@index([projectId])
+}
+
+model Pipeline {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projectId String
+  Lane      Lane[]
+  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model Lane {
+  id         String   @id @default(uuid())
+  name       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  pipelineId String
+  order      Int      @default(0)
+  Pipeline   Pipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+  Tickets    Ticket[]
+
+  @@index([pipelineId])
+}
+
+model Ticket {
+  id             String   @id @default(uuid())
+  name           String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  laneId         String
+  order          Int      @default(0)
+  value          Decimal?
+  description    String?
+  customerId     String?
+  assignedUserId String?
+  Lane           Lane     @relation(fields: [laneId], references: [id], onDelete: Cascade)
+  Tags           Tag[]
+  Customer       Contact? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  Assigned       User?    @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
+
+  @@index([laneId])
+  @@index([customerId])
+  @@index([assignedUserId])
+}
+
+model Trigger {
+  id          String       @id @default(uuid())
+  name        String
+  type        TriggerTypes
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  projectId   String
+  Project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Automations Automation[]
+
+  @@index([projectId])
+}
+
+model Automation {
+  id                 String               @id @default(uuid())
+  name               String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  triggerId          String?
+  published          Boolean              @default(false)
+  projectId          String
+  Trigger            Trigger?             @relation(fields: [triggerId], references: [id], onDelete: Cascade)
+  Project            Project              @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Action             Action[]
+  AutomationInstance AutomationInstance[]
+
+  @@index([triggerId])
+  @@index([projectId])
+}
+
+model AutomationInstance {
+  id           String     @id @default(uuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  automationId String
+  active       Boolean    @default(false)
+  Automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+
+  @@index([automationId])
+}
+
+model Action {
+  id           String     @id @default(uuid())
+  name         String
+  type         ActionType
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  automationId String
+  order        Int
+  laneId       String     @default("0")
+  Automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+
+  @@index([automationId])
+}
+
+model Contact {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projectId String
+  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Ticket    Ticket[]
+
+  @@index([projectId])
+}
+
+model Media {
+  id        String   @id @default(uuid())
+  type      String?
+  name      String
+  link      String   @unique
+  projectId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model Site {
+  id            String      @id @default(uuid())
+  name          String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  description   String?
+  published     Boolean     @default(false)
+  subDomainName String?     @unique
+  favicon       String?
+  projectId     String
+  liveProducts  String?     @default("[]")
+  Project       Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  SitePages     SitePage[]
+  ClassName     ClassName[]
+
+  @@index([projectId])
+}
+
+model ClassName {
+  id         String   @id @default(uuid())
+  name       String
+  color      String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  siteId     String
+  customData String?
+  Site       Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId])
+}
+
+model SitePage {
+  id           String   @id @default(uuid())
+  name         String
+  pathName     String   @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  visits       Int      @default(0)
+  content      String?
+  order        Int
+  previewImage String?
+  siteId       String
+  Site         Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId])
+}
+
+model WorkspaceSidebarOption {
+  id          String     @id @default(uuid())
+  name        String     @default("Menu")
+  link        String     @default("#")
+  icon        Icon       @default(info)
+  workspaceId String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+}
+
+model ProjectSidebarOption {
+  id        String   @id @default(uuid())
+  name      String   @default("Menu")
+  link      String   @default("#")
+  icon      Icon     @default(info)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projectId String?
+  Project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model Invitation {
+  id          String           @id @default(uuid())
+  email       String           @unique
+  workspaceId String
+  status      InvitationStatus @default(PENDING)
+  role        Role             @default(PROJECT_USER)
+  Workspace   Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+}
+
+model Notification {
+  id           String    @id @default(uuid())
+  notification String
+  workspaceId  String
+  projectId    String?
+  userId       String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  User         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  Project      Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([projectId])
+  @@index([userId])
+}
+
+model Subscription {
+  id                   String     @id @default(uuid())
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+  plan                 Plan?
+  price                String?
+  active               Boolean    @default(false)
+  priceId              String
+  customerId           String
+  currentPeriodEndDate DateTime
+  subscritiptionId     String     @unique
+  workspaceId          String?    @unique
+  Workspace            Workspace? @relation(fields: [workspaceId], references: [id])
+
+  @@index([customerId])
+}
+
+model AddOns {
+  id          String     @id @default(uuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  name        String
+  active      Boolean    @default(false)
+  priceId     String     @unique
+  workspaceId String?
+  Workspace   Workspace? @relation(fields: [workspaceId], references: [id])
+
+  @@index([workspaceId])
+}
+
+model TagToTicket {
+  A String
+  B String
+
+  @@unique([A, B], map: "_TagToTicket_AB_unique")
+  @@index([B], map: "_TagToTicket_B_index")
+  @@map("_TagToTicket")
 }
 
 enum Role {
@@ -48,315 +414,12 @@ enum Icon {
   clipboardIcon
 }
 
-model User {
-  id           String         @id @default(uuid())
-  name         String
-  avatarUrl    String         @db.Text
-  email        String         @unique
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  role         Role           @default(PROJECT_USER)
-  workspaceId  String?
-  Workspace    Workspace?     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  Permissions  Permissions[]
-  Ticket       Ticket[]
-  Notification Notification[]
-
-  @@index([workspaceId])
-}
-
-model Permissions {
-  id        String  @id @default(uuid())
-  email     String
-  User      User    @relation(fields: [email], references: [email], onDelete: Cascade)
-  projectId String
-  Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  access    Boolean
-
-  @@index([projectId])
-  @@index([email])
-}
-
-model Workspace {
-  id               String                   @id @default(uuid())
-  connectAccountId String?                  @default("")
-  customerId       String                   @default("")
-  name             String
-  workspaceLogo    String                   @db.Text
-  workEmail        String                   @db.Text
-  workPhone        String?
-  whiteLabel       Boolean                  @default(true)
-  address          String?
-  city             String?
-  zipCode          String?
-  state            String?
-  country          String?
-  goal             Int                      @default(5)
-  users            User[]
-  createdAt        DateTime                 @default(now())
-  updatedAt        DateTime                 @updatedAt
-  Project          Project[]
-  SidebarOption    WorkspaceSidebarOption[]
-  Invitation       Invitation[]
-  Notification     Notification[]
-  Subscription     Subscription?
-  AddOns           AddOns[]
-}
-
-model Project {
-  id               String                 @id @default(uuid())
-  connectAccountId String?                @default("")
-  name             String
-  projectLogo      String                 @db.Text
-  createdAt        DateTime               @default(now())
-  updatedAt        DateTime               @updatedAt
-  workEmail        String                 @db.Text
-  workPhone        String?
-  goal             Int                    @default(5)
-  address          String?
-  city             String?
-  zipCode          String?
-  state            String?
-  country          String?
-  workspaceId      String
-  Workspace        Workspace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  SidebarOption    ProjectSidebarOption[]
-  Permissions      Permissions[]
-  Sites            Site[]
-  Media            Media[]
-  Contact          Contact[]
-  Trigger          Trigger[]
-  Automation       Automation[]
-  Pipeline         Pipeline[]
-  Tags             Tag[]
-  Notification     Notification[]
-
-  @@index([workspaceId])
-}
-
-model Tag {
-  id        String   @id @default(uuid())
-  name      String
-  color     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  projectId String
-
-  Project Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  Ticket  Ticket[]
-
-  @@index([projectId])
-}
-
-model Pipeline {
-  id        String   @id @default(uuid())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Lane      Lane[]
-  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId String
-
-  @@index([projectId])
-}
-
-model Lane {
-  id         String   @id @default(uuid())
-  name       String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  Pipeline   Pipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
-  pipelineId String
-  Tickets    Ticket[]
-  order      Int      @default(0)
-
-  @@index([pipelineId])
-}
-
-model Ticket {
-  id          String   @id @default(uuid())
-  name        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  laneId      String
-  order       Int      @default(0)
-  Lane        Lane     @relation(fields: [laneId], references: [id], onDelete: Cascade)
-  value       Decimal?
-  description String?
-  Tags        Tag[]
-
-  customerId String?
-  Customer   Contact? @relation(fields: [customerId], references: [id], onDelete: SetNull)
-
-  assignedUserId String?
-  Assigned       User?   @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
-
-  @@index([laneId])
-  @@index([customerId])
-  @@index([assignedUserId])
-}
-
 enum TriggerTypes {
   CONTACT_FORM
 }
 
-model Trigger {
-  id          String       @id @default(uuid())
-  name        String
-  type        TriggerTypes
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  projectId   String
-  Project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  Automations Automation[]
-
-  @@index([projectId])
-}
-
-model Automation {
-  id                 String               @id @default(uuid())
-  name               String
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
-  triggerId          String?
-  published          Boolean              @default(false)
-  Trigger            Trigger?             @relation(fields: [triggerId], references: [id], onDelete: Cascade)
-  projectId          String
-  Project            Project              @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  Action             Action[]
-  AutomationInstance AutomationInstance[]
-
-  @@index([triggerId])
-  @@index([projectId])
-}
-
-model AutomationInstance {
-  id           String     @id @default(uuid())
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  automationId String
-  Automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
-  active       Boolean    @default(false)
-
-  @@index([automationId])
-}
-
 enum ActionType {
   CREATE_CONTACT
-}
-
-model Action {
-  id           String     @id @default(uuid())
-  name         String
-  type         ActionType
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  automationId String
-  order        Int
-  Automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
-  laneId       String     @default("0")
-
-  @@index([automationId])
-}
-
-model Contact {
-  id        String   @id @default(uuid())
-  name      String
-  email     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  projectId String
-
-  Project Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  Ticket  Ticket[]
-
-  @@index([projectId])
-}
-
-model Media {
-  id        String   @id @default(uuid())
-  type      String?
-  name      String
-  link      String   @unique
-  projectId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  @@index([projectId])
-}
-
-model Site {
-  id            String      @id @default(uuid())
-  name          String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  description   String?
-  published     Boolean     @default(false)
-  subDomainName String?     @unique
-  favicon       String?     @db.Text
-  projectId     String
-  Project       Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  SitePages     SitePage[]
-  liveProducts  String?     @default("[]")
-  ClassName     ClassName[]
-
-  @@index([projectId])
-}
-
-model ClassName {
-  id         String   @id @default(uuid())
-  name       String
-  color      String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  siteId     String
-  customData String?  @db.Text
-  Site       Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
-
-  @@index([siteId])
-}
-
-model SitePage {
-  id           String   @id @default(uuid())
-  name         String
-  pathName     String   @default("")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  visits       Int      @default(0)
-  content      String?  @db.Text
-  order        Int
-  previewImage String?  @db.Text
-  siteId       String
-  Site         Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
-
-  @@index([siteId])
-}
-
-model WorkspaceSidebarOption {
-  id          String     @id @default(uuid())
-  name        String     @default("Menu")
-  link        String     @default("#")
-  icon        Icon       @default(info)
-  workspaceId String
-  Workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  @@index([workspaceId])
-}
-
-model ProjectSidebarOption {
-  id        String   @id @default(uuid())
-  name      String   @default("Menu")
-  link      String   @default("#")
-  icon      Icon     @default(info)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId String?
-
-  @@index([projectId])
 }
 
 enum InvitationStatus {
@@ -365,69 +428,7 @@ enum InvitationStatus {
   PENDING
 }
 
-model Invitation {
-  id          String           @id @default(uuid())
-  email       String           @unique
-  workspaceId String
-  Workspace   Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  status      InvitationStatus @default(PENDING)
-  role        Role             @default(PROJECT_USER)
-
-  @@index([workspaceId])
-}
-
-model Notification {
-  id           String  @id @default(uuid())
-  notification String
-  workspaceId  String
-  projectId    String?
-  userId       String
-
-  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  Project   Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([workspaceId])
-  @@index([projectId])
-  @@index([userId])
-}
-
 enum Plan {
   price_1OYxkqFj9oKEERu1NbKUxXxN
   price_1OYxkqFj9oKEERu1KfJGWxgN
-}
-
-model Subscription {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  plan      Plan?
-  price     String?
-  active    Boolean  @default(false)
-
-  priceId              String
-  customerId           String
-  currentPeriodEndDate DateTime
-  subscritiptionId     String   @unique
-
-  workspaceId String?    @unique
-  Workspace   Workspace? @relation(fields: [workspaceId], references: [id])
-
-  @@index([customerId])
-}
-
-model AddOns {
-  id          String     @id @default(uuid())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  name        String
-  active      Boolean    @default(false)
-  priceId     String     @unique
-  workspaceId String?
-  Workspace   Workspace? @relation(fields: [workspaceId], references: [id])
-
-  @@index([workspaceId])
 }
