@@ -84,13 +84,13 @@ model Workspace {
   name             String
   workspaceLogo    String                   @db.Text
   workEmail        String                   @db.Text
-  workPhone        String
+  workPhone        String?
   whiteLabel       Boolean                  @default(true)
-  address          String
-  city             String
-  zipCode          String
-  state            String
-  country          String
+  address          String?
+  city             String?
+  zipCode          String?
+  state            String?
+  country          String?
   goal             Int                      @default(5)
   users            User[]
   createdAt        DateTime                 @default(now())
@@ -111,13 +111,13 @@ model Project {
   createdAt        DateTime               @default(now())
   updatedAt        DateTime               @updatedAt
   workEmail        String                 @db.Text
-  workPhone        String
+  workPhone        String?
   goal             Int                    @default(5)
-  address          String
-  city             String
-  zipCode          String
-  state            String
-  country          String
+  address          String?
+  city             String?
+  zipCode          String?
+  state            String?
+  country          String?
   workspaceId      String
   Workspace        Workspace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   SidebarOption    ProjectSidebarOption[]
