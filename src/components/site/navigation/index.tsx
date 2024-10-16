@@ -6,6 +6,7 @@ import React from 'react'
 import localFont from "next/font/local";
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
+import Image from 'next/image'
 
 const novaSquare = localFont({
   src: "../../../app/fonts/NovaSquare.ttf"
@@ -16,6 +17,7 @@ const Navigation = async () => {
   return (
     <header className="p-4 flex items-center justify-between backdrop-blur-sm relative">
       <aside className="flex items-center gap-2">
+        <Image src="/assets/logo.png" width={40} height={40} alt="Zyper Logo" />
         <span className={`text-xl font-bold z-10 ${novaSquare.className}`}>Zyper.</span>
       </aside>
       <nav className="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
