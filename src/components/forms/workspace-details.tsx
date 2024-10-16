@@ -270,8 +270,8 @@ const WorkspaceDetails = ({ data }: Props) => {
                                                 <FormLabel>Whitelabel Workspace</FormLabel>
                                                 <FormDescription>
                                                     Turning on whilelabel mode will show your workspace logo
-                                                    to all sub accounts by default. You can overwrite this
-                                                    functionality through sub account settings.
+                                                    to all projects by default. You can overwrite this
+                                                    functionality through project settings.
                                                 </FormDescription>
                                             </div>
 
@@ -386,14 +386,14 @@ const WorkspaceDetails = ({ data }: Props) => {
                                             await updateWorkspaceDetails(data.id, { goal: val })
                                             await saveActivityLogsNotification({
                                                 workspaceId: data.id,
-                                                description: `Updated the workspace goal to | ${val} Sub Account`,
+                                                description: `Updated the workspace goal to | ${val} Project`,
                                                 projectId: undefined,
                                             })
                                             router.refresh()
                                         }}
                                         min={1}
                                         className="bg-background !border !border-input"
-                                        placeholder="Sub Account Goal"
+                                        placeholder="Project Goal"
                                     />
                                 </div>
                             )}
@@ -413,7 +413,7 @@ const WorkspaceDetails = ({ data }: Props) => {
                             </div>
                             <div className="text-muted-foreground">
                                 Deleting your workspace cannpt be undone. This will also delete all
-                                sub accounts and all data related to your sub accounts. Sub
+                                projects and all data related to your projects. Sub
                                 accounts will no longer have access to sites, contacts etc.
                             </div>
                             <AlertDialogTrigger
@@ -431,7 +431,7 @@ const WorkspaceDetails = ({ data }: Props) => {
                             </AlertDialogTitle>
                             <AlertDialogDescription className="text-left">
                                 This action cannot be undone. This will permanently delete the
-                                Workspace account and all related sub accounts.
+                                Workspace account and all related projects.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter className="flex items-center">

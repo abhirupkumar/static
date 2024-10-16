@@ -28,7 +28,7 @@ const DeleteButton = ({ projectId }: Props) => {
                 router.refresh()
             }}
         >
-            Delete Sub Account
+            Delete Project
         </div>
     )
 }

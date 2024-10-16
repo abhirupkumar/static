@@ -111,7 +111,7 @@ export const columns: ColumnDef<UsersWithWorkspaceProjectPermissionsSidebarOptio
                                         key={account.id}
                                         className="bg-slate-600 w-fit whitespace-nowrap"
                                     >
-                                        Sub Account - {account.Project.name}
+                                        Project - {account.Project.name}
                                     </Badge>
                                 ))
                             ) : (

@@ -256,7 +256,7 @@ const MenuOptions = ({
                                         }
                                     >
                                         <PlusCircleIcon size={15} />
-                                        Create Sub Account
+                                        Create Project
                                     </Button>
                                     // </SheetClose>
                                 )}

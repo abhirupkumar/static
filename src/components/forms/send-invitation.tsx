@@ -125,10 +125,10 @@ const SendInvitation: React.FC<SendInvitationProps> = ({ workspaceId }) => {
                                         <SelectContent>
                                             <SelectItem value="WORKSPACE_ADMIN">Workspace Admin</SelectItem>
                                             <SelectItem value="PROJECT_USER">
-                                                Sub Account User
+                                                Project User
                                             </SelectItem>
                                             <SelectItem value="PROJECT_GUEST">
-                                                Sub Account Guest
+                                                Project Guest
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>

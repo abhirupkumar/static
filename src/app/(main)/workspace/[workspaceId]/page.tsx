@@ -160,7 +160,7 @@ const Page = async ({
                             <CardTitle className="text-4xl">{projects.length}</CardTitle>
                         </CardHeader>
                         <CardContent className="text-sm text-muted-foreground">
-                            Reflects the number of sub accounts you own and manage.
+                            Reflects the number of projects you own and manage.
                         </CardContent>
                         <Contact2 className="absolute right-4 top-4 text-muted-foreground" />
                     </Card>
@@ -168,7 +168,7 @@ const Page = async ({
                         <CardHeader>
                             <CardTitle>Workspace Goal</CardTitle>
                             <CardDescription className='mt-2'>
-                                Reflects the number of sub accounts you want to own and
+                                Reflects the number of projects you want to own and
                                 manage.
                             </CardDescription>
                         </CardHeader>

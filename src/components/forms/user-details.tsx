@@ -308,7 +308,7 @@ const UserDetails = ({ id, type, projects, userData }: Props) => {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="WORKSPACE_ADMING">
+                                            <SelectItem value="WORKSPACE_ADMIN">
                                                 Workspace Admin
                                             </SelectItem>
                                             {(data?.user?.role === 'WORKSPACE_OWNER' ||
@@ -318,10 +318,10 @@ const UserDetails = ({ id, type, projects, userData }: Props) => {
                                                     </SelectItem>
                                                 )}
                                             <SelectItem value="PROJECT_USER">
-                                                Sub Account User
+                                                Project User
                                             </SelectItem>
                                             <SelectItem value="PROJECT_GUEST">
-                                                Sub Account Guest
+                                                Project Guest
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>
@@ -341,8 +341,8 @@ const UserDetails = ({ id, type, projects, userData }: Props) => {
                                 <Separator className="my-4" />
                                 <FormLabel> User Permissions</FormLabel>
                                 <FormDescription className="mb-4">
-                                    You can give Sub Account access to team member by turning on
-                                    access control for each Sub Account. This is only visible to
+                                    You can give Project access to team member by turning on
+                                    access control for each Project. This is only visible to
                                     workspace owners
                                 </FormDescription>
                                 <div className="flex flex-col gap-4">

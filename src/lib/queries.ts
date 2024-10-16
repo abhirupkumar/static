@@ -271,7 +271,7 @@ export const upsertWorkspace = async (workspace: Workspace, price?: Plan) => {
                             link: `/workspace/${workspace.id}/settings`,
                         },
                         {
-                            name: 'Sub Accounts',
+                            name: 'Projects',
                             icon: 'person',
                             link: `/workspace/${workspace.id}/all-projects`,
                         },
@@ -804,9 +804,9 @@ export const upsertContact = async (
     return response
 }
 
-export const getSites = async (subacountId: string) => {
+export const getSites = async (projectId: string) => {
     const sites = await db.site.findMany({
-        where: { projectId: subacountId },
+        where: { projectId: projectId },
         include: { SitePages: true },
     })
 

@@ -47,7 +47,7 @@ const AllProjectsPage = async ({ params }: Props) => {
                     <CommandInput placeholder="Search Account..." />
                     <CommandList>
                         <CommandEmpty>No Results Found.</CommandEmpty>
-                        <CommandGroup heading="Sub Accounts">
+                        <CommandGroup heading="Projects">
                             {!!user.Workspace?.Project.length ? (
                                 user.Workspace.Project.map((project: Project) => (
                                     <CommandItem
@@ -107,7 +107,7 @@ const AllProjectsPage = async ({ params }: Props) => {
                                 ))
                             ) : (
                                 <div className="text-muted-foreground text-center p-4">
-                                    No Sub accounts
+                                    No Projects
                                 </div>
                             )}
                         </CommandGroup>

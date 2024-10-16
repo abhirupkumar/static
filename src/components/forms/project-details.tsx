@@ -50,7 +50,7 @@ const formSchema = z.object({
 //CHALLENGE layout.tsx oonly runs once as a result if you remove permissions for someone and they keep navigating the layout.tsx wont fire again. solution- save the data inside metadata for current user.
 
 interface ProjectDetailsProps {
-    //To add the sub account to the workspace
+    //To add the project to the workspace
     workspaceDetails: Workspace
     details?: Partial<Project>
     userId: string
@@ -103,7 +103,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
             if (!response) throw new Error('No response from server')
             await saveActivityLogsNotification({
                 workspaceId: response.workspaceId,
-                description: `${userName} | updated sub account | ${response.name}`,
+                description: `${userName} | updated project | ${response.name}`,
                 projectId: response.id,
             })
 
@@ -118,7 +118,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
             toast({
                 variant: 'destructive',
                 title: 'Oppse!',
-                description: 'Could not save sub account details.',
+                description: 'Could not save project details.',
             })
         }
     }
@@ -134,7 +134,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
     return (
         <Card className="w-full">
             <CardHeader>
-                <CardTitle>Sub Account Information</CardTitle>
+                <CardTitle>Project Information</CardTitle>
                 <CardDescription>Please enter business details</CardDescription>
             </CardHeader>
             <CardContent>
