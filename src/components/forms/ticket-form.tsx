@@ -106,6 +106,7 @@ const TicketForm = ({ getNewTicket, laneId, projectId }: Props) => {
                 )
                 setContactList(response)
             }
+            console.log("ticket: ", defaultData.ticket)
             fetchData()
         }
     }, [defaultData])

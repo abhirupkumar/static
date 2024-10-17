@@ -53,7 +53,7 @@ const WorkspaceDetails = ({ data }: Props) => {
             name: data?.name,
             workEmail: data?.workEmail,
             workPhone: data?.workPhone,
-            whiteLabel: data?.whiteLabel || false,
+            whiteLabel: data?.whiteLabel || true,
             address: data?.address,
             city: data?.city,
             zipCode: data?.zipCode,
