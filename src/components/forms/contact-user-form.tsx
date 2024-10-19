@@ -68,7 +68,7 @@ const ContactUserForm: React.FC<ContactUserFormProps> = ({ projectId }) => {
             })
             toast({
                 title: 'Success',
-                description: 'Saved funnel details',
+                description: 'Saved site details',
             })
             setClose()
             router.refresh()
@@ -76,7 +76,7 @@ const ContactUserForm: React.FC<ContactUserFormProps> = ({ projectId }) => {
             toast({
                 variant: 'destructive',
                 title: 'Oppse!',
-                description: 'Could not save funnel details',
+                description: 'Could not save site details',
             })
         }
     }

@@ -303,5 +303,5 @@ const ProjectPageId = async ({ params, searchParams }: Props) => {
 export default ProjectPageId;
 
 export const metadata = constructMetadata({
-    title: "Subaacount - Zyper",
+    title: "Project - Zyper",
 });

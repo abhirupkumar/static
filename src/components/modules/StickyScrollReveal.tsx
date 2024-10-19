@@ -13,16 +13,16 @@ const content = [
             <>
                 <p>
                     The Website Builder for Workspace CRM is a powerful tool designed to
-                    streamline the process of creating and managing websites for agencies.
+                    streamline the process of creating and managing websites for workspaces.
                 </p>
                 <p>
-                    With its intuitive interface and robust features, agencies can easily
+                    With its intuitive interface and robust features, workspaces can easily
                     build custom websites tailored to their clients&apos; needs without
                     extensive coding knowledge.
                 </p>
                 <p>
                     From drag-and-drop functionality to seamless integration with CRM
-                    systems, this tool empowers agencies to deliver stunning websites
+                    systems, this tool empowers workspaces to deliver stunning websites
                     efficiently and effectively, ultimately enhancing client satisfaction
                     and driving business growth.
                 </p>
@@ -45,10 +45,10 @@ const content = [
             <>
                 <p>
                     The Kanban Board for pipelines in Workspace CRM offers a visual and
-                    efficient way for agencies to manage their workspaces and workflows.
+                    efficient way for workspaces to manage their workspaces and workflows.
                 </p>
                 <p>
-                    By organizing tasks into customizable pipelines, agencies can easily
+                    By organizing tasks into customizable pipelines, workspaces can easily
                     track the progress of workspaces from start to finish.
                 </p>
                 <p>
@@ -80,7 +80,7 @@ const content = [
                     management.
                 </p>
                 <p>
-                    With customizable user permissions, agencies can easily tailor access
+                    With customizable user permissions, workspaces can easily tailor access
                     levels to match individual roles and responsibilities.
                 </p>
                 <p>
@@ -108,16 +108,16 @@ const content = [
             <>
                 <p>
                     The Leads Dashboard for Workspace CRM offers a comprehensive overview of
-                    potential opportunities and client interactions, empowering agencies
+                    potential opportunities and client interactions, empowering workspaces
                     to effectively manage their sales pipeline.
                 </p>
                 <p>
-                    With real-time updates and customizable filters, agencies can track
+                    With real-time updates and customizable filters, workspaces can track
                     leads, prioritize follow-ups, and analyze conversion rates with ease.
                 </p>
                 <p>
                     This feature enhances sales performance by providing actionable
-                    insights, enabling agencies to make informed decisions and drive
+                    insights, enabling workspaces to make informed decisions and drive
                     business growth.
                 </p>
             </>

@@ -177,9 +177,9 @@ const UserDetails = ({ id, type, projects, userData }: Props) => {
         if (!id) return
         if (userData || data?.user) {
             const updatedUser = await updateUser(values)
-            authUserData?.Workspace?.Project.filter((subacc) =>
+            authUserData?.Workspace?.Project.filter((proj) =>
                 authUserData.Permissions.find(
-                    (p) => p.projectId === subacc.id && p.access
+                    (p) => p.projectId === proj.id && p.access
                 )
             ).forEach(async (project) => {
                 await saveActivityLogsNotification({
