@@ -576,6 +576,13 @@ export const upsertSite = async (
         },
     })
 
+    await db.project.update({
+        where: { id: projectId },
+        data: {
+            siteId: response.id,
+        },
+    });
+
     return response
 }
 
@@ -804,13 +811,12 @@ export const upsertContact = async (
     return response
 }
 
-export const getSites = async (projectId: string) => {
-    const sites = await db.site.findMany({
+export const getProjectSite = async (projectId: string) => {
+    const site = await db.site.findUnique({
         where: { projectId: projectId },
-        include: { SitePages: true },
     })
 
-    return sites
+    return site
 }
 
 export const getSite = async (siteId: string) => {

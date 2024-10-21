@@ -82,7 +82,8 @@ model Project {
   Workspace        Workspace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   SidebarOption    ProjectSidebarOption[]
   Permissions      Permissions[]
-  Sites            Site[]
+  siteId           String?
+  Site             Site?
   Media            Media[]
   Contact          Contact[]
   Trigger          Trigger[]
@@ -243,7 +244,7 @@ model Site {
   published     Boolean     @default(false)
   subDomainName String?     @unique
   favicon       String?
-  projectId     String
+  projectId     String      @unique
   liveProducts  String?     @default("[]")
   Project       Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   SitePages     SitePage[]

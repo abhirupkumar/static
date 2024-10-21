@@ -11,7 +11,7 @@ import {
 import {
     _getTicketsWithAllRelations,
     getAuthUserDetails,
-    getSites,
+    getProjectSite,
     getMedia,
     getPipelineDetails,
     getTicketsWithTags,
@@ -143,7 +143,7 @@ export type StripeCustomerType = {
 export type PricesList = Stripe.ApiList<Stripe.Price>
 
 export type SitesForProject = Prisma.PromiseReturnType<
-    typeof getSites
->[0]
+    typeof getProjectSite
+>
 
 export type UpsertSitePage = Prisma.SitePageCreateWithoutSiteInput

@@ -1,33 +1,20 @@
-import { getSites } from '@/lib/queries'
+import { getProjectSite } from '@/lib/queries'
 import React from 'react'
-import SitesDataTable from './data-table'
-import { Plus } from 'lucide-react'
-import { columns } from './columns'
 import SiteForm from '@/components/forms/site-form'
-import BlurPage from '@/components/global/blur-page'
+import CustomModal from '@/components/global/custom-modal'
+import { redirect } from 'next/navigation'
 
 const Sites = async ({ params }: { params: { projectId: string } }) => {
-    const sites = await getSites(params.projectId)
-    if (!sites) return null
+    const site = await getProjectSite(params.projectId)
+    if (!site) return <CustomModal
+        title="Create A Site"
+        subheading="Sites are a like websites, but better! Try creating one!"
+    >
+        <SiteForm projectId={params.projectId}></SiteForm>
+    </CustomModal>
 
-    return (
-        <BlurPage>
-            <SitesDataTable
-                actionButtonText={
-                    <>
-                        <Plus size={15} />
-                        Create Site
-                    </>
-                }
-                modalChildren={
-                    <SiteForm projectId={params.projectId}></SiteForm>
-                }
-                filterValue="name"
-                columns={columns}
-                data={sites}
-            />
-        </BlurPage>
-    )
+    return <>Site</>
+
 }
 
 export default Sites
