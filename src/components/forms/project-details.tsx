@@ -98,6 +98,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 workEmail: values.workEmail,
                 workspaceId: workspaceDetails.id,
                 connectAccountId: '',
+                siteId: "",
                 goal: 5000,
             })
             if (!response) throw new Error('No response from server')
