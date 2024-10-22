@@ -52,7 +52,7 @@ const ContactPage = async ({ params }: Props) => {
                                     </AvatarFallback>
                                 </Avatar>
                             </TableCell>
-                            <TableCell>{contact.email}</TableCell>
+                            <TableCell>{contact.workEmail}</TableCell>
                             <TableCell>{format(contact.createdAt, 'MM/dd/yyyy')}</TableCell>
                         </TableRow>
                     ))}
