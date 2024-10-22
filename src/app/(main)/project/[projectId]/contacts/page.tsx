@@ -27,7 +27,7 @@ const ContactPage = async ({ params }: Props) => {
         },
     }))
 
-    const allContacts = contacts.Contact
+    const allContacts = contacts.Contact ?? []
 
     return (
         <BlurPage>
