@@ -115,9 +115,11 @@ const MenuOptions = ({
                                 <Compass />
                                 <div className="flex flex-col">
                                     {details.name}
-                                    <span className="text-muted-foreground">
+                                    {details.address ? <span className="text-muted-foreground">
                                         {truncate(details.address)}
-                                    </span>
+                                    </span> : <span className="text-muted-foreground">
+                                        {truncate(details.workEmail)}
+                                    </span>}
                                 </div>
                             </div>
                             <div>
@@ -144,12 +146,7 @@ const MenuOptions = ({
                                                         className="flex gap-4 w-full h-full"
                                                     >
                                                         <div className="relative w-16">
-                                                            <Image
-                                                                src={user?.Workspace?.workspaceLogo}
-                                                                alt="Workspace Logo"
-                                                                fill
-                                                                className="rounded-md object-contain"
-                                                            />
+                                                            <Compass />
                                                         </div>
                                                         <div className="flex flex-col flex-1">
                                                             {user?.Workspace?.name}
@@ -195,7 +192,7 @@ const MenuOptions = ({
                                                     >
                                                         <div className="relative w-16">
                                                             <Image
-                                                                src={project.projectLogo}
+                                                                src={project.projectLogo || '/assets/logo.png'}
                                                                 alt="project Logo"
                                                                 fill
                                                                 className="rounded-md object-contain"
@@ -216,7 +213,7 @@ const MenuOptions = ({
                                                         >
                                                             <div className="relative w-16">
                                                                 <Image
-                                                                    src={project.projectLogo}
+                                                                    src={project.projectLogo || '/assets/logo.png'}
                                                                     alt="project Logo"
                                                                     fill
                                                                     className="rounded-md object-contain"
@@ -247,6 +244,7 @@ const MenuOptions = ({
                                                 subheading="You can switch between your workspace and the project from the sidebar"
                                             >
                                                 <ProjectDetails
+                                                    isCreatingProject={true}
                                                     workspaceDetails={user?.Workspace as Workspace}
                                                     userId={user?.id as string}
                                                     userName={user?.name}

@@ -19,7 +19,6 @@ model User {
   workspaceId  String?
   Workspace    Workspace?     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   Permissions  Permissions[]
-  Ticket       Ticket[]
   Notification Notification[]
 
   @@index([workspaceId])
@@ -42,16 +41,8 @@ model Workspace {
   connectAccountId String?                  @default("")
   customerId       String                   @default("")
   name             String
-  workspaceLogo    String
   workEmail        String
-  workPhone        String
   whiteLabel       Boolean                  @default(true)
-  address          String
-  city             String
-  zipCode          String
-  state            String
-  country          String
-  goal             Int                      @default(5)
   createdAt        DateTime                 @default(now())
   updatedAt        DateTime                 @updatedAt
   users            User[]
@@ -67,91 +58,29 @@ model Project {
   id               String                 @id @default(uuid())
   connectAccountId String?                @default("")
   name             String
-  projectLogo      String
+  projectLogo      String?
   createdAt        DateTime               @default(now())
   updatedAt        DateTime               @updatedAt
   workEmail        String
-  workPhone        String
+  workPhone        String?
   goal             Int                    @default(5)
-  address          String
-  city             String
-  zipCode          String
-  state            String
-  country          String
+  address          String?
+  city             String?
+  zipCode          String?
+  state            String?
+  country          String?
   workspaceId      String
   Workspace        Workspace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   SidebarOption    ProjectSidebarOption[]
   Permissions      Permissions[]
-  siteId           String?
   Site             Site?
   Media            Media[]
   Contact          Contact[]
   Trigger          Trigger[]
   Automation       Automation[]
-  Pipeline         Pipeline[]
-  Tags             Tag[]
   Notification     Notification[]
 
   @@index([workspaceId])
-}
-
-model Tag {
-  id        String   @id @default(uuid())
-  name      String
-  color     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  projectId String
-  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  Ticket    Ticket[]
-
-  @@index([projectId])
-}
-
-model Pipeline {
-  id        String   @id @default(uuid())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  projectId String
-  Lane      Lane[]
-  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  @@index([projectId])
-}
-
-model Lane {
-  id         String   @id @default(uuid())
-  name       String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  pipelineId String
-  order      Int      @default(0)
-  Pipeline   Pipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
-  Tickets    Ticket[]
-
-  @@index([pipelineId])
-}
-
-model Ticket {
-  id             String   @id @default(uuid())
-  name           String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  laneId         String
-  order          Int      @default(0)
-  value          Decimal?
-  description    String?
-  customerId     String?
-  assignedUserId String?
-  Lane           Lane     @relation(fields: [laneId], references: [id], onDelete: Cascade)
-  Tags           Tag[]
-  Customer       Contact? @relation(fields: [customerId], references: [id], onDelete: SetNull)
-  Assigned       User?    @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
-
-  @@index([laneId])
-  @@index([customerId])
-  @@index([assignedUserId])
 }
 
 model Trigger {
@@ -203,7 +132,6 @@ model Action {
   updatedAt    DateTime   @updatedAt
   automationId String
   order        Int
-  laneId       String     @default("0")
   Automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
 
   @@index([automationId])
@@ -217,7 +145,6 @@ model Contact {
   updatedAt DateTime @updatedAt
   projectId String
   Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  Ticket    Ticket[]
 
   @@index([projectId])
 }
@@ -237,7 +164,6 @@ model Media {
 
 model Site {
   id            String      @id @default(uuid())
-  name          String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   description   String?
@@ -364,15 +290,6 @@ model AddOns {
   Workspace   Workspace? @relation(fields: [workspaceId], references: [id])
 
   @@index([workspaceId])
-}
-
-model TagToTicket {
-  A String
-  B String
-
-  @@unique([A, B], map: "_TagToTicket_AB_unique")
-  @@index([B], map: "_TagToTicket_B_index")
-  @@map("_TagToTicket")
 }
 
 enum Role {

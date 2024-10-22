@@ -1,7 +1,6 @@
 import WorkspaceDetails from '@/components/forms/workspace-details';
 import { getAuthUserDetails, verifyAndAcceptInvitation } from '@/lib/queries'
 import { currentUser } from '@clerk/nextjs/server';
-import { Plan } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import { constructMetadata } from "@/lib/utils";
@@ -9,7 +8,7 @@ import { constructMetadata } from "@/lib/utils";
 const Page = async ({
     searchParams,
 }: {
-    searchParams: { plan: Plan; state: string; code: string }
+    searchParams: { state: string; code: string }
 }) => {
     const workspaceId = await verifyAndAcceptInvitation()
 
@@ -19,9 +18,6 @@ const Page = async ({
         if (user?.role === 'PROJECT_GUEST' || user?.role === 'PROJECT_USER') {
             return redirect('/project')
         } else if (user?.role === 'WORKSPACE_OWNER' || user?.role === 'WORKSPACE_ADMIN') {
-            if (searchParams.plan) {
-                return redirect(`/workspace/${workspaceId}/billing?plan=${searchParams.plan}`)
-            }
             if (searchParams.state) {
                 const statePath = searchParams.state.split('___')[0]
                 const stateWorkspaceId = searchParams.state.split('___')[1]

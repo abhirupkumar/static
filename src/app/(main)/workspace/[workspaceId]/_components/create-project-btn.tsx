@@ -40,6 +40,7 @@ const CreateProjectButton = ({ className, id, user }: Props) => {
                         subheading="You can switch bettween"
                     >
                         <ProjectDetails
+                            isCreatingProject={true}
                             workspaceDetails={workspaceDetails}
                             userId={user.id}
                             userName={user.name}

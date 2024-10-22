@@ -22,13 +22,13 @@ const Sidebar = async ({ id, type }: Props) => {
     const isWhiteLabeledWorkspace = user.Workspace.whiteLabel
     if (!details) return
 
-    let sideBarLogo = user.Workspace.workspaceLogo || '/assets/plura-logo.svg'
+    let sideBarLogo = '/assets/logo.png'
 
     if (!isWhiteLabeledWorkspace) {
         if (type === 'project') {
             sideBarLogo =
                 user?.Workspace.Project.find((project) => project.id === id)
-                    ?.projectLogo || user.Workspace.workspaceLogo
+                    ?.projectLogo || '/assets/logo.png'
         }
     }
 

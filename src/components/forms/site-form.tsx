@@ -44,7 +44,6 @@ const SiteForm: React.FC<CreateSiteProps> = ({
         mode: 'onChange',
         resolver: zodResolver(CreateSiteFormSchema),
         defaultValues: {
-            name: defaultData?.name || '',
             description: defaultData?.description || '',
             favicon: defaultData?.favicon || '',
             subDomainName: defaultData?.subDomainName || '',
@@ -56,7 +55,6 @@ const SiteForm: React.FC<CreateSiteProps> = ({
             form.reset({
                 description: defaultData.description || '',
                 favicon: defaultData.favicon || '',
-                name: defaultData.name || '',
                 subDomainName: defaultData.subDomainName || '',
             })
         }
@@ -104,13 +102,13 @@ const SiteForm: React.FC<CreateSiteProps> = ({
                         <FormField
                             disabled={isLoading}
                             control={form.control}
-                            name="name"
+                            name="subDomainName"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Site Name</FormLabel>
+                                    <FormLabel>Sub domain</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Name"
+                                            placeholder="Sub domain for site"
                                             {...field}
                                         />
                                     </FormControl>
@@ -127,22 +125,6 @@ const SiteForm: React.FC<CreateSiteProps> = ({
                                     <FormControl>
                                         <Textarea
                                             placeholder="Tell us a little bit more about this site."
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            disabled={isLoading}
-                            control={form.control}
-                            name="subDomainName"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Sub domain</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Sub domain for site"
                                             {...field}
                                         />
                                     </FormControl>

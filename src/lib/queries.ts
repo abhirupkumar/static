@@ -5,13 +5,10 @@ import { db } from './db'
 import { redirect } from 'next/navigation'
 import {
     Workspace,
-    Lane,
     Plan,
     Prisma,
     Role,
     Project,
-    Tag,
-    Ticket,
     User,
 } from '@prisma/client'
 import { v4 } from 'uuid'
@@ -256,24 +253,9 @@ export const upsertWorkspace = async (workspace: Workspace, price?: Plan) => {
                             link: `/workspace/${workspace.id}`,
                         },
                         {
-                            name: 'Launchpad',
-                            icon: 'clipboardIcon',
-                            link: `/workspace/${workspace.id}/launchpad`,
-                        },
-                        {
-                            name: 'Billing',
-                            icon: 'payment',
-                            link: `/workspace/${workspace.id}/billing`,
-                        },
-                        {
                             name: 'Settings',
                             icon: 'settings',
                             link: `/workspace/${workspace.id}/settings`,
-                        },
-                        {
-                            name: 'Projects',
-                            icon: 'person',
-                            link: `/workspace/${workspace.id}/all-projects`,
                         },
                         {
                             name: 'Team',
@@ -317,6 +299,7 @@ export const upsertProject = async (project: Project) => {
     })
     if (!workspaceOwner) return console.log('🔴Erorr could not create project')
     const permissionId = v4()
+    const siteId = v4()
     const response = await db.project.upsert({
         where: { id: project.id },
         update: project,
@@ -333,8 +316,10 @@ export const upsertProject = async (project: Project) => {
                     id: permissionId,
                 },
             },
-            Pipeline: {
-                create: { name: 'Lead Cycle' },
+            Site: {
+                create: {
+                    id: siteId,
+                },
             },
             SidebarOption: {
                 create: [
@@ -362,11 +347,6 @@ export const upsertProject = async (project: Project) => {
                         name: 'Automations',
                         icon: 'chip',
                         link: `/project/${project.id}/automations`,
-                    },
-                    {
-                        name: 'Pipelines',
-                        icon: 'flag',
-                        link: `/project/${project.id}/pipelines`,
                     },
                     {
                         name: 'Contacts',
@@ -530,173 +510,25 @@ export const deleteMedia = async (mediaId: string) => {
     return response
 }
 
-export const getPipelineDetails = async (pipelineId: string) => {
-    const response = await db.pipeline.findUnique({
-        where: {
-            id: pipelineId,
-        },
-    })
-    return response
-}
-
-export const getLanesWithTicketAndTags = async (pipelineId: string) => {
-    const response = await db.lane.findMany({
-        where: {
-            pipelineId,
-        },
-        orderBy: { order: 'asc' },
-        include: {
-            Tickets: {
-                orderBy: {
-                    order: 'asc',
-                },
-                include: {
-                    Tags: true,
-                    Assigned: true,
-                    Customer: true,
-                },
-            },
-        },
-    })
-    return response
-}
-
 export const upsertSite = async (
     projectId: string,
     site: z.infer<typeof CreateSiteFormSchema> & { liveProducts: string },
     siteId: string
 ) => {
-    const response = await db.site.upsert({
-        where: { id: siteId },
-        update: site,
-        create: {
-            ...site,
-            id: siteId || v4(),
-            projectId: projectId,
-        },
-    })
-
-    await db.project.update({
+    const response = await db.project.update({
         where: { id: projectId },
         data: {
-            siteId: response.id,
-        },
-    });
-
-    return response
-}
-
-export const upsertPipeline = async (
-    pipeline: Prisma.PipelineUncheckedCreateWithoutLaneInput
-) => {
-    const response = await db.pipeline.upsert({
-        where: { id: pipeline.id || v4() },
-        update: pipeline,
-        create: pipeline,
-    })
-
-    return response
-}
-
-export const deletePipeline = async (pipelineId: string) => {
-    const response = await db.pipeline.delete({
-        where: { id: pipelineId },
-    })
-    return response
-}
-
-export const updateLanesOrder = async (lanes: Lane[]) => {
-    try {
-        const updateTrans = lanes.map((lane) =>
-            db.lane.update({
-                where: {
-                    id: lane.id,
+            Site: {
+                upsert: {
+                    where: { id: siteId },
+                    update: site,
+                    create: site,
                 },
-                data: {
-                    order: lane.order,
-                },
-            })
-        )
-
-        await db.$transaction(updateTrans)
-        console.log('🟢 Done reordered 🟢')
-    } catch (error) {
-        console.log(error, 'ERROR UPDATE LANES ORDER')
-    }
-}
-
-export const updateTicketsOrder = async (tickets: Ticket[]) => {
-    try {
-        const updateTrans = tickets.map((ticket) =>
-            db.ticket.update({
-                where: {
-                    id: ticket.id,
-                },
-                data: {
-                    order: ticket.order,
-                    laneId: ticket.laneId,
-                },
-            })
-        )
-
-        await db.$transaction(updateTrans)
-        console.log('🟢 Done reordered 🟢')
-    } catch (error) {
-        console.log(error, '🔴 ERROR UPDATE TICKET ORDER')
-    }
-}
-
-export const upsertLane = async (lane: Prisma.LaneUncheckedCreateInput) => {
-    let order: number
-
-    if (!lane.order) {
-        const lanes = await db.lane.findMany({
-            where: {
-                pipelineId: lane.pipelineId,
-            },
-        })
-
-        order = lanes.length
-    } else {
-        order = lane.order
-    }
-
-    const response = await db.lane.upsert({
-        where: { id: lane.id || v4() },
-        update: lane,
-        create: { ...lane, order },
-    })
-
-    return response
-}
-
-export const deleteLane = async (laneId: string) => {
-    const resposne = await db.lane.delete({ where: { id: laneId } })
-    return resposne
-}
-
-export const getTicketsWithTags = async (pipelineId: string) => {
-    const response = await db.ticket.findMany({
-        where: {
-            Lane: {
-                pipelineId,
+                connect: { id: siteId },
             },
         },
-        include: { Tags: true, Assigned: true, Customer: true },
     })
-    return response
-}
 
-export const _getTicketsWithAllRelations = async (laneId: string) => {
-    const response = await db.ticket.findMany({
-        where: { laneId: laneId },
-        include: {
-            Assigned: true,
-            Customer: true,
-            Lane: true,
-            Tags: true,
-        },
-    })
     return response
 }
 
@@ -733,73 +565,6 @@ export const searchContacts = async (searchTerms: string) => {
     return response
 }
 
-export const upsertTicket = async (
-    ticket: Prisma.TicketUncheckedCreateInput,
-    tags: Tag[]
-) => {
-    let order: number
-    if (!ticket.order) {
-        const tickets = await db.ticket.findMany({
-            where: { laneId: ticket.laneId },
-        })
-        order = tickets.length
-    } else {
-        order = ticket.order
-    }
-
-    const response = await db.ticket.upsert({
-        where: {
-            id: ticket.id || v4(),
-        },
-        update: { ...ticket, Tags: { set: tags } },
-        create: { ...ticket, Tags: { connect: tags }, order },
-        include: {
-            Assigned: true,
-            Customer: true,
-            Tags: true,
-            Lane: true,
-        },
-    })
-
-    return response
-}
-
-export const deleteTicket = async (ticketId: string) => {
-    const response = await db.ticket.delete({
-        where: {
-            id: ticketId,
-        },
-    })
-
-    return response
-}
-
-export const upsertTag = async (
-    projectId: string,
-    tag: Prisma.TagUncheckedCreateInput
-) => {
-    const response = await db.tag.upsert({
-        where: { id: tag.id || v4(), projectId: projectId },
-        update: tag,
-        create: { ...tag, projectId: projectId },
-    })
-
-    return response
-}
-
-export const getTagsForProject = async (projectId: string) => {
-    const response = await db.project.findUnique({
-        where: { id: projectId },
-        select: { Tags: true },
-    })
-    return response
-}
-
-export const deleteTag = async (tagId: string) => {
-    const response = await db.tag.delete({ where: { id: tagId } })
-    return response
-}
-
 export const upsertContact = async (
     contact: Prisma.ContactUncheckedCreateInput
 ) => {
@@ -814,6 +579,13 @@ export const upsertContact = async (
 export const getProjectSite = async (projectId: string) => {
     const site = await db.site.findUnique({
         where: { projectId: projectId },
+        include: {
+            SitePages: {
+                orderBy: {
+                    order: 'asc',
+                },
+            },
+        },
     })
 
     return site
@@ -897,18 +669,6 @@ export const getDomainContent = async (subDomainName: string) => {
             subDomainName,
         },
         include: { SitePages: true },
-    })
-    return response
-}
-
-export const getPipelines = async (projectId: string) => {
-    const response = await db.pipeline.findMany({
-        where: { projectId: projectId },
-        include: {
-            Lane: {
-                include: { Tickets: true },
-            },
-        },
     })
     return response
 }

@@ -36,13 +36,13 @@ import { useModal } from '@/providers/modal-provider'
 const formSchema = z.object({
     name: z.string(),
     workEmail: z.string(),
-    workPhone: z.string().min(1),
-    address: z.string(),
-    city: z.string(),
-    projectLogo: z.string(),
-    zipCode: z.string(),
-    state: z.string(),
-    country: z.string(),
+    workPhone: z.optional(z.string()),
+    address: z.optional(z.string()),
+    city: z.optional(z.string()),
+    projectLogo: z.optional(z.string()),
+    zipCode: z.optional(z.string()),
+    state: z.optional(z.string()),
+    country: z.optional(z.string()),
 })
 
 //CHALLENGE Give access for Project Guest they should see a different view maybe a form that allows them to create tickets
@@ -55,6 +55,7 @@ interface ProjectDetailsProps {
     details?: Partial<Project>
     userId: string
     userName: string
+    isCreatingProject?: boolean
 }
 
 const ProjectDetails: React.FC<ProjectDetailsProps> = ({
@@ -62,6 +63,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
     workspaceDetails,
     userId,
     userName,
+    isCreatingProject,
 }) => {
     const { toast } = useToast()
     const { setClose } = useModal()
@@ -70,14 +72,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: details?.name,
-            workEmail: details?.workEmail,
-            workPhone: details?.workPhone,
-            address: details?.address,
-            city: details?.city,
-            zipCode: details?.zipCode,
-            state: details?.state,
-            country: details?.country,
-            projectLogo: details?.projectLogo,
+            workEmail: details?.workEmail || workspaceDetails?.workEmail,
+            projectLogo: details?.projectLogo || "",
         },
     })
 
@@ -85,20 +81,19 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         try {
             const response = await upsertProject({
                 id: details?.id ? details.id : v4(),
-                address: values.address,
-                projectLogo: values.projectLogo,
-                city: values.city,
-                workPhone: values.workPhone,
-                country: values.country,
+                address: values?.address ?? "",
+                projectLogo: values?.projectLogo ?? "",
+                city: values?.city ?? "",
+                workPhone: values?.workPhone ?? "",
+                country: values?.country ?? "",
                 name: values.name,
-                state: values.state,
-                zipCode: values.zipCode,
+                state: values?.state ?? "",
+                zipCode: values?.zipCode ?? "",
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 workEmail: values.workEmail,
                 workspaceId: workspaceDetails.id,
                 connectAccountId: '',
-                siteId: "",
                 goal: 5000,
             })
             if (!response) throw new Error('No response from server')
@@ -126,12 +121,21 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
 
     useEffect(() => {
         if (details) {
-            form.reset(details)
+            form.reset({
+                ...details,
+                projectLogo: details.projectLogo ?? "",
+                workPhone: details.workPhone ?? "",
+                address: details.address ?? "",
+                city: details.city ?? "",
+                country: details.country ?? "",
+                state: details.state ?? "",
+                zipCode: details.zipCode ?? ""
+            })
         }
     }, [details])
 
     const isLoading = form.formState.isSubmitting
-    //CHALLENGE Create this form.
+
     return (
         <Card className="w-full">
             <CardHeader>
@@ -150,7 +154,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                             name="projectLogo"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Account Logo</FormLabel>
+                                    <FormLabel>Project Logo</FormLabel>
                                     <FormControl>
                                         <FileUpload
                                             apiEndpoint="projectLogo"
@@ -169,11 +173,11 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                        <FormLabel>Account Name</FormLabel>
+                                        <FormLabel>Project Name</FormLabel>
                                         <FormControl>
                                             <Input
                                                 required
-                                                placeholder="Your workspace name"
+                                                placeholder="Your project name"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -182,12 +186,11 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                                 )}
                             />
                             <FormField
-                                disabled={isLoading}
                                 control={form.control}
                                 name="workEmail"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                        <FormLabel>Acount Email</FormLabel>
+                                        <FormLabel>Email</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="Email"
@@ -199,57 +202,39 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                                 )}
                             />
                         </div>
-                        <div className="flex md:flex-row gap-4">
-                            <FormField
-                                disabled={isLoading}
-                                control={form.control}
-                                name="workPhone"
-                                render={({ field }) => (
-                                    <FormItem className="flex-1">
-                                        <FormLabel>Acount Phone Number</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Phone"
-                                                required
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
+                        {!isCreatingProject && <>
+                            <div className="flex md:flex-row gap-4">
+                                <FormField
+                                    disabled={isLoading}
+                                    control={form.control}
+                                    name="workPhone"
+                                    render={({ field }) => (
+                                        <FormItem className="flex-1">
+                                            <FormLabel>Phone Number</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Phone"
+                                                    required
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
 
-                        <FormField
-                            disabled={isLoading}
-                            control={form.control}
-                            name="address"
-                            render={({ field }) => (
-                                <FormItem className="flex-1">
-                                    <FormLabel>Address</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            required
-                                            placeholder="123 st..."
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <div className="flex md:flex-row gap-4">
                             <FormField
                                 disabled={isLoading}
                                 control={form.control}
-                                name="city"
+                                name="address"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                        <FormLabel>City</FormLabel>
+                                        <FormLabel>Address</FormLabel>
                                         <FormControl>
                                             <Input
                                                 required
-                                                placeholder="City"
+                                                placeholder="123 st..."
                                                 {...field}
                                             />
                                         </FormControl>
@@ -257,17 +242,73 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                                     </FormItem>
                                 )}
                             />
+                            <div className="flex md:flex-row gap-4">
+                                <FormField
+                                    disabled={isLoading}
+                                    control={form.control}
+                                    name="city"
+                                    render={({ field }) => (
+                                        <FormItem className="flex-1">
+                                            <FormLabel>City</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    required
+                                                    placeholder="City"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    disabled={isLoading}
+                                    control={form.control}
+                                    name="state"
+                                    render={({ field }) => (
+                                        <FormItem className="flex-1">
+                                            <FormLabel>State</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    required
+                                                    placeholder="State"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    disabled={isLoading}
+                                    control={form.control}
+                                    name="zipCode"
+                                    render={({ field }) => (
+                                        <FormItem className="flex-1">
+                                            <FormLabel>Zipcpde</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    required
+                                                    placeholder="Zipcode"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                             <FormField
                                 disabled={isLoading}
                                 control={form.control}
-                                name="state"
+                                name="country"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                        <FormLabel>State</FormLabel>
+                                        <FormLabel>Country</FormLabel>
                                         <FormControl>
                                             <Input
                                                 required
-                                                placeholder="State"
+                                                placeholder="Country"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -275,48 +316,12 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                disabled={isLoading}
-                                control={form.control}
-                                name="zipCode"
-                                render={({ field }) => (
-                                    <FormItem className="flex-1">
-                                        <FormLabel>Zipcpde</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                required
-                                                placeholder="Zipcode"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <FormField
-                            disabled={isLoading}
-                            control={form.control}
-                            name="country"
-                            render={({ field }) => (
-                                <FormItem className="flex-1">
-                                    <FormLabel>Country</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            required
-                                            placeholder="Country"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        </>}
                         <Button
                             type="submit"
                             disabled={isLoading}
                         >
-                            {isLoading ? <Loading /> : 'Save Account Information'}
+                            {isLoading ? <Loading /> : 'Save Project Information'}
                         </Button>
                     </form>
                 </Form>

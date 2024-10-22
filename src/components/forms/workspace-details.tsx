@@ -32,14 +32,7 @@ type Props = {
 const FormSchema = z.object({
     name: z.string().min(2, { message: 'Workspace name must be atleast 2 chars.' }),
     workEmail: z.string().min(1),
-    workPhone: z.string().min(1),
     whiteLabel: z.boolean(),
-    address: z.string().min(1),
-    city: z.string().min(1),
-    zipCode: z.string().min(1),
-    state: z.string().min(1),
-    country: z.string().min(1),
-    workspaceLogo: z.string().min(1),
 })
 
 const WorkspaceDetails = ({ data }: Props) => {
@@ -52,14 +45,7 @@ const WorkspaceDetails = ({ data }: Props) => {
         defaultValues: {
             name: data?.name,
             workEmail: data?.workEmail,
-            workPhone: data?.workPhone,
             whiteLabel: data?.whiteLabel || true,
-            address: data?.address,
-            city: data?.city,
-            zipCode: data?.zipCode,
-            state: data?.state,
-            country: data?.country,
-            workspaceLogo: data?.workspaceLogo,
         },
     })
 
@@ -79,23 +65,6 @@ const WorkspaceDetails = ({ data }: Props) => {
                 const bodyData = {
                     email: values.workEmail,
                     name: values.name,
-                    shipping: {
-                        address: {
-                            city: values.city,
-                            country: values.country,
-                            line1: values.address,
-                            postal_code: values.zipCode,
-                            state: values.zipCode,
-                        },
-                        name: values.name,
-                    },
-                    address: {
-                        city: values.city,
-                        country: values.country,
-                        line1: values.address,
-                        postal_code: values.zipCode,
-                        state: values.zipCode,
-                    },
                 }
 
                 // const customerResponse = await fetch('/api/stripe/create-customer', {
@@ -116,20 +85,12 @@ const WorkspaceDetails = ({ data }: Props) => {
             const response = await upsertWorkspace({
                 id: data?.id ? data.id : v4(),
                 customerId: data?.customerId || custId || '',
-                address: values.address,
-                workspaceLogo: values.workspaceLogo,
-                city: values.city,
-                workPhone: values.workPhone,
-                country: values.country,
                 name: values.name,
-                state: values.state,
                 whiteLabel: values.whiteLabel,
-                zipCode: values.zipCode,
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 workEmail: values.workEmail,
                 connectAccountId: '',
-                goal: 5,
             })
             toast({
                 title: 'Created Workspace',
@@ -185,24 +146,6 @@ const WorkspaceDetails = ({ data }: Props) => {
                             onSubmit={form.handleSubmit(handleSubmit)}
                             className="space-y-4"
                         >
-                            <FormField
-                                disabled={isLoading}
-                                control={form.control}
-                                name="workspaceLogo"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Workspace Logo</FormLabel>
-                                        <FormControl>
-                                            <FileUpload
-                                                apiEndpoint="workspaceLogo"
-                                                onChange={field.onChange}
-                                                value={field.value}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
                             <div className="flex md:flex-row gap-4">
                                 <FormField
                                     disabled={isLoading}
@@ -239,25 +182,6 @@ const WorkspaceDetails = ({ data }: Props) => {
                                     )}
                                 />
                             </div>
-                            <div className="flex md:flex-row gap-4">
-                                <FormField
-                                    disabled={isLoading}
-                                    control={form.control}
-                                    name="workPhone"
-                                    render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>Workspace Phone Number</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="Phone"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
 
                             <FormField
                                 disabled={isLoading}
@@ -285,118 +209,6 @@ const WorkspaceDetails = ({ data }: Props) => {
                                     )
                                 }}
                             />
-                            <FormField
-                                disabled={isLoading}
-                                control={form.control}
-                                name="address"
-                                render={({ field }) => (
-                                    <FormItem className="flex-1">
-                                        <FormLabel>Address</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="123 st..."
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <div className="flex md:flex-row gap-4">
-                                <FormField
-                                    disabled={isLoading}
-                                    control={form.control}
-                                    name="city"
-                                    render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>City</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="City"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    disabled={isLoading}
-                                    control={form.control}
-                                    name="state"
-                                    render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>State</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="State"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    disabled={isLoading}
-                                    control={form.control}
-                                    name="zipCode"
-                                    render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>Zipcpde</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="Zipcode"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-                            <FormField
-                                disabled={isLoading}
-                                control={form.control}
-                                name="country"
-                                render={({ field }) => (
-                                    <FormItem className="flex-1">
-                                        <FormLabel>Country</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Country"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            {data?.id && (
-                                <div className="flex flex-col gap-2">
-                                    <FormLabel>Create A Goal</FormLabel>
-                                    <FormDescription>
-                                        ✨ Create a goal for your workspace. As your business grows
-                                        your goals grow too so dont forget to set the bar higher!
-                                    </FormDescription>
-                                    <NumberInput
-                                        defaultValue={data?.goal}
-                                        onValueChange={async (val) => {
-                                            if (!data?.id) return
-                                            await updateWorkspaceDetails(data.id, { goal: val })
-                                            await saveActivityLogsNotification({
-                                                workspaceId: data.id,
-                                                description: `Updated the workspace goal to | ${val} Project`,
-                                                projectId: undefined,
-                                            })
-                                            router.refresh()
-                                        }}
-                                        min={1}
-                                        className="bg-background !border !border-input"
-                                        placeholder="Project Goal"
-                                    />
-                                </div>
-                            )}
                             <Button
                                 type="submit"
                                 disabled={isLoading}

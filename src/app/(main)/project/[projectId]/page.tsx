@@ -1,6 +1,5 @@
 import BlurPage from '@/components/global/blur-page'
 import CircleProgress from '@/components/global/circle-progress'
-import PipelineValue from '@/components/global/pipeline-value'
 import ProjectSiteChart from '@/components/global/project-site-chart'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -178,7 +177,6 @@ const ProjectPageId = async ({ params, searchParams }: Props) => {
                             </CardContent>
                             <Contact2 className="absolute right-4 top-4 text-muted-foreground" />
                         </Card>
-                        <PipelineValue projectId={params.projectId} />
 
                         <Card className="xl:w-fit">
                             <CardHeader>

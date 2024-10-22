@@ -1,252 +1,121 @@
-import CircleProgress from '@/components/global/circle-progress'
+import { AlertDescription } from '@/components/ui/alert'
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import { Separator } from '@/components/ui/separator'
-import { db } from '@/lib/db'
-// import { stripe } from '@/lib/stripe'
-import { AreaChart } from '@tremor/react'
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
 import {
-    ClipboardIcon,
-    Contact2,
-    DollarSign,
-    Goal,
-    ShoppingCart,
-} from 'lucide-react'
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from '@/components/ui/command'
+import { getAuthUserDetails } from '@/lib/queries'
+import { Project } from '@prisma/client'
+import Image from 'next/image'
 import Link from 'next/link'
+
 import React from 'react'
+import DeleteButton from './_components/delete-button'
+import CreateProjectButton from './_components/create-project-btn'
+import { ImageIcon } from 'lucide-react'
 
-const Page = async ({
-    params,
-    searchParams
-}: {
+type Props = {
     params: { workspaceId: string }
-    searchParams: { code: string }
-}) => {
-    let currency = 'USD'
-    let sessions
-    let totalClosedSessions
-    let totalPendingSessions
-    let net = 0
-    let potentialIncome = 0
-    let closingRate = 0
-    const currentYear = new Date().getFullYear()
-    const startDate = new Date(`${currentYear}-01-01T00:00:00Z`).getTime() / 1000
-    const endDate = new Date(`${currentYear}-12-31T23:59:59Z`).getTime() / 1000
+}
 
-    // const workspaceDetails = await db.workspace.findUnique({
-    //     where: {
-    //         id: params.workspaceId,
-    //     },
-    // })
-
-    // if (!workspaceDetails) return
-
-    const projects = await db.project.findMany({
-        where: {
-            workspaceId: params.workspaceId,
-        },
-    })
-
-    // if (workspaceDetails.connectAccountId) {
-    // const response = await stripe.accounts.retrieve({
-    //   stripeAccount: workspaceDetails.connectAccountId,
-    // })
-
-    // currency = response.default_currency?.toUpperCase() || 'USD'
-    // const checkoutSessions = await stripe.checkout.sessions.list(
-    //   {
-    //     created: { gte: startDate, lte: endDate },
-    //     limit: 100,
-    //   },
-    //   { stripeAccount: workspaceDetails.connectAccountId }
-    // )
-    // sessions = checkoutSessions.data
-    // totalClosedSessions = checkoutSessions.data
-    //   .filter((session) => session.status === 'complete')
-    //   .map((session) => ({
-    //     ...session,
-    //     created: new Date(session.created).toLocaleDateString(),
-    //     amount_total: session.amount_total ? session.amount_total / 100 : 0,
-    //   }))
-
-    // totalPendingSessions = checkoutSessions.data
-    //   .filter((session) => session.status === 'open')
-    //   .map((session) => ({
-    //     ...session,
-    //     created: new Date(session.created).toLocaleDateString(),
-    //     amount_total: session.amount_total ? session.amount_total / 100 : 0,
-    //   }))
-    // net = +totalClosedSessions
-    //   .reduce((total, session) => total + (session.amount_total || 0), 0)
-    //   .toFixed(2)
-
-    // potentialIncome = +totalPendingSessions
-    //   .reduce((total, session) => total + (session.amount_total || 0), 0)
-    //   .toFixed(2)
-
-    // closingRate = +(
-    //   (totalClosedSessions.length / checkoutSessions.data.length) *
-    //   100
-    // ).toFixed(2)
-    // }
+const Page = async ({ params }: Props) => {
+    const user = await getAuthUserDetails()
+    if (!user) return
 
     return (
-        <div className="relative h-full">
-            {/* {!workspaceDetails.connectAccountId && (
-                <div className="absolute -top-10 -left-10 right-0 bottom-0 z-30 flex items-center justify-center backdrop-blur-md bg-background/50">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Connect Your Stripe</CardTitle>
-                            <CardDescription>
-                                You need to connect your stripe account to see metrics
-                            </CardDescription>
-                            <Link
-                                href={`/workspace/${workspaceDetails.id}/launchpad`}
-                                className="p-2 w-fit bg-secondary text-white rounded-md flex items-center gap-2"
-                            >
-                                <ClipboardIcon />
-                                Launch Pad
-                            </Link>
-                        </CardHeader>
-                    </Card>
-                </div>
-            )} */}
-            <h1 className="text-4xl">Dashboard</h1>
-            <Separator className=" my-6" />
-            <div className="flex flex-col gap-4 pb-6">
-                <div className="flex gap-4 flex-col xl:!flex-row">
-                    <Card className="flex-1 relative">
-                        <CardHeader>
-                            <CardDescription>Income</CardDescription>
-                            <CardTitle className="text-4xl">
-                                {net ? `${currency} ${net.toFixed(2)}` : `$0.00`}
-                            </CardTitle>
-                            <small className="text-xs text-muted-foreground">
-                                For the year {currentYear}
-                            </small>
-                        </CardHeader>
-                        <CardContent className="text-sm text-muted-foreground">
-                            Total revenue generated as reflected in your stripe dashboard.
-                        </CardContent>
-                        <DollarSign className="absolute right-4 top-4 text-muted-foreground" />
-                    </Card>
-                    <Card className="flex-1 relative">
-                        <CardHeader>
-                            <CardDescription>Potential Income</CardDescription>
-                            <CardTitle className="text-4xl">
-                                {potentialIncome
-                                    ? `${currency} ${potentialIncome.toFixed(2)}`
-                                    : `$0.00`}
-                            </CardTitle>
-                            <small className="text-xs text-muted-foreground">
-                                For the year {currentYear}
-                            </small>
-                        </CardHeader>
-                        <CardContent className="text-sm text-muted-foreground">
-                            This is how much you can close.
-                        </CardContent>
-                        <DollarSign className="absolute right-4 top-4 text-muted-foreground" />
-                    </Card>
-                    <Card className="flex-1 relative">
-                        <CardHeader>
-                            <CardDescription>Active Clients</CardDescription>
-                            <CardTitle className="text-4xl">{projects.length}</CardTitle>
-                        </CardHeader>
-                        <CardContent className="text-sm text-muted-foreground">
-                            Reflects the number of projects you own and manage.
-                        </CardContent>
-                        <Contact2 className="absolute right-4 top-4 text-muted-foreground" />
-                    </Card>
-                    <Card className="flex-1 relative">
-                        <CardHeader>
-                            <CardTitle>Workspace Goal</CardTitle>
-                            <CardDescription className='mt-2'>
-                                Reflects the number of projects you want to own and
-                                manage.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardFooter>
-                            <div className="flex flex-col w-full">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-muted-foreground text-sm">
-                                        Current: {projects.length}
-                                    </span>
-                                    <span className="text-muted-foreground text-sm">
-                                        {/* Goal: {workspaceDetails.goal} */}
-                                        Goal: 100
-                                    </span>
+        <AlertDialog>
+            <div className="flex flex-col ">
+                <CreateProjectButton
+                    user={user}
+                    id={params.workspaceId}
+                    className="w-[200px] self-end m-6"
+                />
+                <Command className="rounded-lg bg-transparent">
+                    <CommandInput placeholder="Search Project..." />
+                    <CommandList>
+                        <CommandEmpty>No Results Found.</CommandEmpty>
+                        <CommandGroup heading="Projects">
+                            {!!user.Workspace?.Project.length ? (
+                                user.Workspace.Project.map((project: Project) => (
+                                    <CommandItem
+                                        key={project.id}
+                                        className="h-32 !bg-background my-2 text-primary border-[1px] border-border p-4 rounded-lg hover:!bg-background cursor-pointer transition-all"
+                                    >
+                                        <Link
+                                            href={`/project/${project.id}`}
+                                            className="flex gap-4 w-full h-full"
+                                        >
+                                            <div className="relative w-32">
+                                                <Image
+                                                    src={project.projectLogo ?? ""}
+                                                    alt="project logo"
+                                                    fill
+                                                    className="rounded-md object-contain bg-muted/50 p-4"
+                                                />
+                                            </div>
+                                            <div className='flex flex-col justify-center'>
+                                                <div className="text-lg flex items-center">
+                                                    {project.name}
+                                                </div>
+                                                {project.address && <div className="text-xm flex items-center text-foreground/50">
+                                                    {project.address}
+                                                </div>}
+                                            </div>
+                                        </Link>
+                                        <AlertDialogTrigger asChild>
+                                            <Button
+                                                size={'sm'}
+                                                variant={'destructive'}
+                                                className="w-20 hover:bg-red-600 hover:text-white !text-white"
+                                            >
+                                                Delete
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle className="text-left">
+                                                    Are your absolutely sure
+                                                </AlertDialogTitle>
+                                                <AlertDescription className="text-left">
+                                                    This action cannot be undon. This will delete the
+                                                    project and all data related to the project.
+                                                </AlertDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter className="flex items-center">
+                                                <AlertDialogCancel className="mb-2">
+                                                    Cancel
+                                                </AlertDialogCancel>
+                                                <AlertDialogAction className="bg-destructive hover:bg-destructive">
+                                                    <DeleteButton projectId={project.id} />
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </CommandItem>
+                                ))
+                            ) : (
+                                <div className="text-muted-foreground text-center p-4">
+                                    No Projects
                                 </div>
-                                {/* <Progress
-                                    value={(projects.length / workspaceDetails.goal) * 100}
-                                /> */}
-                                <Progress
-                                    value={0}
-                                />
-                            </div>
-                        </CardFooter>
-                        <Goal className="absolute right-4 top-4 text-muted-foreground" />
-                    </Card>
-                </div>
-                <div className="flex gap-4 xl:!flex-row flex-col">
-                    <Card className="p-4 flex-1">
-                        <CardHeader>
-                            <CardTitle>Transaction History</CardTitle>
-                        </CardHeader>
-                        <AreaChart
-                            className="text-sm stroke-primary"
-                            data={[
-                                ...(totalClosedSessions || []),
-                                ...(totalPendingSessions || []),
-                            ]}
-                            index="created"
-                            categories={['amount_total']}
-                            colors={['primary']}
-                            yAxisWidth={30}
-                            showAnimation={true}
-                        />
-                    </Card>
-                    <Card className="xl:w-[400px] w-full">
-                        <CardHeader>
-                            <CardTitle>Conversions</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <CircleProgress
-                                value={closingRate}
-                                description={
-                                    <>
-                                        {sessions && (
-                                            <div className="flex flex-col">
-                                                Abandoned
-                                                <div className="flex gap-2">
-                                                    <ShoppingCart className="text-rose-700" />
-                                                    {/* {sessions.length} */}
-                                                </div>
-                                            </div>
-                                        )}
-                                        {totalClosedSessions && (
-                                            <div className="felx flex-col">
-                                                Won Carts
-                                                <div className="flex gap-2">
-                                                    <ShoppingCart className="text-emerald-700" />
-                                                    {/* {totalClosedSessions.length} */}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </>
-                                }
-                            />
-                        </CardContent>
-                    </Card>
-                </div>
+                            )}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
             </div>
-        </div>
+        </AlertDialog>
     )
 }
 

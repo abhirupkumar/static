@@ -130,7 +130,7 @@ const LaunchPad = async ({ params, searchParams }: Props) => {
                             <div className="flex justify-between items-center w-full h-20 border p-4 rounded-lg">
                                 <div className="flex items-center gap-4">
                                     <Image
-                                        src={projectDetails.projectLogo}
+                                        src={projectDetails.projectLogo || '/assets/logo.png'}
                                         alt="App logo"
                                         height={80}
                                         width={80}
