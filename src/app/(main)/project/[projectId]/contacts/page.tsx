@@ -21,11 +21,11 @@ type Props = {
 
 const ContactPage = async ({ params }: Props) => {
 
-    const contacts = (await db.project.findUnique({
+    const contacts = await db.project.findMany({
         where: {
             id: params.projectId,
         },
-    }))
+    })
 
     const allContacts = contacts.Contact ?? []
 
