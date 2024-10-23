@@ -13,7 +13,6 @@ const Sites = async ({ params }: { params: { projectId: string } }) => {
         <SiteForm projectId={params.projectId}></SiteForm>
     </BlurPage>
 
-
     return (
         <BlurPage>
             <Link
