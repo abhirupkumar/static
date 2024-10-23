@@ -69,9 +69,8 @@ export const CreatePipelineFormSchema = z.object({
 })
 
 export const CreateSiteFormSchema = z.object({
-    name: z.string().min(1),
-    description: z.string(),
-    subDomainName: z.string().optional(),
+    description: z.string().optional(),
+    subDomainName: z.string().min(1),
     favicon: z.string().optional(),
 })
 

@@ -66,12 +66,12 @@ const SiteForm: React.FC<CreateSiteProps> = ({
         if (!projectId) return
         const response = await upsertSite(
             projectId,
-            { ...values, liveProducts: defaultData?.liveProducts || '[]' },
+            { ...values, liveProducts: '[]' },
             defaultData?.id || v4()
         )
         await saveActivityLogsNotification({
             workspaceId: undefined,
-            description: `Update site | ${response.name}`,
+            description: `Update site`,
             projectId: projectId,
         })
         if (response)
@@ -82,7 +82,7 @@ const SiteForm: React.FC<CreateSiteProps> = ({
         else
             toast({
                 variant: 'destructive',
-                title: 'Oppse!',
+                title: 'Opps!',
                 description: 'Could not save site details',
             })
         setClose()

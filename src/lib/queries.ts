@@ -299,7 +299,6 @@ export const upsertProject = async (project: Project) => {
     })
     if (!workspaceOwner) return console.log('🔴Erorr could not create project')
     const permissionId = v4()
-    const siteId = v4()
     const response = await db.project.upsert({
         where: { id: project.id },
         update: project,
@@ -314,11 +313,6 @@ export const upsertProject = async (project: Project) => {
                 connect: {
                     projectId: project.id,
                     id: permissionId,
-                },
-            },
-            Site: {
-                create: {
-                    id: siteId,
                 },
             },
             SidebarOption: {
@@ -520,11 +514,12 @@ export const upsertSite = async (
         data: {
             Site: {
                 upsert: {
-                    where: { id: siteId },
                     update: site,
-                    create: site,
+                    create: {
+                        ...site,
+                        id: siteId,
+                    },
                 },
-                connect: { id: siteId },
             },
         },
     })
@@ -647,7 +642,7 @@ export const upsertSitePage = async (
     return response
 }
 
-export const deleteSiteePage = async (sitePageId: string) => {
+export const deleteSitePage = async (sitePageId: string) => {
     const response = await db.sitePage.delete({ where: { id: sitePageId } })
 
     return response
