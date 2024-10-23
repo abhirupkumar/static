@@ -11,10 +11,11 @@ const Sites = async ({ params }: { params: { projectId: string } }) => {
             <SiteForm projectId={params.projectId}></SiteForm>
         </div>
     </BlurPage>
+    console.log(site);
 
-    return <div>
-        sites
-    </div>
+    return <BlurPage>
+        <div>site</div>
+    </BlurPage>
 
 }
 
