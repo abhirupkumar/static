@@ -26,21 +26,21 @@ const SiteSettings: React.FC<SiteSettingsProps> = async ({
 }) => {
   //CHALLENGE: go connect your stripe to sell products
 
-  const projectDetails = await db.project.findUnique({
-    where: {
-      id: projectId,
-    },
-  })
+  // const projectDetails = await db.project.findUnique({
+  //   where: {
+  //     id: projectId,
+  //   },
+  // })
 
-  if (!projectDetails) return
-  if (!projectDetails.connectAccountId) return
-  const products = await getConnectAccountProducts(
-    projectDetails.connectAccountId
-  )
+  // if (!projectDetails) return
+  // if (!projectDetails.connectAccountId) return
+  // const products = await getConnectAccountProducts(
+  //   projectDetails.connectAccountId
+  // )
 
   return (
     <div className="flex gap-4 flex-col xl:!flex-row">
-      <Card className="flex-1 flex-shrink">
+      {/* <Card className="flex-1 flex-shrink">
         <CardHeader>
           <CardTitle>Site Products</CardTitle>
           <CardDescription>
@@ -60,7 +60,7 @@ const SiteSettings: React.FC<SiteSettingsProps> = async ({
             )}
           </>
         </CardContent>
-      </Card>
+      </Card> */}
 
       <SiteForm
         projectId={projectId}

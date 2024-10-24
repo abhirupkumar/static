@@ -34,6 +34,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { v4 } from 'uuid'
 import { CopyPlusIcon, Trash } from 'lucide-react'
+import { useModal } from '@/providers/modal-provider'
 
 interface CreateSitePageProps {
     defaultData?: SitePage
@@ -46,9 +47,10 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
     defaultData,
     siteId,
     order,
-    projectId,
+    projectId
 }) => {
     const { toast } = useToast()
+    const { setClose } = useModal()
     const router = useRouter()
     //ch
     const form = useForm<z.infer<typeof SitePageSchema>>({
@@ -94,7 +96,9 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
                 title: 'Success',
                 description: 'Saves Site Page Details',
             })
-            router.refresh()
+
+            window.location.reload()
+            setClose()
         } catch (error) {
             console.log(error)
             toast({
@@ -146,7 +150,7 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
                                     <FormLabel>Path Name</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Path for the page"
+                                            placeholder="Path for the page, default: /"
                                             {...field}
                                             value={field.value?.toLowerCase()}
                                         />
@@ -177,7 +181,11 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
                                             description: `Deleted a site page | ${response?.name}`,
                                             projectId: projectId,
                                         })
-                                        router.refresh()
+                                        toast({
+                                            title: 'Success',
+                                            description: 'Deleted Site Page',
+                                        })
+                                        window.location.reload()
                                     }}
                                 >
                                     {form.formState.isSubmitting ? <Loading /> : <Trash />}

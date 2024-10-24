@@ -89,7 +89,7 @@ const SiteForm: React.FC<CreateSiteProps> = ({
         router.refresh()
     }
     return (
-        <Card className="flex-1">
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle>Site Details</CardTitle>
             </CardHeader>

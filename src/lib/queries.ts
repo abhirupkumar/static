@@ -637,8 +637,7 @@ export const upsertSitePage = async (
             siteId,
         },
     })
-
-    revalidatePath(`/project/${projectId}/sites/${siteId}`, 'page')
+    revalidatePath(`/project/${projectId}/sites`)
     return response
 }
 
