@@ -20,6 +20,8 @@ import {
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 
+export const dynamic = 'force-dynamic';
+
 export const getAuthUserDetails = async () => {
     const user = await currentUser()
     if (!user) {
