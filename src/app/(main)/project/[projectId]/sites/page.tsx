@@ -1,5 +1,3 @@
-"use server";
-
 import { getProjectSite } from '@/lib/queries'
 import React from 'react'
 import SiteForm from '@/components/forms/site-form'
