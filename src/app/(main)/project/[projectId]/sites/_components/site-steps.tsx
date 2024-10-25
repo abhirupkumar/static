@@ -43,16 +43,19 @@ const SiteSteps = ({ site: projectSite, siteId, pages, projectId }: Props) => {
   const { setOpen } = useModal()
   const [pagesState, setPagesState] = useState(pages)
   const [site, setSite] = useState(projectSite)
+  const [change, setChange] = useState(true)
 
   const getSiteDetails = async () => {
     const site = await getProjectSite(projectId)
     if (!site) return
     setSite(site)
+    setChange(false);
   }
 
   useEffect(() => {
-    getSiteDetails();
-  },);
+    if (change)
+      getSiteDetails();
+  }, []);
 
   const onDragStart = (event: DragStart) => {
     //current chosen page
@@ -165,6 +168,7 @@ const SiteSteps = ({ site: projectSite, siteId, pages, projectId }: Props) => {
                   subheading="Site Pages allow you to create step by step processes for customers to follow"
                 >
                   <CreateSitePage
+                    setChange={setChange}
                     projectId={projectId}
                     siteId={siteId}
                     order={pagesState.length}
@@ -212,6 +216,7 @@ const SiteSteps = ({ site: projectSite, siteId, pages, projectId }: Props) => {
                   </div>
 
                   <CreateSitePage
+                    setChange={setChange}
                     projectId={projectId}
                     defaultData={clickedPage}
                     siteId={siteId}

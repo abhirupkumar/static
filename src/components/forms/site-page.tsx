@@ -41,13 +41,15 @@ interface CreateSitePageProps {
     siteId: string
     order: number
     projectId: string
+    setChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const CreateSitePage: React.FC<CreateSitePageProps> = ({
     defaultData,
     siteId,
     order,
-    projectId
+    projectId,
+    setChange
 }) => {
     const { toast } = useToast()
     const { setClose } = useModal()
@@ -98,6 +100,7 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
             })
 
             // window.location.reload()
+            setChange(true);
             router.refresh()
             setClose()
         } catch (error) {
@@ -188,6 +191,7 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
                                         })
                                         // window.location.reload()
                                         router.refresh()
+                                        setChange(true)
                                     }}
                                 >
                                     {form.formState.isSubmitting ? <Loading /> : <Trash />}
