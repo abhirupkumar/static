@@ -16,10 +16,6 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-const novaSquare = localFont({
-  src: "./fonts/NovaSquare.ttf"
-});
-
 export const metadata: Metadata = {
   title: 'Zyper',
   description: 'All in one Workspace Solution',
@@ -34,7 +30,7 @@ export default function RootLayout({
 
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${novaSquare.className} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"

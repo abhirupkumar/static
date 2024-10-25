@@ -173,7 +173,7 @@ const SiteSteps = ({ site, siteId, pages, projectId }: Props) => {
                 <CardDescription className="flex flex-col gap-4">
                   <div className="border-2 rounded-lg sm:w-80 w-full  overflow-clip">
                     <Link
-                      href={`/project/${projectId}/sites/${siteId}/editor/${clickedPage?.id}`}
+                      href={`/project/${projectId}/sites/editor/${clickedPage?.id}`}
                       className="relative group"
                     >
                       <div className="cursor-pointer group-hover:opacity-30 w-full">
