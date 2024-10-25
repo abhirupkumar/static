@@ -5,12 +5,12 @@ import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { toast } from '@/components/ui/use-toast'
-import { upsertSitePage } from '@/lib/queries'
+import { getProjectSite, upsertSitePage } from '@/lib/queries'
 import { SitesForProject } from '@/lib/types'
 import { useModal } from '@/providers/modal-provider'
 import { SitePage } from '@prisma/client'
 import { Check, ExternalLink, LucideEdit } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import {
   DragDropContext,
@@ -36,12 +36,24 @@ type Props = {
   siteId: string
 }
 
-const SiteSteps = ({ site, siteId, pages, projectId }: Props) => {
+const SiteSteps = ({ site: projectSite, siteId, pages, projectId }: Props) => {
   const [clickedPage, setClickedPage] = useState<SitePage | undefined>(
     pages[0]
   )
   const { setOpen } = useModal()
   const [pagesState, setPagesState] = useState(pages)
+  const [site, setSite] = useState(projectSite)
+
+  const getSiteDetails = async () => {
+    const site = await getProjectSite(projectId)
+    if (!site) return
+    setSite(site)
+  }
+
+  useEffect(() => {
+    getSiteDetails();
+  },);
+
   const onDragStart = (event: DragStart) => {
     //current chosen page
     const { draggableId } = event
