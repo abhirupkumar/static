@@ -6,6 +6,8 @@ import SiteSteps from './_components/site-steps'
 import BlurPage from '@/components/global/blur-page'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
+export const revalidate = 0;
+
 const Sites = async ({ params }: { params: { projectId: string } }) => {
     const site = await getProjectSite(params.projectId)
     if (!site) return <BlurPage>

@@ -47,7 +47,7 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
     defaultData,
     siteId,
     order,
-    projectId
+    projectId,
 }) => {
     const { toast } = useToast()
     const { setClose } = useModal()
@@ -186,6 +186,7 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
                                             description: 'Deleted Site Page',
                                         })
                                         window.location.reload()
+
                                     }}
                                 >
                                     {form.formState.isSubmitting ? <Loading /> : <Trash />}
@@ -218,7 +219,7 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
                                             title: 'Success',
                                             description: 'Saves Site Page Details',
                                         })
-                                        router.refresh()
+                                        window.location.reload();
                                     }}
                                 >
                                     {form.formState.isSubmitting ? <Loading /> : <CopyPlusIcon />}
