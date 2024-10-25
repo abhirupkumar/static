@@ -97,8 +97,7 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
                 description: 'Saves Site Page Details',
             })
 
-            // window.location.reload()
-            router.refresh()
+            window.location.reload()
             setClose()
         } catch (error) {
             console.log(error)
@@ -186,8 +185,7 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
                                             title: 'Success',
                                             description: 'Deleted Site Page',
                                         })
-                                        // window.location.reload()
-                                        router.refresh()
+                                        window.location.reload()
                                     }}
                                 >
                                     {form.formState.isSubmitting ? <Loading /> : <Trash />}
