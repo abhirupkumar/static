@@ -14,7 +14,7 @@ import clsx from 'clsx'
 import React from 'react'
 import TabList from './tabs'
 import SettingsTab from './tabs/settings-tab'
-// import MediaBucketTab from './tabs/media-bucket-tab'
+import MediaBucketTab from './tabs/media-bucket-tab'
 import ComponentsTab from './tabs/components-tab'
 
 type Props = {
@@ -63,7 +63,7 @@ const SiteEditorSidebar = ({ projectId }: Props) => {
                             <SettingsTab />
                         </TabsContent>
                         <TabsContent value="Media">
-                            {/* <MediaBucketTab projectId={projectId} /> */}
+                            <MediaBucketTab projectId={projectId} />
                         </TabsContent>
                         <TabsContent value="Components">
                             <SheetHeader className="text-left p-6 ">
