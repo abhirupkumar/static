@@ -3,6 +3,7 @@ import EditorProvider from '@/providers/editor/editor-provider'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import SiteEditorNavigation from './_components/site-editor-navigation'
+import SiteEditorSidebar from './_components/funnel-editor-sidebar'
 
 type Props = {
     params: {
@@ -37,6 +38,10 @@ const Page = async ({ params }: Props) => {
                     sitePageDetails={sitePageDetails}
                     projectId={params.projectId}
                 />
+                <div className="h-full flex justify-center">
+                    {/* <SiteEditor sitePageId={params.sitePageId} /> */}
+                </div>
+                <SiteEditorSidebar projectId={params.projectId} />
             </EditorProvider>
         </div>
     )
