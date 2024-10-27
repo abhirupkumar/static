@@ -10,6 +10,8 @@ import {
     Role,
     Project,
     User,
+    Form,
+    Field,
 } from '@prisma/client'
 import { v4 } from 'uuid'
 import {
@@ -331,6 +333,11 @@ export const upsertProject = async (project: Project) => {
                         name: 'Sites',
                         icon: 'pipelines',
                         link: `/project/${project.id}/sites`,
+                    },
+                    {
+                        name: 'Forms',
+                        icon: 'star',
+                        link: `/project/${project.id}/forms`,
                     },
                     {
                         name: 'Media',
@@ -665,4 +672,69 @@ export const getDomainContent = async (subDomainName: string) => {
         include: { SitePages: true },
     })
     return response
+}
+
+export const getForms = async (projectId: string) => {
+    const forms = await db.form.findMany({
+        where: {
+            projectId,
+        },
+        include: {
+            Fields: {
+                orderBy: {
+                    order: 'asc',
+                },
+                include: {
+                    Responses: true,
+                }
+            }
+        },
+    })
+    return forms
+}
+
+export type FormWithFields = Form & {
+    Fields: Field[];
+};
+export async function getFormById(formId: string): Promise<FormWithFields | null> {
+    try {
+        const form = await db.form.findUnique({
+            where: { id: formId },
+            include: {
+                Fields: {
+                    orderBy: {
+                        order: 'asc',
+                    },
+                },
+            },
+        });
+
+        return form;
+    } catch (error) {
+        console.error('Error getting form:', error);
+        throw new Error('Failed to get form');
+    }
+}
+
+export async function getFormWithResponses(formId: string) {
+    try {
+        const form = await db.form.findUnique({
+            where: { id: formId },
+            include: {
+                Fields: {
+                    orderBy: {
+                        order: 'asc',
+                    },
+                    include: {
+                        Responses: true
+                    }
+                },
+            }
+        });
+
+        return form;
+    } catch (error) {
+        console.error('Error getting form with responses:', error);
+        throw new Error('Failed to get form with responses');
+    }
 }
