@@ -29,7 +29,6 @@ const Container = ({ element }: Props) => {
                             id: v4(),
                             name: 'Text',
                             styles: {
-                                color: 'black',
                                 ...defaultStyles,
                             },
                             type: 'text',
@@ -50,7 +49,6 @@ const Container = ({ element }: Props) => {
                             id: v4(),
                             name: 'Link',
                             styles: {
-                                color: 'black',
                                 ...defaultStyles,
                             },
                             type: 'link',
@@ -71,6 +69,24 @@ const Container = ({ element }: Props) => {
                             name: 'Video',
                             styles: {},
                             type: 'video',
+                        },
+                    },
+                })
+                break
+            case 'image':
+                dispatch({
+                    type: 'ADD_ELEMENT',
+                    payload: {
+                        containerId: id,
+                        elementDetails: {
+                            content: {
+                                src: 'https://images.unsplash.com/photo-1449034446853-66c86144b0ad?ixlib=rb-4.0.3',
+                                alt: 'Unsplash Picture',
+                            },
+                            id: v4(),
+                            name: 'Image',
+                            styles: {},
+                            type: 'image',
                         },
                     },
                 })
@@ -96,7 +112,11 @@ const Container = ({ element }: Props) => {
                     payload: {
                         containerId: id,
                         elementDetails: {
-                            content: [],
+                            content: {
+                                formTitle: 'Want a free quote? We can help you',
+                                formDescription: 'Contact Us',
+                                formButton: 'Submit',
+                            },
                             id: v4(),
                             name: 'Contact Form',
                             styles: {},
@@ -131,6 +151,43 @@ const Container = ({ element }: Props) => {
                             name: 'Two Columns',
                             styles: { ...defaultStyles, display: 'flex' },
                             type: '2Col',
+                        },
+                    },
+                })
+                break;
+            case '3Col':
+                dispatch({
+                    type: 'ADD_ELEMENT',
+                    payload: {
+                        containerId: id,
+                        elementDetails: {
+                            content: [
+                                {
+                                    content: [],
+                                    id: v4(),
+                                    name: 'Container',
+                                    styles: { ...defaultStyles, width: '100%' },
+                                    type: 'container',
+                                },
+                                {
+                                    content: [],
+                                    id: v4(),
+                                    name: 'Container',
+                                    styles: { ...defaultStyles, width: '100%' },
+                                    type: 'container',
+                                },
+                                {
+                                    content: [],
+                                    id: v4(),
+                                    name: 'Container',
+                                    styles: { ...defaultStyles, width: '100%' },
+                                    type: 'container',
+                                },
+                            ],
+                            id: v4(),
+                            name: 'Two Columns',
+                            styles: { ...defaultStyles, display: 'flex' },
+                            type: '3Col',
                         },
                     },
                 })

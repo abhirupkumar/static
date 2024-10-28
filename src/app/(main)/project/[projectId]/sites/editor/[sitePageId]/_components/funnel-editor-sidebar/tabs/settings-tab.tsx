@@ -1,5 +1,5 @@
 'use client'
-import React, { ChangeEventHandler } from 'react'
+import React, { ChangeEventHandler, useEffect } from 'react'
 import {
     Accordion,
     AccordionContent,
@@ -87,7 +87,7 @@ const SettingsTab = () => {
         <Accordion
             type="multiple"
             className="w-full"
-            defaultValue={['Typography', 'Dimensions', 'Decorations', 'Flexbox']}
+            defaultValue={['Typography', 'Dimensions', 'Decorations', 'Layout']}
         >
             <AccordionItem
                 value="Custom"
@@ -107,6 +107,74 @@ const SettingsTab = () => {
                                 />
                             </div>
                         )}
+                    {state.editor.selectedElement.type === "video" && !Array.isArray(state.editor.selectedElement.content) && (
+                        <div className="flex flex-col gap-2">
+                            <Label>Video Path</Label>
+                            <Input
+                                id="src"
+                                placeholder="https://domain.example.com/pathname"
+                                onChange={handleChangeCustomValues}
+                                value={state.editor.selectedElement.content.src}
+                            />
+                        </div>
+                    )}
+                    {state.editor.selectedElement.type === "contactForm" && !Array.isArray(state.editor.selectedElement.content) && (
+                        <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-2">
+                                <Label>Form title</Label>
+                                <Input
+                                    id="formTitle"
+                                    placeholder="Want a free quote? We can help you"
+                                    onChange={handleChangeCustomValues}
+                                    value={state.editor.selectedElement.content.formTitle}
+                                />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <Label>Form description</Label>
+                                <Input
+                                    id="formDescription"
+                                    placeholder="Get in touch with our team"
+                                    onChange={handleChangeCustomValues}
+                                    value={
+                                        state.editor.selectedElement.content.formDescription
+                                    }
+                                />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <Label>Form button</Label>
+                                <Input
+                                    id="formButton"
+                                    placeholder="Submit"
+                                    onChange={handleChangeCustomValues}
+                                    value={state.editor.selectedElement.content.formButton}
+                                />
+                            </div>
+                        </div>
+                    )}
+                    {state.editor.selectedElement.type === "image" && !Array.isArray(state.editor.selectedElement.content) && (
+                        <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-2">
+                                <Label>Image Path</Label>
+                                <Input
+                                    id="src"
+                                    placeholder="https://domain.example.com/pathname"
+                                    onChange={handleChangeCustomValues}
+                                    value={state.editor.selectedElement.content.src}
+                                />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <Label>Image alt description</Label>
+                                <Input
+                                    id="alt"
+                                    placeholder="Image description"
+                                    onChange={handleChangeCustomValues}
+                                    value={
+                                        state.editor.selectedElement.content.alt
+                                    }
+                                />
+                            </div>
+                        </div>
+                    )}
                 </AccordionContent>
             </AccordionItem>
             <AccordionItem
@@ -668,11 +736,38 @@ const SettingsTab = () => {
                 </AccordionContent>
             </AccordionItem>
             <AccordionItem
-                value="Flexbox"
+                value="Layout"
                 className="px-6 py-0"
             >
-                <AccordionTrigger className="!no-underline">Flexbox</AccordionTrigger>
+                <AccordionTrigger className="!no-underline">Layout</AccordionTrigger>
                 <AccordionContent className='flex flex-col gap-y-4'>
+                    <div className="flex flex-col gap-2">
+                        <Label>Display Mode</Label>
+                        <Select
+                            onValueChange={(e) =>
+                                handleOnChanges({
+                                    target: {
+                                        id: "display",
+                                        value: e,
+                                    },
+                                })
+                            }
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select display" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Display Mode</SelectLabel>
+                                    <SelectItem value="flex">Flex</SelectItem>
+                                    <SelectItem value="inline-flex">Inline Flex</SelectItem>
+                                    <SelectItem value="inline">Inline</SelectItem>
+                                    <SelectItem value="block">Block</SelectItem>
+                                    <SelectItem value="inline-block">Inline Block</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
                     <Label className="text-muted-foreground">Justify Content</Label>
                     <Tabs
                         onValueChange={(e) =>
@@ -757,23 +852,6 @@ const SettingsTab = () => {
                             </TabsTrigger>
                         </TabsList>
                     </Tabs>
-                    <div className="flex items-center gap-2">
-                        <Input
-                            className="h-4 w-4"
-                            placeholder="px"
-                            type="checkbox"
-                            id="display"
-                            onChange={(va) => {
-                                handleOnChanges({
-                                    target: {
-                                        id: 'display',
-                                        value: va.target.checked ? 'flex' : 'block',
-                                    },
-                                })
-                            }}
-                        />
-                        <Label className="text-muted-foreground">Flex</Label>
-                    </div>
                     <div className='gap-y-2'>
                         <Label className="text-muted-foreground">Flex Direction</Label>
                         <Select

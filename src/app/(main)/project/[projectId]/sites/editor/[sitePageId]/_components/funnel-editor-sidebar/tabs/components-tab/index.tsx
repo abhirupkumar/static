@@ -12,6 +12,8 @@ import VideoPlaceholder from './video-placeholder'
 import TwoColumnsPlaceholder from './two-columns-placeholder'
 import LinkPlaceholder from './link-placeholder'
 import ContactFormComponentPlaceholder from './contact-form-placeholder'
+import ThreeColumnsPlaceholder from './three-columns-placeholder'
+import ImagePlaceholder from './image-placeholder'
 
 type Props = {}
 
@@ -39,6 +41,18 @@ const ComponentsTab = (props: Props) => {
         label: '2 Columns',
         id: '2Col',
         group: 'layout',
+      },
+      {
+        Component: <ThreeColumnsPlaceholder />,
+        label: '3 Columns',
+        id: '3Col',
+        group: 'layout',
+      },
+      {
+        Component: <ImagePlaceholder />,
+        label: 'Image',
+        id: 'image',
+        group: 'elements',
       },
       {
         Component: <VideoPlaceholder />,

@@ -41,8 +41,6 @@ const ContactFormComponent = (props: Props) => {
         })
     }
 
-    const styles = props.element.styles
-
     const goToNextPage = async () => {
         if (!state.editor.liveMode) return
         const sitePages = await getSite(siteId)
@@ -97,7 +95,6 @@ const ContactFormComponent = (props: Props) => {
 
     return (
         <div
-            style={styles}
             draggable
             onDragStart={(e) => handleDragStart(e, 'contactForm')}
             onClick={handleOnClickBody}
@@ -118,11 +115,13 @@ const ContactFormComponent = (props: Props) => {
                         {state.editor.selectedElement.name}
                     </Badge>
                 )}
-            <ContactForm
-                subTitle="Contact Us"
-                title="Want a free quote? We can help you"
+            {!Array.isArray(props.element.content) && (<ContactForm
+                title={props.element.content.formTitle as string}
+                subTitle={props.element.content.formDescription as string}
+                buttonText={props.element.content.formButton as string}
+                styles={props.element.styles}
                 apiCall={onFormSubmit}
-            />
+            />)}
             {state.editor.selectedElement.id === props.element.id &&
                 !state.editor.liveMode && (
                     <div className="absolute bg-red-500 px-2.5 py-1 text-xs font-bold  -top-[25px] -right-[1px] rounded-none rounded-t-lg !text-white">

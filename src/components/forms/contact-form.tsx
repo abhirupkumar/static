@@ -25,10 +25,12 @@ import Loading from '../global/loading'
 type Props = {
     title: string
     subTitle: string
+    buttonText: string;
+    styles: React.CSSProperties;
     apiCall: (values: z.infer<typeof ContactUserFormSchema>) => any
 }
 
-const ContactForm = ({ apiCall, subTitle, title }: Props) => {
+const ContactForm = ({ apiCall, subTitle, title, buttonText, styles }: Props) => {
     const form = useForm<z.infer<typeof ContactUserFormSchema>>({
         mode: 'onChange',
         resolver: zodResolver(ContactUserFormSchema),
@@ -40,7 +42,7 @@ const ContactForm = ({ apiCall, subTitle, title }: Props) => {
     const isLoading = form.formState.isLoading
 
     return (
-        <Card className="max-w-[500px] w-[500px]">
+        <Card style={styles} className="max-w-[500px] w-[500px]">
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{subTitle}</CardDescription>
@@ -91,7 +93,7 @@ const ContactForm = ({ apiCall, subTitle, title }: Props) => {
                             disabled={isLoading}
                             type="submit"
                         >
-                            {form.formState.isSubmitting ? <Loading /> : 'Get a free quote!'}
+                            {form.formState.isSubmitting ? <Loading /> : buttonText}
                         </Button>
                     </form>
                 </Form>
