@@ -74,7 +74,6 @@ model Project {
   SidebarOption    ProjectSidebarOption[]
   Permissions      Permissions[]
   Site             Site?
-  Form             Form[]
   Media            Media[]
   Contact          Contact[]
   Trigger          Trigger[]
@@ -291,59 +290,6 @@ model AddOns {
   Workspace   Workspace? @relation(fields: [workspaceId], references: [id])
 
   @@index([workspaceId])
-}
-
-model Form {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  projectId   String
-  Project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  published   Boolean  @default(false)
-  Fields      Field[]
-
-  @@index([projectId])
-}
-
-model Field {
-  id          String          @id @default(cuid())
-  formId      String
-  form        Form            @relation(fields: [formId], references: [id], onDelete: Cascade)
-  label       String
-  type        FieldType
-  required    Boolean         @default(false)
-  order       Int
-  options     String[]        @default([])
-  placeholder String?
-  Responses   FieldResponse[]
-
-  @@index([formId])
-}
-
-model FieldResponse {
-  id        String   @id @default(cuid())
-  fieldId   String
-  Field     Field    @relation(fields: [fieldId], references: [id], onDelete: Cascade)
-  value     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([fieldId])
-}
-
-enum FieldType {
-  TEXT
-  TEXTAREA
-  NUMBER
-  PASSWORD
-  EMAIL
-  IMAGE
-  SELECT
-  RADIO
-  CHECKBOX
-  DATE
 }
 
 enum Role {
