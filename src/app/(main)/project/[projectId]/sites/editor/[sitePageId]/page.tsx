@@ -4,22 +4,19 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 import SiteEditorNavigation from './_components/site-editor-navigation'
 import SiteEditorSidebar from './_components/funnel-editor-sidebar'
+import SiteEditor from './_components/site-editor'
+import { getSitePageDetails } from '@/lib/queries'
 
 type Props = {
     params: {
         projectId: string
-        siteId: string
         sitePageId: string
     }
 }
 
 const Page = async ({ params }: Props) => {
 
-    const sitePageDetails = await db.sitePage.findFirst({
-        where: {
-            id: params.sitePageId,
-        },
-    })
+    const sitePageDetails = await getSitePageDetails(params.sitePageId)
     if (!sitePageDetails) {
         return redirect(
             `/project/${params.projectId}/sites`
@@ -30,16 +27,16 @@ const Page = async ({ params }: Props) => {
         <div className="fixed top-0 bottom-0 left-0 right-0 z-[20] bg-background overflow-hidden">
             <EditorProvider
                 projectId={params.projectId}
-                siteId={params.siteId}
+                siteId={sitePageDetails.siteId}
                 pageDetails={sitePageDetails}
             >
                 <SiteEditorNavigation
-                    siteId={params.siteId}
+                    siteId={sitePageDetails.siteId}
                     sitePageDetails={sitePageDetails}
                     projectId={params.projectId}
                 />
                 <div className="h-full flex justify-center">
-                    {/* <SiteEditor sitePageId={params.sitePageId} /> */}
+                    <SiteEditor sitePageData={sitePageDetails} sitePageId={params.sitePageId} />
                 </div>
                 <SiteEditorSidebar projectId={params.projectId} />
             </EditorProvider>

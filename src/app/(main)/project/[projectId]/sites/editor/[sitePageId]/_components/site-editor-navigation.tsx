@@ -17,6 +17,7 @@ import {
   ArrowLeftCircle,
   EyeIcon,
   Laptop,
+  Loader2,
   Redo2,
   Smartphone,
   Tablet,
@@ -24,7 +25,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { FocusEventHandler, useEffect } from 'react'
+import React, { FocusEventHandler, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 type Props = {
@@ -40,6 +41,7 @@ const SiteEditorNavigation = ({
 }: Props) => {
   const router = useRouter()
   const { state, dispatch } = useEditor()
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch({
@@ -89,7 +91,10 @@ const SiteEditorNavigation = ({
   }
 
   const handleOnSave = async () => {
+    setIsLoading(true);
     const content = JSON.stringify(state.editor.elements)
+    console.log(
+      siteId)
     try {
       const response = await upsertSitePage(
         projectId,
@@ -111,6 +116,8 @@ const SiteEditorNavigation = ({
       toast('Oppse!', {
         description: 'Could not save editor',
       })
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -123,7 +130,7 @@ const SiteEditorNavigation = ({
         )}
       >
         <aside className="flex items-center gap-4 max-w-[260px] w-[300px]">
-          <Link href={`/project/${projectId}/sites/${siteId}`}>
+          <Link href={`/project/${projectId}/sites`}>
             <ArrowLeftCircle />
           </Link>
           <div className="flex flex-col w-full ">
@@ -234,7 +241,10 @@ const SiteEditorNavigation = ({
               Last updated {sitePageDetails.updatedAt.toLocaleDateString()}
             </span>
           </div>
-          <Button onClick={handleOnSave}>Save</Button>
+          <Button
+            onClick={handleOnSave}
+            disabled={isLoading}
+          >{isLoading ? <Loader2 className='animate-spin h-4 w-4' /> : "Save"}</Button>
         </aside>
       </nav>
     </TooltipProvider>
