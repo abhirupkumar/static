@@ -41,13 +41,13 @@ const ImageComponent: React.FC<ImageProps> = ({ element }) => {
             draggable={!editor.liveMode}
             onClick={handleOnClickBody}
             className={cn("p-0.5 w-full m-1 relative min-h-7 transition-all", {
-                "border-blue-500 border-solid":
+                "border-blue-600 border-solid":
                     editor.selectedElement.id === element.id,
                 "border-dashed border": !editor.liveMode,
             })}
         >
             {editor.selectedElement.id === element.id && !editor.liveMode && (
-                <Badge className="absolute -top-6 -left-0.5 rounded-none rounded-t-md">
+                <Badge className="absolute -top-6 -left-0.5 rounded-none rounded-t-md bg-blue-600 text-white z-[100]">
                     {editor.selectedElement.name}
                 </Badge>
             )}

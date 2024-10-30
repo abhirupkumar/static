@@ -49,7 +49,7 @@ const LinkComponent = (props: Props) => {
             className={clsx(
                 'p-[2px] w-full m-[5px] relative text-[16px] transition-all',
                 {
-                    '!border-blue-500':
+                    '!border-blue-600':
                         state.editor.selectedElement.id === props.element.id,
 
                     '!border-solid': state.editor.selectedElement.id === props.element.id,
@@ -59,7 +59,7 @@ const LinkComponent = (props: Props) => {
         >
             {state.editor.selectedElement.id === props.element.id &&
                 !state.editor.liveMode && (
-                    <Badge className="absolute -top-[23px] -left-[1px] rounded-none rounded-t-lg ">
+                    <Badge className="absolute -top-[23px] -left-[1px] rounded-none rounded-t-lg bg-blue-600 text-white">
                         {state.editor.selectedElement.name}
                     </Badge>
                 )}

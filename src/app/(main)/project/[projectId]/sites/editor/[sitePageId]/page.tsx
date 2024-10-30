@@ -3,7 +3,7 @@ import EditorProvider from '@/providers/editor/editor-provider'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import SiteEditorNavigation from './_components/site-editor-navigation'
-import SiteEditorSidebar from './_components/funnel-editor-sidebar'
+import SiteEditorSidebar from './_components/site-editor-sidebar'
 import SiteEditor from './_components/site-editor'
 import { getSitePageDetails } from '@/lib/queries'
 

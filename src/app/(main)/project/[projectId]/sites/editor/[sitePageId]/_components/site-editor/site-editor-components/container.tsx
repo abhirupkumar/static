@@ -28,7 +28,9 @@ const Container = ({ element }: Props) => {
                             content: { innerText: 'Text Element', tagType: 'div' },
                             id: v4(),
                             name: 'Text',
-                            styles: {},
+                            styles: {
+                                color: '#000000',
+                            },
                             type: 'text',
                         },
                     },
@@ -46,6 +48,7 @@ const Container = ({ element }: Props) => {
                             styles: {
                                 fontWeight: '700',
                                 fontSize: '2rem',
+                                color: '#000000',
                             },
                             type: 'heading',
                         },
@@ -61,7 +64,7 @@ const Container = ({ element }: Props) => {
                             content: { innerText: 'This is a paragraph.', tagType: 'p' },
                             id: v4(),
                             name: 'Paragraph',
-                            styles: {},
+                            styles: { color: '#000000', },
                             type: 'paragraph',
                         },
                     },
@@ -80,6 +83,7 @@ const Container = ({ element }: Props) => {
                             id: v4(),
                             name: 'Link',
                             styles: {
+                                color: '#000000',
                                 ...defaultStyles,
                             },
                             type: 'link',
@@ -131,7 +135,13 @@ const Container = ({ element }: Props) => {
                             content: [],
                             id: v4(),
                             name: 'Container',
-                            styles: { ...defaultStyles },
+                            styles: {
+                                paddingTop: "1rem",
+                                paddingBottom: "1rem",
+                                paddingLeft: "1rem",
+                                paddingRight: "1rem",
+                                ...defaultStyles
+                            },
                             type: 'container',
                         },
                     },
@@ -167,20 +177,35 @@ const Container = ({ element }: Props) => {
                                     content: [],
                                     id: v4(),
                                     name: 'Container',
-                                    styles: { ...defaultStyles, width: '100%' },
+                                    styles: {
+                                        ...defaultStyles, width: '100%', paddingTop: "1rem",
+                                        paddingBottom: "1rem",
+                                        paddingLeft: "1rem",
+                                        paddingRight: "1rem",
+                                    },
                                     type: 'container',
                                 },
                                 {
                                     content: [],
                                     id: v4(),
                                     name: 'Container',
-                                    styles: { ...defaultStyles, width: '100%' },
+                                    styles: {
+                                        ...defaultStyles, width: '100%', paddingTop: "1rem",
+                                        paddingBottom: "1rem",
+                                        paddingLeft: "1rem",
+                                        paddingRight: "1rem",
+                                    },
                                     type: 'container',
                                 },
                             ],
                             id: v4(),
                             name: 'Two Columns',
-                            styles: { ...defaultStyles, display: 'flex' },
+                            styles: {
+                                ...defaultStyles, display: 'flex', paddingTop: "1rem",
+                                paddingBottom: "1rem",
+                                paddingLeft: "1rem",
+                                paddingRight: "1rem",
+                            },
                             type: '2Col',
                         },
                     },
@@ -197,27 +222,47 @@ const Container = ({ element }: Props) => {
                                     content: [],
                                     id: v4(),
                                     name: 'Container',
-                                    styles: { ...defaultStyles, width: '100%' },
+                                    styles: {
+                                        ...defaultStyles, width: '100%', paddingTop: "1rem",
+                                        paddingBottom: "1rem",
+                                        paddingLeft: "1rem",
+                                        paddingRight: "1rem",
+                                    },
                                     type: 'container',
                                 },
                                 {
                                     content: [],
                                     id: v4(),
                                     name: 'Container',
-                                    styles: { ...defaultStyles, width: '100%' },
+                                    styles: {
+                                        ...defaultStyles, width: '100%', paddingTop: "1rem",
+                                        paddingBottom: "1rem",
+                                        paddingLeft: "1rem",
+                                        paddingRight: "1rem",
+                                    },
                                     type: 'container',
                                 },
                                 {
                                     content: [],
                                     id: v4(),
                                     name: 'Container',
-                                    styles: { ...defaultStyles, width: '100%' },
+                                    styles: {
+                                        ...defaultStyles, width: '100%', paddingTop: "1rem",
+                                        paddingBottom: "1rem",
+                                        paddingLeft: "1rem",
+                                        paddingRight: "1rem",
+                                    },
                                     type: 'container',
                                 },
                             ],
                             id: v4(),
                             name: 'Three Columns',
-                            styles: { ...defaultStyles, display: 'flex' },
+                            styles: {
+                                ...defaultStyles, display: 'flex', paddingTop: "1rem",
+                                paddingBottom: "1rem",
+                                paddingLeft: "1rem",
+                                paddingRight: "1rem",
+                            },
                             type: '3Col',
                         },
                     },
@@ -257,13 +302,13 @@ const Container = ({ element }: Props) => {
     return (
         <div
             style={styles}
-            className={clsx('relative p-4 transition-all group', {
+            className={clsx('relative transition-all group', {
                 'max-w-full w-full': type === 'container' || type === '2Col' || type === '3Col',
                 'h-fit': type === 'container',
                 'h-full': type === '__body',
-                'overflow-scroll ': type === '__body',
+                'overflow-scroll p-4': type === '__body',
                 'flex flex-col md:!flex-row': type === '2Col' || type === '3Col',
-                '!border-blue-500':
+                '!border-blue-600':
                     state.editor.selectedElement.id === id &&
                     !state.editor.liveMode &&
                     state.editor.selectedElement.type !== '__body',
@@ -283,7 +328,7 @@ const Container = ({ element }: Props) => {
         >
             <Badge
                 className={clsx(
-                    'absolute -top-[23px] -left-[1px] rounded-none rounded-t-lg hidden',
+                    'absolute -top-[23px] -left-[1px] rounded-none rounded-t-lg hidden bg-blue-600 text-white',
                     {
                         block:
                             state.editor.selectedElement.id === element.id &&
