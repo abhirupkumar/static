@@ -29,7 +29,7 @@ const TextComponent = (props: Props) => {
             },
         })
     }
-
+    const Tagtype = (!Array.isArray(props.element.content) && props.element.content.tagType) || 'div'
     return (
         <div
             style={styles}
@@ -51,26 +51,33 @@ const TextComponent = (props: Props) => {
                         {state.editor.selectedElement.name}
                     </Badge>
                 )}
-            <span
-                contentEditable={!state.editor.liveMode}
-                onBlur={(e) => {
-                    const spanElement = e.target as HTMLSpanElement
-                    dispatch({
-                        type: 'UPDATE_ELEMENT',
-                        payload: {
-                            elementDetails: {
-                                ...props.element,
-                                content: {
-                                    innerText: spanElement.innerText,
+            {React.createElement(
+                Tagtype,
+                {
+                    contentEditable: !state.editor.liveMode,
+                    onBlur: (e: any) => {
+                        if (!state.editor.liveMode) {
+                            const selectedElement = e.target
+                            dispatch({
+                                type: 'UPDATE_ELEMENT',
+                                payload: {
+                                    elementDetails: {
+                                        ...props.element,
+                                        content: {
+                                            innerText: selectedElement.innerText,
+                                            tagType: selectedElement.tagName.toLowerCase(),
+                                        },
+                                    },
                                 },
-                            },
-                        },
-                    })
-                }}
-            >
-                {!Array.isArray(props.element.content) &&
-                    props.element.content.innerText}
-            </span>
+                            })
+                        }
+                    },
+                    suppressContentEditableWarning: true,
+                    suppressHydrationWarning: true,
+                    suppressuncontrolledwarning: true,
+                },
+                !Array.isArray(props.element.content) && props.element.content.innerText
+            )}
             {state.editor.selectedElement.id === props.element.id &&
                 !state.editor.liveMode && (
                     <div className="absolute bg-red-500 px-2.5 py-1 text-xs font-bold -top-[25px] -right-[1px] rounded-none rounded-t-lg !text-white">

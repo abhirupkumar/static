@@ -25,13 +25,44 @@ const Container = ({ element }: Props) => {
                     payload: {
                         containerId: id,
                         elementDetails: {
-                            content: { innerText: 'Text Element' },
+                            content: { innerText: 'Text Element', tagType: 'div' },
                             id: v4(),
                             name: 'Text',
-                            styles: {
-                                ...defaultStyles,
-                            },
+                            styles: {},
                             type: 'text',
+                        },
+                    },
+                })
+                break
+            case 'heading':
+                dispatch({
+                    type: 'ADD_ELEMENT',
+                    payload: {
+                        containerId: id,
+                        elementDetails: {
+                            content: { innerText: 'Heading', tagType: 'h1' },
+                            id: v4(),
+                            name: 'Heading',
+                            styles: {
+                                fontWeight: '700',
+                                fontSize: '2rem',
+                            },
+                            type: 'heading',
+                        },
+                    },
+                })
+                break
+            case 'paragraph':
+                dispatch({
+                    type: 'ADD_ELEMENT',
+                    payload: {
+                        containerId: id,
+                        elementDetails: {
+                            content: { innerText: 'This is a paragraph.', tagType: 'p' },
+                            id: v4(),
+                            name: 'Paragraph',
+                            styles: {},
+                            type: 'paragraph',
                         },
                     },
                 })
@@ -185,7 +216,7 @@ const Container = ({ element }: Props) => {
                                 },
                             ],
                             id: v4(),
-                            name: 'Two Columns',
+                            name: 'Three Columns',
                             styles: { ...defaultStyles, display: 'flex' },
                             type: '3Col',
                         },
@@ -227,11 +258,11 @@ const Container = ({ element }: Props) => {
         <div
             style={styles}
             className={clsx('relative p-4 transition-all group', {
-                'max-w-full w-full': type === 'container' || type === '2Col',
+                'max-w-full w-full': type === 'container' || type === '2Col' || type === '3Col',
                 'h-fit': type === 'container',
                 'h-full': type === '__body',
                 'overflow-scroll ': type === '__body',
-                'flex flex-col md:!flex-row': type === '2Col',
+                'flex flex-col md:!flex-row': type === '2Col' || type === '3Col',
                 '!border-blue-500':
                     state.editor.selectedElement.id === id &&
                     !state.editor.liveMode &&

@@ -211,6 +211,8 @@ export const icons = [
 
 export type EditorBtns =
     | 'text'
+    | 'heading'
+    | 'paragraph'
     | 'container'
     | 'section'
     | 'contactForm'
@@ -220,8 +222,8 @@ export type EditorBtns =
     | 'video'
     | '__body'
     | 'image'
-    | null
     | '3Col'
+    | null
 
 export const defaultStyles: React.CSSProperties = {
     backgroundPosition: 'center',

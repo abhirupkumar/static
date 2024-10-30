@@ -95,6 +95,94 @@ const SettingsTab = () => {
             >
                 <AccordionTrigger className="!no-underline">Custom</AccordionTrigger>
                 <AccordionContent>
+                    {(state.editor.selectedElement.type === 'heading') &&
+                        !Array.isArray(state.editor.selectedElement.content) && (
+                            <div className="flex flex-col gap-2">
+                                <p className="text-muted-foreground">Tag Type</p>
+                                <Tabs
+                                    onValueChange={(e) =>
+                                        handleChangeCustomValues({
+                                            target: {
+                                                id: 'tagType',
+                                                value: e,
+                                            },
+                                        })
+                                    }
+                                    value={state.editor.selectedElement.content.tagType}
+                                >
+                                    <TabsList className="flex items-center flex-row justify-evenly border-[1px] rounded-md bg-transparent h-fit gap-4">
+                                        <TabsTrigger
+                                            value="h1"
+                                            className="w-5 h-10 p-0 data-[state=active]:bg-muted"
+                                        >
+                                            H1
+                                        </TabsTrigger>
+                                        <TabsTrigger
+                                            value="h2"
+                                            className="w-5 h-10 p-0 data-[state=active]:bg-muted"
+                                        >
+                                            H2
+                                        </TabsTrigger>
+                                        <TabsTrigger
+                                            value="h3"
+                                            className="w-5 h-10 p-0 data-[state=active]:bg-muted"
+                                        >
+                                            H3
+                                        </TabsTrigger>
+                                        <TabsTrigger
+                                            value="h4"
+                                            className="w-5 h-10 p-0 data-[state=active]:bg-muted"
+                                        >
+                                            H4
+                                        </TabsTrigger>
+                                        <TabsTrigger
+                                            value="h5"
+                                            className="w-5 h-10 p-0 data-[state=active]:bg-muted"
+                                        >
+                                            H5
+                                        </TabsTrigger>
+                                        <TabsTrigger
+                                            value="h6"
+                                            className="w-5 h-10 p-0 data-[state=active]:bg-muted"
+                                        >
+                                            H6
+                                        </TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
+                            </div>
+                        )}
+                    {(state.editor.selectedElement.type === 'text') &&
+                        !Array.isArray(state.editor.selectedElement.content) && (
+                            <div className="flex flex-col gap-2">
+                                <p className="text-muted-foreground">Tag Type</p>
+                                <Tabs
+                                    onValueChange={(e) =>
+                                        handleChangeCustomValues({
+                                            target: {
+                                                id: 'tagType',
+                                                value: e,
+                                            },
+                                        })
+                                    }
+                                    value={state.editor.selectedElement.content.tagType}
+                                >
+                                    <TabsList className="flex items-center flex-row justify-evenly border-[1px] rounded-md bg-transparent h-fit gap-4">
+                                        <TabsTrigger
+                                            value="div"
+                                            className="w-10 h-10 p-0 data-[state=active]:bg-muted"
+                                        >
+                                            Div
+                                        </TabsTrigger>
+                                        <TabsTrigger
+                                            value="span"
+                                            className="w-10 h-10 p-0 data-[state=active]:bg-muted"
+                                        >
+                                            Span
+                                        </TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
+                            </div>
+                        )}
                     {state.editor.selectedElement.type === 'link' &&
                         !Array.isArray(state.editor.selectedElement.content) && (
                             <div className="flex flex-col gap-2">

@@ -14,6 +14,8 @@ import LinkPlaceholder from './link-placeholder'
 import ContactFormComponentPlaceholder from './contact-form-placeholder'
 import ThreeColumnsPlaceholder from './three-columns-placeholder'
 import ImagePlaceholder from './image-placeholder'
+import HeadingPlaceholder from './heading-placeholder'
+import ParagraphPlaceholder from './paragraph-placeholder'
 
 type Props = {}
 
@@ -28,6 +30,18 @@ const ComponentsTab = (props: Props) => {
         Component: <TextPlaceholder />,
         label: 'Text',
         id: 'text',
+        group: 'elements',
+      },
+      {
+        Component: <HeadingPlaceholder />,
+        label: 'Heading',
+        id: 'heading',
+        group: 'elements',
+      },
+      {
+        Component: <ParagraphPlaceholder />,
+        label: 'Paragraph',
+        id: 'paragraph',
         group: 'elements',
       },
       {
