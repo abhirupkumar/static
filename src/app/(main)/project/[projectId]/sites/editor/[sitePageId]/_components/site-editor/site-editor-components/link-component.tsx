@@ -72,15 +72,16 @@ const LinkComponent = (props: Props) => {
             {!state.editor.previewMode && !state.editor.liveMode && (
                 <span
                     contentEditable={!state.editor.liveMode}
-                    onBlur={(e) => {
-                        const spanElement = e.target as HTMLSpanElement
+                    onBlur={(e: any) => {
+                        const element = e.target
                         dispatch({
                             type: 'UPDATE_ELEMENT',
                             payload: {
                                 elementDetails: {
                                     ...props.element,
                                     content: {
-                                        innerText: spanElement.innerText,
+                                        innerText: element.innerText,
+                                        href: element.href,
                                     },
                                 },
                             },
