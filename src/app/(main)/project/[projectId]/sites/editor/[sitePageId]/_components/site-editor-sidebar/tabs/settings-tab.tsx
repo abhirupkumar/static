@@ -406,6 +406,50 @@ const SettingsTab = () => {
                                     </div>
                                 </div>
                             </div>
+                            <div className="flex gap-4 flex-col">
+                                <div className="flex gap-4">
+                                    <div>
+                                        <Label className="text-muted-foreground">Max Height</Label>
+                                        <Input
+                                            id="maxHeight"
+                                            placeholder="px"
+                                            onChange={handleOnChanges}
+                                            value={state.editor.selectedElement.styles.maxHeight}
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label className="text-muted-foreground">Max Width</Label>
+                                        <Input
+                                            placeholder="px"
+                                            id="maxWidth"
+                                            onChange={handleOnChanges}
+                                            value={state.editor.selectedElement.styles.maxWidth}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-4 flex-col">
+                                <div className="flex gap-4">
+                                    <div>
+                                        <Label className="text-muted-foreground">Min Height</Label>
+                                        <Input
+                                            id="minHeight"
+                                            placeholder="px"
+                                            onChange={handleOnChanges}
+                                            value={state.editor.selectedElement.styles.minHeight}
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label className="text-muted-foreground">Min Width</Label>
+                                        <Input
+                                            placeholder="px"
+                                            id="minWidth"
+                                            onChange={handleOnChanges}
+                                            value={state.editor.selectedElement.styles.minWidth}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                             <p>Margin px</p>
                             <div className="flex gap-4 flex-col">
                                 <div className="flex gap-4">

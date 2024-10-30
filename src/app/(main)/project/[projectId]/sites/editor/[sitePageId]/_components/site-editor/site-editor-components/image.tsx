@@ -43,7 +43,7 @@ const ImageComponent: React.FC<ImageProps> = ({ element }) => {
             className={cn("p-0.5 w-full m-1 relative min-h-7 transition-all", {
                 "border-blue-600 border-solid":
                     editor.selectedElement.id === element.id,
-                "border-dashed border": !editor.liveMode,
+                // "border-dashed border": !editor.liveMode,
             })}
         >
             {editor.selectedElement.id === element.id && !editor.liveMode && (
