@@ -193,7 +193,7 @@ const Container = ({ element }: Props) => {
                             id: v4(),
                             name: 'Two Columns',
                             styles: {
-                                ...defaultStyles, display: 'flex', minHeight: "100px",
+                                ...defaultStyles, display: 'flex', minHeight: "150px",
                             },
                             type: '2Col',
                         },
@@ -238,7 +238,7 @@ const Container = ({ element }: Props) => {
                             id: v4(),
                             name: 'Three Columns',
                             styles: {
-                                ...defaultStyles, display: 'flex', minHeight: "100px",
+                                ...defaultStyles, display: 'flex', minHeight: "150px",
                             },
                             type: '3Col',
                         },
