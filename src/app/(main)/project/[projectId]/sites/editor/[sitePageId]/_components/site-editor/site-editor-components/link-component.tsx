@@ -17,12 +17,14 @@ const LinkComponent = (props: Props) => {
     const { dispatch, state } = useEditor()
 
     const handleDragStart = (e: React.DragEvent, type: EditorBtns) => {
-        if (type === null) return
-        e.dataTransfer.setData('componentType', type)
+        if (state.editor.previewMode || state.editor.liveMode) return;
+        if (type === null) return;
+        e.dataTransfer.setData('componentType', type);
     }
 
     const handleOnClickBody = (e: React.MouseEvent) => {
         e.stopPropagation()
+        if (state.editor.previewMode || state.editor.liveMode) return;
         dispatch({
             type: 'CHANGE_CLICKED_ELEMENT',
             payload: {
@@ -43,7 +45,7 @@ const LinkComponent = (props: Props) => {
     return (
         <div
             style={styles}
-            draggable
+            draggable={!state.editor.previewMode || !state.editor.liveMode}
             onDragStart={(e) => handleDragStart(e, 'text')}
             onClick={handleOnClickBody}
             className={clsx(
