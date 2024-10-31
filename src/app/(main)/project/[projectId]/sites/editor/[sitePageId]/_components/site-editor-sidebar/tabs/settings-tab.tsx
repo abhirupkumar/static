@@ -493,6 +493,61 @@ const SettingsTab = () => {
                                     </div>
                                 </div>
                             </div>
+                            <p>Overflow</p>
+                            <div className="flex gap-4">
+                                <div>
+                                    <Label className="text-muted-foreground">Overflow X</Label>
+                                    <Select
+                                        onValueChange={(e) =>
+                                            handleOnChanges({
+                                                target: {
+                                                    id: 'overflowX',
+                                                    value: e,
+                                                },
+                                            })
+                                        }
+                                    >
+                                        <SelectTrigger className="w-[180px]">
+                                            <SelectValue placeholder="Select Overflow" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Overflow</SelectLabel>
+                                                <SelectItem value="auto">auto</SelectItem>
+                                                <SelectItem value="scroll">scroll</SelectItem>
+                                                <SelectItem value="visible">visible</SelectItem>
+                                                <SelectItem value="hidden">hidden</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div>
+                                    <Label className="text-muted-foreground">Overflow Y</Label>
+                                    <Select
+                                        onValueChange={(e) =>
+                                            handleOnChanges({
+                                                target: {
+                                                    id: 'overflowY',
+                                                    value: e,
+                                                },
+                                            })
+                                        }
+                                    >
+                                        <SelectTrigger className="w-[180px]">
+                                            <SelectValue placeholder="Select Overflow" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Overflow</SelectLabel>
+                                                <SelectItem value="auto">auto</SelectItem>
+                                                <SelectItem value="scroll">scroll</SelectItem>
+                                                <SelectItem value="visible">visible</SelectItem>
+                                                <SelectItem value="hidden">hidden</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
                         </div>
                         <div className="flex flex-col gap-2">
                             <p>Padding px</p>
@@ -836,6 +891,48 @@ const SettingsTab = () => {
                                 </TabsTrigger>
                             </TabsList>
                         </Tabs>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <Label className="text-muted-foreground">Cursor</Label>
+                        <Select
+                            onValueChange={(e) =>
+                                handleOnChanges({
+                                    target: {
+                                        id: 'cursor',
+                                        value: e,
+                                    },
+                                })
+                            }
+                        >
+                            <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Select a Cursore type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Cursor Type</SelectLabel>
+                                    <SelectItem value="default">Default</SelectItem>
+                                    <SelectItem value="pointer">Pointer</SelectItem>
+                                    <SelectItem value="none">None</SelectItem>
+                                    <SelectItem value="context-menu">Context Menu</SelectItem>
+                                    <SelectItem value="help">Help</SelectItem>
+                                    <SelectItem value="progress">Progress</SelectItem>
+                                    <SelectItem value="wait">Wait</SelectItem>
+                                    <SelectItem value="cell">Cell</SelectItem>
+                                    <SelectItem value="crosshair">Crosshair</SelectItem>
+                                    <SelectItem value="text">Text</SelectItem>
+                                    <SelectItem value="vertical-text">Vertical Text</SelectItem>
+                                    <SelectItem value="alias">Alias</SelectItem>
+                                    <SelectItem value="copy">Copy</SelectItem>
+                                    <SelectItem value="move">Move</SelectItem>
+                                    <SelectItem value="no-drop">No Drop</SelectItem>
+                                    <SelectItem value="not-allowed">Not Allowed</SelectItem>
+                                    <SelectItem value="grab">Grab</SelectItem>
+                                    <SelectItem value="grabbing">Grabbing</SelectItem>
+                                    <SelectItem value="zoom-in">Zoom In</SelectItem>
+                                    <SelectItem value="zoom-out">Zoom Out</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label className="text-muted-foreground">Image Repeat</Label>
