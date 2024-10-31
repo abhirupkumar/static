@@ -166,9 +166,12 @@ model Site {
   id            String      @id @default(uuid())
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  title         String
   description   String?
+  keywords      String?
   published     Boolean     @default(false)
   subDomainName String?     @unique
+  domain        String?     @unique
   favicon       String?
   projectId     String      @unique
   liveProducts  String?     @default("[]")
@@ -196,11 +199,15 @@ model SitePage {
   id           String   @id @default(uuid())
   name         String
   pathName     String   @default("")
+  title        String?
+  description  String?
+  keywords     String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   visits       Int      @default(0)
   content      String?
   order        Int
+  isPublished  Boolean  @default(false)
   previewImage String?
   siteId       String
   Site         Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)

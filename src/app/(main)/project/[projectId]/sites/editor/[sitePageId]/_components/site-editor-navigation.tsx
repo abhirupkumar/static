@@ -93,13 +93,41 @@ const SiteEditorNavigation = ({
   const handleOnSave = async () => {
     setIsLoading(true);
     const content = JSON.stringify(state.editor.elements)
-    console.log(
-      siteId)
     try {
       const response = await upsertSitePage(
         projectId,
         {
           ...sitePageDetails,
+          content,
+        },
+        siteId
+      )
+      await saveActivityLogsNotification({
+        workspaceId: undefined,
+        description: `Updated a site page | ${response?.name}`,
+        projectId: projectId,
+      })
+      toast('Success', {
+        description: 'Saved Editor',
+      })
+    } catch (error) {
+      toast('Oppse!', {
+        description: 'Could not save editor',
+      })
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const handleSwitchChange = async () => {
+    setIsLoading(true);
+    const content = JSON.stringify(state.editor.elements)
+    try {
+      const response = await upsertSitePage(
+        projectId,
+        {
+          ...sitePageDetails,
+          isPublished: !sitePageDetails.isPublished,
           content,
         },
         siteId
@@ -232,8 +260,9 @@ const SiteEditorNavigation = ({
             <div className="flex flex-row items-center gap-4">
               Draft
               <Switch
-                disabled
-                defaultChecked={true}
+                disabled={isLoading}
+                checked={sitePageDetails.isPublished}
+                onChange={handleSwitchChange}
               />
               Publish
             </div>

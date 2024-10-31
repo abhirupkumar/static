@@ -44,18 +44,24 @@ const SiteForm: React.FC<CreateSiteProps> = ({
         mode: 'onChange',
         resolver: zodResolver(CreateSiteFormSchema),
         defaultValues: {
+            title: defaultData?.title || '',
             description: defaultData?.description || '',
+            keywords: defaultData?.keywords || '',
             favicon: defaultData?.favicon || '',
             subDomainName: defaultData?.subDomainName || '',
+            domain: defaultData?.domain || '',
         },
     })
 
     useEffect(() => {
         if (defaultData) {
             form.reset({
-                description: defaultData.description || '',
-                favicon: defaultData.favicon || '',
-                subDomainName: defaultData.subDomainName || '',
+                title: defaultData?.title || '',
+                description: defaultData?.description || '',
+                keywords: defaultData?.keywords || '',
+                favicon: defaultData?.favicon || '',
+                subDomainName: defaultData?.subDomainName || '',
+                domain: defaultData?.domain || '',
             })
         }
     }, [defaultData])
@@ -105,7 +111,7 @@ const SiteForm: React.FC<CreateSiteProps> = ({
                             name="subDomainName"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Sub domain</FormLabel>
+                                    <FormLabel>Sub domain*</FormLabel>
                                     <FormControl>
                                         <Input
                                             placeholder="Sub domain for site"
@@ -118,13 +124,61 @@ const SiteForm: React.FC<CreateSiteProps> = ({
                         <FormField
                             disabled={isLoading}
                             control={form.control}
+                            name="domain"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Domain (optional)</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="domain.com"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            disabled={isLoading}
+                            control={form.control}
+                            name="title"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Seo Title*</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Write down the title which will be shown."
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            disabled={isLoading}
+                            control={form.control}
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Site Description</FormLabel>
+                                    <FormLabel>Seo Description</FormLabel>
                                     <FormControl>
                                         <Textarea
                                             placeholder="Tell us a little bit more about this site."
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            disabled={isLoading}
+                            control={form.control}
+                            name="keywords"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Seo Keywords</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Write keywords separated by commas(,)."
                                             {...field}
                                         />
                                     </FormControl>

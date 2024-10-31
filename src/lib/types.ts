@@ -15,6 +15,7 @@ import { db } from './db'
 import { z } from 'zod'
 
 import Stripe from 'stripe'
+import { title } from 'process'
 
 export type NotificationWithUser =
     | ({
@@ -37,7 +38,11 @@ export type UserWithPermissionsAndProjects = Prisma.PromiseReturnType<
 
 export const SitePageSchema = z.object({
     name: z.string().min(1),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    keywords: z.string().optional(),
     pathName: z.string().optional(),
+    isPublished: z.boolean().optional(),
 })
 
 const __getUsersWithWorkspaceProjectPermissionsSidebarOptions = async (
@@ -69,7 +74,10 @@ export const CreatePipelineFormSchema = z.object({
 })
 
 export const CreateSiteFormSchema = z.object({
+    title: z.string().min(1),
     description: z.string().optional(),
+    keywords: z.string().optional(),
+    domain: z.string().optional(),
     subDomainName: z.string().min(1),
     favicon: z.string().optional(),
 })

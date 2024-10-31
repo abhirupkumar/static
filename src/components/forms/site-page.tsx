@@ -35,6 +35,7 @@ import { useRouter } from 'next/navigation'
 import { v4 } from 'uuid'
 import { CopyPlusIcon, Trash } from 'lucide-react'
 import { useModal } from '@/providers/modal-provider'
+import { Textarea } from '../ui/textarea'
 
 interface CreateSitePageProps {
     defaultData?: SitePage
@@ -52,19 +53,29 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
     const { toast } = useToast()
     const { setClose } = useModal()
     const router = useRouter()
-    //ch
     const form = useForm<z.infer<typeof SitePageSchema>>({
         resolver: zodResolver(SitePageSchema),
         mode: 'onChange',
         defaultValues: {
             name: '',
+            title: '',
+            description: '',
+            keywords: '',
             pathName: '',
+            isPublished: false,
         },
     })
 
     useEffect(() => {
         if (defaultData) {
-            form.reset({ name: defaultData.name, pathName: defaultData.pathName })
+            form.reset({
+                name: defaultData.name,
+                title: defaultData?.title || "",
+                description: defaultData?.description || "",
+                keywords: defaultData?.keywords || "",
+                pathName: defaultData.pathName,
+                isPublished: defaultData.isPublished || false,
+            })
         }
     }, [defaultData])
 
@@ -156,6 +167,54 @@ const CreateSitePage: React.FC<CreateSitePageProps> = ({
                                         />
                                     </FormControl>
                                     <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            disabled={form.formState.isSubmitting}
+                            control={form.control}
+                            name="title"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Seo Title</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder={`If not mentioned Title will be: 'Name - Site Title'`}
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            disabled={form.formState.isSubmitting}
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Seo Description</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder={`If not mentioned the Description will be the same as the Site Description`}
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            disabled={form.formState.isSubmitting}
+                            control={form.control}
+                            name="keywords"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Seo Keywords</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Write keywords separated by commas(,). Site Keywords will be used if not mentioned."
+                                            {...field}
+                                        />
+                                    </FormControl>
                                 </FormItem>
                             )}
                         />

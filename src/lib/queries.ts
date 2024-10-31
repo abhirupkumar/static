@@ -666,3 +666,18 @@ export const getDomainContent = async (subDomainName: string) => {
     })
     return response
 }
+
+export const updateSitePageVisits = async (sitePageId: string) => {
+    const response = await db.sitePage.update({
+        where: {
+            id: sitePageId,
+        },
+        data: {
+            visits: {
+                increment: 1,
+            },
+        },
+    });
+
+    return response;
+};
