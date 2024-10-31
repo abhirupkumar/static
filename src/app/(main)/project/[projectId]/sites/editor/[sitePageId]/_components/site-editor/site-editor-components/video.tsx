@@ -16,11 +16,13 @@ const VideoComponent = (props: Props) => {
 
     const handleDragStart = (e: React.DragEvent, type: EditorBtns) => {
         if (type === null) return
+        if (state.editor.previewMode || state.editor.liveMode) return;
         e.dataTransfer.setData('componentType', type)
     }
 
     const handleOnClick = (e: React.MouseEvent) => {
         e.stopPropagation()
+        if (state.editor.previewMode || state.editor.liveMode) return;
         dispatch({
             type: 'CHANGE_CLICKED_ELEMENT',
             payload: {
@@ -30,6 +32,7 @@ const VideoComponent = (props: Props) => {
     }
 
     const handleDeleteElement = () => {
+        if (state.editor.previewMode || state.editor.liveMode) return;
         dispatch({
             type: 'DELETE_ELEMENT',
             payload: { elementDetails: props.element },
@@ -39,7 +42,7 @@ const VideoComponent = (props: Props) => {
     return (
         <div
             style={styles}
-            draggable
+            draggable={!state.editor.previewMode || !state.editor.liveMode}
             onDragStart={(e) => handleDragStart(e, 'video')}
             onClick={handleOnClick}
             className={clsx(

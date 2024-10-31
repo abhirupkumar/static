@@ -27,12 +27,14 @@ const ContactFormComponent = (props: Props) => {
     const router = useRouter()
 
     const handleDragStart = (e: React.DragEvent, type: EditorBtns) => {
+        if (state.editor.previewMode || state.editor.liveMode) return;
         if (type === null) return
         e.dataTransfer.setData('componentType', type)
     }
 
     const handleOnClickBody = (e: React.MouseEvent) => {
         e.stopPropagation()
+        if (state.editor.previewMode || state.editor.liveMode) return;
         dispatch({
             type: 'CHANGE_CLICKED_ELEMENT',
             payload: {
@@ -57,6 +59,7 @@ const ContactFormComponent = (props: Props) => {
     }
 
     const handleDeleteElement = () => {
+        if (state.editor.previewMode || state.editor.liveMode) return;
         dispatch({
             type: 'DELETE_ELEMENT',
             payload: { elementDetails: props.element },
@@ -95,7 +98,7 @@ const ContactFormComponent = (props: Props) => {
 
     return (
         <div
-            draggable
+            draggable={!state.editor.previewMode || !state.editor.liveMode}
             onDragStart={(e) => handleDragStart(e, 'contactForm')}
             onClick={handleOnClickBody}
             className={clsx(

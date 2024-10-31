@@ -36,6 +36,7 @@ const LinkComponent = (props: Props) => {
     const styles = props.element.styles
 
     const handleDeleteElement = () => {
+        if (state.editor.previewMode || state.editor.liveMode) return;
         dispatch({
             type: 'DELETE_ELEMENT',
             payload: { elementDetails: props.element },

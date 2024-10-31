@@ -19,6 +19,7 @@ const ImageComponent: React.FC<ImageProps> = ({ element }) => {
 
     const handleOnClickBody = (e: React.MouseEvent) => {
         e.stopPropagation();
+        if (state.editor.previewMode || state.editor.liveMode) return;
 
         dispatch({
             type: "CHANGE_CLICKED_ELEMENT",
@@ -29,6 +30,7 @@ const ImageComponent: React.FC<ImageProps> = ({ element }) => {
     };
 
     const handleDeleteElement = () => {
+        if (state.editor.previewMode || state.editor.liveMode) return;
         dispatch({
             type: "DELETE_ELEMENT",
             payload: { elementDetails: element },
@@ -38,7 +40,7 @@ const ImageComponent: React.FC<ImageProps> = ({ element }) => {
     return (
         <div
             style={element.styles}
-            draggable={!editor.liveMode}
+            draggable={!state.editor.previewMode || !state.editor.liveMode}
             onClick={handleOnClickBody}
             className={cn("p-0.5 w-full m-1 relative min-h-7 transition-all", {
                 "border-blue-600 border-solid":

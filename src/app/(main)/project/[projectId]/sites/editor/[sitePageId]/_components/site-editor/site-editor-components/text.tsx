@@ -13,6 +13,7 @@ const TextComponent = (props: Props) => {
     const { dispatch, state } = useEditor()
 
     const handleDeleteElement = () => {
+        if (state.editor.previewMode || state.editor.liveMode) return;
         dispatch({
             type: 'DELETE_ELEMENT',
             payload: { elementDetails: props.element },
@@ -22,6 +23,7 @@ const TextComponent = (props: Props) => {
 
     const handleOnClickBody = (e: React.MouseEvent) => {
         e.stopPropagation()
+        if (state.editor.previewMode || state.editor.liveMode) return;
         dispatch({
             type: 'CHANGE_CLICKED_ELEMENT',
             payload: {

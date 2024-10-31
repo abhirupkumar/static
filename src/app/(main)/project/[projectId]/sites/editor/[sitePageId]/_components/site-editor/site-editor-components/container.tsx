@@ -16,6 +16,7 @@ const Container = ({ element }: Props) => {
 
     const handleOnDrop = (e: React.DragEvent, type: string) => {
         e.stopPropagation()
+        if (state.editor.previewMode || state.editor.liveMode) return;
         const componentType = e.dataTransfer.getData('componentType') as EditorBtns
 
         switch (componentType) {
@@ -250,15 +251,18 @@ const Container = ({ element }: Props) => {
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault()
+        if (state.editor.previewMode || state.editor.liveMode) return;
     }
 
     const handleDragStart = (e: React.DragEvent, type: string) => {
         if (type === '__body') return
+        if (state.editor.previewMode || state.editor.liveMode) return;
         e.dataTransfer.setData('componentType', type)
     }
 
     const handleOnClickBody = (e: React.MouseEvent) => {
         e.stopPropagation()
+        if (state.editor.previewMode || state.editor.liveMode) return;
         dispatch({
             type: 'CHANGE_CLICKED_ELEMENT',
             payload: {
@@ -268,6 +272,7 @@ const Container = ({ element }: Props) => {
     }
 
     const handleDeleteElement = () => {
+        if (state.editor.previewMode || state.editor.liveMode) return;
         dispatch({
             type: 'DELETE_ELEMENT',
             payload: {
@@ -299,7 +304,7 @@ const Container = ({ element }: Props) => {
             })}
             onDrop={(e) => handleOnDrop(e, id)}
             onDragOver={handleDragOver}
-            draggable={type !== '__body'}
+            draggable={type !== '__body' || !state.editor.previewMode || !state.editor.liveMode}
             onClick={handleOnClickBody}
             onDragStart={(e) => handleDragStart(e, 'container')}
         >
