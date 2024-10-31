@@ -288,7 +288,7 @@ const Container = ({ element }: Props) => {
                 'max-w-full w-full': type === 'container' || type === '2Col' || type === '3Col',
                 'h-fit': type === 'container',
                 'h-full': type === '__body',
-                'overflow-scroll p-4': type === '__body',
+                'p-4': type === '__body',
                 'flex flex-col md:!flex-row': type === '2Col' || type === '3Col',
                 '!border-blue-600':
                     state.editor.selectedElement.id === id &&

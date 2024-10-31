@@ -630,7 +630,7 @@ export const upsertSitePage = async (
                         content: [],
                         id: '__body',
                         name: 'Body',
-                        styles: { backgroundColor: 'white' },
+                        styles: { backgroundColor: 'white', overflowX: "hidden" },
                         type: '__body',
                     },
                 ]),
@@ -662,7 +662,7 @@ export const getDomainContent = async (subDomainName: string) => {
         where: {
             subDomainName,
         },
-        include: { SitePages: true },
+        include: { SitePages: true, Project: true },
     })
     return response
 }

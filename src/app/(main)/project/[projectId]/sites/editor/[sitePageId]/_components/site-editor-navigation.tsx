@@ -119,7 +119,8 @@ const SiteEditorNavigation = ({
     }
   }
 
-  const handleSwitchChange = async () => {
+  const handleSwitchChange = async (e: any) => {
+    console.log("change")
     setIsLoading(true);
     const content = JSON.stringify(state.editor.elements)
     try {
@@ -260,9 +261,8 @@ const SiteEditorNavigation = ({
             <div className="flex flex-row items-center gap-4">
               Draft
               <Switch
-                disabled={isLoading}
                 checked={sitePageDetails.isPublished}
-                onChange={handleSwitchChange}
+                onCheckedChange={handleSwitchChange}
               />
               Publish
             </div>

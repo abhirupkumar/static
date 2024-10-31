@@ -20,7 +20,6 @@ export default clerkMiddleware((auth, req) => {
         .filter(Boolean)[0];
 
     if (customSubDomain) {
-        console.log("customDomain")
         return NextResponse.rewrite(
             new URL(`/${customSubDomain}${pathWithSearchParams}`, req.url)
         );

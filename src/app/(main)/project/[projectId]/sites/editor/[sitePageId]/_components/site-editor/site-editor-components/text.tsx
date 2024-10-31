@@ -76,7 +76,7 @@ const TextComponent = (props: Props) => {
                     },
                     suppressContentEditableWarning: true,
                     suppressHydrationWarning: true,
-                    suppressuncontrolledwarning: true,
+                    suppressUncontrolledWarning: true,
                 },
                 !Array.isArray(props.element.content) && props.element.content.innerText
             )}
