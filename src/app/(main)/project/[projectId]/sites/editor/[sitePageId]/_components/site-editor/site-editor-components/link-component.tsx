@@ -69,28 +69,32 @@ const LinkComponent = (props: Props) => {
                         {props.element.content.innerText}
                     </Link>
                 )}
-            {!state.editor.previewMode && !state.editor.liveMode && (
-                <span
+            {!Array.isArray(props.element.content) && !state.editor.previewMode && !state.editor.liveMode && (
+                <Link
                     contentEditable={!state.editor.liveMode}
+                    href={props.element.content.href || '#'}
                     onBlur={(e: any) => {
-                        const element = e.target
-                        dispatch({
-                            type: 'UPDATE_ELEMENT',
-                            payload: {
-                                elementDetails: {
-                                    ...props.element,
-                                    content: {
-                                        innerText: element.innerText,
-                                        href: element.href,
+                        if (!state.editor.liveMode) {
+                            const element = e.target
+                            dispatch({
+                                type: 'UPDATE_ELEMENT',
+                                payload: {
+                                    elementDetails: {
+                                        ...props.element,
+                                        content: {
+                                            innerText: element.innerText,
+                                            href: element.href,
+                                        },
                                     },
                                 },
-                            },
-                        })
+                            })
+                        }
                     }}
+                    onClick={(e) => e.preventDefault()}
                 >
                     {!Array.isArray(props.element.content) &&
                         props.element.content.innerText}
-                </span>
+                </Link>
             )}
             {state.editor.selectedElement.id === props.element.id &&
                 !state.editor.liveMode && (
