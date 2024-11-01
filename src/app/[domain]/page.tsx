@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: { params: { domain: string | 
                 icon: [
                     {
                         url: 'https://cdn.iconscout.com/icon/free/png-256/free-a-icon-download-in-svg-png-gif-file-formats--button-blood-type-symbols-pack-sign-icons-37808.png?f=ico',
-                        href: '/images/preview.png',
+                        href: 'https://cdn.iconscout.com/icon/free/png-256/free-a-icon-download-in-svg-png-gif-file-formats--button-blood-type-symbols-pack-sign-icons-37808.png?f=ico',
                     },
                 ],
             },

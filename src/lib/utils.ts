@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function constructMetadata({
   title = "Zyper - run your workspace",
   description = "Zyper - run your workspace in just aone place",
-  image = "/assets/preview.png",
+  image = "/assets/logo.png",
   noIndex = false,
 }: {
   title?: string;
@@ -26,6 +26,7 @@ export function constructMetadata({
       images: [
         {
           url: image,
+          href: image,
         },
       ],
     },
