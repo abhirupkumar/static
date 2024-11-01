@@ -7,10 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function constructMetadata({
-  title = "Zyper - run your workspace",
-  description = "Zyper - run your workspace in just aone place",
+  title = "Zyper - No Code Website Builder",
+  description = "Zyper - Create Stunning Websites Without Writing Code",
   image = "/assets/logo.png",
-  noIndex = false,
 }: {
   title?: string;
   description?: string;
@@ -38,11 +37,5 @@ export function constructMetadata({
       creator: "@Abhirup_2003",
     },
     metadataBase: new URL("https://zyper.tech"),
-    ...(noIndex && {
-      robots: {
-        index: false,
-        follow: false,
-      },
-    }),
   };
 }
