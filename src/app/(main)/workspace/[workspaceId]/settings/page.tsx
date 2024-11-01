@@ -5,11 +5,10 @@ import { currentUser } from '@clerk/nextjs/server'
 import React from 'react'
 
 type Props = {
-    params: Promise<{ workspaceId: string }>
+    params: { workspaceId: string }
 }
 
-const SettingsPage = async (props: Props) => {
-    const params = await props.params;
+const SettingsPage = async ({ params }: Props) => {
     const authUser = await currentUser()
     if (!authUser) return null
 

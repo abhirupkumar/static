@@ -28,14 +28,13 @@ import Link from 'next/link'
 import React from 'react'
 
 type Props = {
-    params: Promise<{ projectId: string }>
-    searchParams: Promise<{
+    params: { projectId: string }
+    searchParams: {
         code: string
-    }>
+    }
 }
 
-const ProjectPageId = async (props: Props) => {
-    const params = await props.params;
+const ProjectPageId = async ({ params, searchParams }: Props) => {
     let currency = 'USD'
     let sessions
     let totalClosedSessions

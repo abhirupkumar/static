@@ -8,14 +8,13 @@ import SiteEditor from './_components/site-editor'
 import { getSitePageDetails } from '@/lib/queries'
 
 type Props = {
-    params: Promise<{
+    params: {
         projectId: string
         sitePageId: string
-    }>
+    }
 }
 
-const Page = async (props: Props) => {
-    const params = await props.params;
+const Page = async ({ params }: Props) => {
 
     const sitePageDetails = await getSitePageDetails(params.sitePageId)
     if (!sitePageDetails) {

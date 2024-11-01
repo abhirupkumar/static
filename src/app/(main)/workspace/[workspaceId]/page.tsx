@@ -29,11 +29,10 @@ import CreateProjectButton from './_components/create-project-btn'
 import { ImageIcon } from 'lucide-react'
 
 type Props = {
-    params: Promise<{ workspaceId: string }>
+    params: { workspaceId: string }
 }
 
-const Page = async (props: Props) => {
-    const params = await props.params;
+const Page = async ({ params }: Props) => {
     const user = await getAuthUserDetails()
     if (!user) return
 

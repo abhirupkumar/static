@@ -12,16 +12,10 @@ import React from 'react'
 
 type Props = {
     children: React.ReactNode
-    params: Promise<{ workspaceId: string }>
+    params: { workspaceId: string }
 }
 
-const layout = async (props: Props) => {
-    const params = await props.params;
-
-    const {
-        children
-    } = props;
-
+const layout = async ({ children, params }: Props) => {
     const workspaceId = await verifyAndAcceptInvitation()
     const user = await currentUser()
 

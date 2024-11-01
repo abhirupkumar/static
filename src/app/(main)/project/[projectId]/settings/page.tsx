@@ -7,11 +7,10 @@ import { currentUser } from '@clerk/nextjs/server'
 import React from 'react'
 
 type Props = {
-    params: Promise<{ projectId: string }>
+    params: { projectId: string }
 }
 
-const ProjectSettingPage = async (props: Props) => {
-    const params = await props.params;
+const ProjectSettingPage = async ({ params }: Props) => {
     const authUser = await currentUser()
     if (!authUser) return
     const userDetails = await db.user.findUnique({

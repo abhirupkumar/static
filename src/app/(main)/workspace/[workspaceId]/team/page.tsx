@@ -7,11 +7,10 @@ import { columns } from './columns'
 import SendInvitation from '@/components/forms/send-invitation'
 
 type Props = {
-    params: Promise<{ workspaceId: string }>
+    params: { workspaceId: string }
 }
 
-const TeamPage = async (props: Props) => {
-    const params = await props.params;
+const TeamPage = async ({ params }: Props) => {
     const authUser = await currentUser()
     const teamMembers = await db.user.findMany({
         where: {

@@ -4,11 +4,10 @@ import { getMedia } from '@/lib/queries'
 import React from 'react'
 
 type Props = {
-    params: Promise<{ projectId: string }>
+    params: { projectId: string }
 }
 
-const MediaPage = async (props: Props) => {
-    const params = await props.params;
+const MediaPage = async ({ params }: Props) => {
     const data = await getMedia(params.projectId)
 
     return (
