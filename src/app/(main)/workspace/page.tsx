@@ -5,11 +5,12 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 import { constructMetadata } from "@/lib/utils";
 
-const Page = async ({
-    searchParams,
-}: {
-    searchParams: { state: string; code: string }
-}) => {
+const Page = async (
+    props: {
+        searchParams: Promise<{ state: string; code: string }>
+    }
+) => {
+    const searchParams = await props.searchParams;
     const workspaceId = await verifyAndAcceptInvitation()
 
     //get the users details

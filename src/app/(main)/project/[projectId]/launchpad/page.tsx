@@ -16,14 +16,15 @@ import Link from 'next/link'
 import React from 'react'
 
 type Props = {
-    searchParams: {
+    searchParams: Promise<{
         state: string
         code: string
-    }
-    params: { projectId: string }
+    }>
+    params: Promise<{ projectId: string }>
 }
 
-const LaunchPad = async ({ params, searchParams }: Props) => {
+const LaunchPad = async (props: Props) => {
+    const params = await props.params;
     const projectDetails = await db.project.findUnique({
         where: {
             id: params.projectId,
@@ -70,7 +71,7 @@ const LaunchPad = async ({ params, searchParams }: Props) => {
     //   }
 
     return (
-        <BlurPage>
+        (<BlurPage>
             <div className="flex flex-col justify-center items-center">
                 <div className="w-full h-full max-w-[800px]">
                     <Card className="border-none ">
@@ -119,12 +120,11 @@ const LaunchPad = async ({ params, searchParams }: Props) => {
                                     //     className="bg-primary py-2 px-4 rounded-md text-white"
                                     //     href={stripeOAuthLink}
                                     //   >
-                                    <Link
+                                    (<Link
                                         className="bg-primary py-2 px-4 rounded-md text-white"
                                         href={"#"}
-                                    >
-                                        Start
-                                    </Link>
+                                    >Start
+                                                                            </Link>)
                                 )}
                             </div>
                             <div className="flex justify-between items-center w-full h-20 border p-4 rounded-lg">
@@ -156,8 +156,8 @@ const LaunchPad = async ({ params, searchParams }: Props) => {
                     </Card>
                 </div>
             </div>
-        </BlurPage>
-    )
+        </BlurPage>)
+    );
 }
 
 export default LaunchPad

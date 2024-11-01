@@ -11,7 +11,8 @@ interface DomainPageProps {
     };
 }
 
-const DomainPage: React.FC<DomainPageProps> = async ({ params }) => {
+const DomainPage: React.FC<DomainPageProps> = async props => {
+    const params = await props.params;
     const { domain } = params;
 
     if (!domain) notFound();
@@ -46,7 +47,8 @@ const DomainPage: React.FC<DomainPageProps> = async ({ params }) => {
     );
 };
 
-export async function generateMetadata({ params }: { params: { domain: string | undefined; }; }) {
+export async function generateMetadata(props: { params: Promise<{ domain: string | undefined; }>; }) {
+    const params = await props.params;
     const { domain } = params;
 
     if (!domain) return;

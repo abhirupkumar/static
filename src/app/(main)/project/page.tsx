@@ -5,10 +5,11 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 
 type Props = {
-    searchParams: { state: string; code: string }
+    searchParams: Promise<{ state: string; code: string }>
 }
 
-const ProjectMainPage = async ({ searchParams }: Props) => {
+const ProjectMainPage = async (props: Props) => {
+    const searchParams = await props.searchParams;
     const workspaceId = await verifyAndAcceptInvitation();
     if (!workspaceId) {
         return <Unauthorized />

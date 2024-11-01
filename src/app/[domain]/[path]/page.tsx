@@ -11,7 +11,8 @@ interface DomainPathPageProps {
     };
 }
 
-const DomainPathPage: React.FC<DomainPathPageProps> = async ({ params }) => {
+const DomainPathPage: React.FC<DomainPathPageProps> = async props => {
+    const params = await props.params;
     const { domain, path } = params;
 
     if (!domain || !path) notFound();

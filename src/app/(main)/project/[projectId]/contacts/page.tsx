@@ -16,10 +16,11 @@ import React from 'react'
 import CraeteContactButton from './_components/create-contact-btn'
 
 type Props = {
-    params: { projectId: string }
+    params: Promise<{ projectId: string }>
 }
 
-const ContactPage = async ({ params }: Props) => {
+const ContactPage = async (props: Props) => {
+    const params = await props.params;
 
     const contacts = await db.project.findMany({
         where: {

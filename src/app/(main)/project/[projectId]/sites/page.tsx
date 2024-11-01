@@ -8,7 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export const revalidate = 0;
 
-const Sites = async ({ params }: { params: { projectId: string } }) => {
+const Sites = async (props: { params: Promise<{ projectId: string }> }) => {
+    const params = await props.params;
     const site = await getProjectSite(params.projectId)
     if (!site) return <BlurPage>
         <SiteForm projectId={params.projectId}></SiteForm>
@@ -41,7 +42,6 @@ const Sites = async ({ params }: { params: { projectId: string } }) => {
             </Tabs>
         </BlurPage>
     )
-
 }
 
 export default Sites
