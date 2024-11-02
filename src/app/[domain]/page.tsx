@@ -73,8 +73,8 @@ export async function generateMetadata({ params }: { params: { domain: string | 
             icons: {
                 icon: [
                     {
-                        url: 'https://cdn.iconscout.com/icon/free/png-256/free-a-icon-download-in-svg-png-gif-file-formats--button-blood-type-symbols-pack-sign-icons-37808.png?f=ico',
-                        href: 'https://cdn.iconscout.com/icon/free/png-256/free-a-icon-download-in-svg-png-gif-file-formats--button-blood-type-symbols-pack-sign-icons-37808.png?f=ico',
+                        url: domainData.favicon || domainData.Project.projectLogo || '/assets/images/logo.png',
+                        href: domainData.favicon || domainData.Project.projectLogo || '/assets/images/logo.png',
                     },
                 ],
             },
