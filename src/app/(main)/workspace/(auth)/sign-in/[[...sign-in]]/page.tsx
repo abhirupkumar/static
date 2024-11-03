@@ -11,5 +11,5 @@ const Page = () => {
 export default Page
 
 export const metadata = constructMetadata({
-    title: "Sign In - Zyper",
+    title: "Sign In - Static",
 });

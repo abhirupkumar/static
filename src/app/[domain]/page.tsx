@@ -84,7 +84,7 @@ export async function generateMetadata({ params }: { params: { domain: string | 
                 description,
             },
             type: 'website',
-            metadataBase: `https://${domainData.subDomainName}.zyper.vercel.app`,
+            metadataBase: `https://${domainData.subDomainName}.static.vercel.app`,
         },
     }
 }

@@ -17,8 +17,8 @@ const Navigation = async () => {
   return (
     <header className="p-4 flex items-center justify-between backdrop-blur-sm relative">
       <aside className="flex items-center gap-x-2">
-        <Image src="/assets/logo.png" width={45} height={45} alt="Zyper Logo" />
-        <span className={`text-xl font-bold z-10 ${novaSquare.className}`}>Zyper.</span>
+        <Image src="/assets/logo.png" width={45} height={45} alt="Static Logo" />
+        <span className={`text-xl font-bold z-10 ${novaSquare.className}`}>Static.</span>
       </aside>
       <nav className="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <ul className="flex items-center gap-8">

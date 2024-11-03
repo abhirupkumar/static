@@ -17,7 +17,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Zyper',
+  title: 'Static',
   description: 'All in one Workspace Solution',
 }
 

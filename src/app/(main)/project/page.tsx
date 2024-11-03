@@ -41,5 +41,5 @@ export default ProjectMainPage
 
 
 export const metadata = constructMetadata({
-    title: "Project - Zyper",
+    title: "Project - Static",
 });

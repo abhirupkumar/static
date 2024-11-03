@@ -48,5 +48,5 @@ export default Page;
 
 
 export const metadata = constructMetadata({
-    title: "Workspace - Zyper",
+    title: "Workspace - Static",
 });
