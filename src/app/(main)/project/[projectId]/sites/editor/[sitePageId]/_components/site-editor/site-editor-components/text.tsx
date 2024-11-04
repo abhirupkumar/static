@@ -22,6 +22,7 @@ const TextComponent = (props: Props) => {
     const styles = props.element.styles as { [key: string]: CSSProperties }
 
     const getStyles = () => {
+        console.log("styles: ", styles)
         const deviceType = state.editor.device;
         if (deviceType === 'Tablet') {
             return styles['@media (max-width: 768px)'] || styles;
