@@ -1,5 +1,5 @@
 'use client'
-import React, { ChangeEventHandler, useEffect } from 'react'
+import React, { CSSProperties, ChangeEventHandler, useEffect } from 'react'
 import {
     Accordion,
     AccordionContent,
@@ -41,11 +41,37 @@ const SettingsTab = () => {
 
     const { state, dispatch } = useEditor();
 
+    const getStyleValue = (styleName: keyof CSSProperties) => {
+        const styles = state.editor.selectedElement.styles as { [key: string]: CSSProperties };
+        const deviceType = state.editor.device
+
+        if (deviceType === 'Tablet') {
+            return styles['@media (max-width: 768px)']?.[styleName] || styles[styleName] || "";
+        }
+        if (deviceType === 'Mobile') {
+            return styles['@media (max-width: 480px)']?.[styleName] || styles[styleName] || "";
+        }
+        return styles[styleName] || "";
+    };
+
+
     const handleOnChanges = (e: any) => {
         const styleSettings = e.target.id
         let value = e.target.value
-        const styleObject = {
-            [styleSettings]: value,
+        let styleObject;
+        if (state.editor.device == 'Desktop') {
+            styleObject = {
+                [styleSettings]: value,
+            }
+        }
+        else {
+            const mediaQuery = state.editor.device === 'Tablet' ? '@media (max-width: 768px)' : '@media (max-width: 480px)';
+
+            styleObject = {
+                [mediaQuery]: {
+                    [styleSettings]: value,
+                },
+            };
         }
 
         dispatch({
@@ -284,7 +310,7 @@ const SettingsTab = () => {
                                     },
                                 })
                             }
-                            value={state.editor.selectedElement.styles.textAlign || ""}
+                            value={getStyleValue("textAlign").toString()}
                         >
                             <TabsList className="flex items-center flex-row justify-between border-[1px] rounded-md bg-transparent h-fit gap-4">
                                 <TabsTrigger
@@ -319,7 +345,7 @@ const SettingsTab = () => {
                         <Input
                             id="DM Sans"
                             onChange={handleOnChanges}
-                            value={state.editor.selectedElement.styles.fontFamily || ""}
+                            value={getStyleValue("fontFamily").toString()}
                         />
                     </div>
                     <div className="flex flex-col gap-2">
@@ -327,7 +353,7 @@ const SettingsTab = () => {
                         <Input
                             id="color"
                             onChange={handleOnChanges}
-                            value={state.editor.selectedElement.styles.color || ""}
+                            value={getStyleValue("color").toString()}
                         />
                     </div>
                     <div className="flex gap-4">
@@ -342,6 +368,7 @@ const SettingsTab = () => {
                                         },
                                     })
                                 }
+                                value={getStyleValue("fontWeight").toString()}
                             >
                                 <SelectTrigger className="w-[180px] font-">
                                     <SelectValue placeholder="Select a weight" />
@@ -368,7 +395,7 @@ const SettingsTab = () => {
                                 placeholder="px"
                                 id="fontSize"
                                 onChange={handleOnChanges}
-                                value={state.editor.selectedElement.styles.fontSize || ""}
+                                value={getStyleValue("fontSize").toString()}
                             />
                         </div>
                     </div>
@@ -392,7 +419,7 @@ const SettingsTab = () => {
                                             id="height"
                                             placeholder="px"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.height || ""}
+                                            value={getStyleValue("height").toString()}
                                         />
                                     </div>
                                     <div>
@@ -401,7 +428,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="width"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.width || ""}
+                                            value={getStyleValue("width").toString()}
                                         />
                                     </div>
                                 </div>
@@ -414,7 +441,7 @@ const SettingsTab = () => {
                                             id="maxHeight"
                                             placeholder="px"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.maxHeight || ""}
+                                            value={getStyleValue("maxHeight").toString()}
                                         />
                                     </div>
                                     <div>
@@ -423,7 +450,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="maxWidth"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.maxWidth || ""}
+                                            value={getStyleValue("maxWidth").toString()}
                                         />
                                     </div>
                                 </div>
@@ -436,7 +463,7 @@ const SettingsTab = () => {
                                             id="minHeight"
                                             placeholder="px"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.minHeight || ""}
+                                            value={getStyleValue("minHeight").toString()}
                                         />
                                     </div>
                                     <div>
@@ -445,7 +472,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="minWidth"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.minWidth || ""}
+                                            value={getStyleValue("minWidth").toString()}
                                         />
                                     </div>
                                 </div>
@@ -459,7 +486,7 @@ const SettingsTab = () => {
                                             id="marginTop"
                                             placeholder="px"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.marginTop || ""}
+                                            value={getStyleValue("marginTop").toString()}
                                         />
                                     </div>
                                     <div>
@@ -468,7 +495,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="marginBottom"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.marginBottom || ""}
+                                            value={getStyleValue("marginBottom").toString()}
                                         />
                                     </div>
                                 </div>
@@ -479,7 +506,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="marginLeft"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.marginLeft || ""}
+                                            value={getStyleValue("marginLeft").toString()}
                                         />
                                     </div>
                                     <div>
@@ -488,7 +515,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="marginRight"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.marginRight || ""}
+                                            value={getStyleValue("marginRight").toString()}
                                         />
                                     </div>
                                 </div>
@@ -504,7 +531,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="paddingTop"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.paddingTop || ""}
+                                            value={getStyleValue("paddingTop").toString()}
                                         />
                                     </div>
                                     <div>
@@ -513,7 +540,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="paddingBottom"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.paddingBottom || ""}
+                                            value={getStyleValue("paddingBottom").toString()}
                                         />
                                     </div>
                                 </div>
@@ -524,7 +551,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="paddingLeft"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.paddingLeft || ""}
+                                            value={getStyleValue("paddingLeft").toString()}
                                         />
                                     </div>
                                     <div>
@@ -533,7 +560,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="paddingRight"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.paddingRight || ""}
+                                            value={getStyleValue("paddingRight").toString()}
                                         />
                                     </div>
                                 </div>
@@ -552,6 +579,7 @@ const SettingsTab = () => {
                                             },
                                         })
                                     }
+                                    value={getStyleValue("overflowX").toString()}
                                 >
                                     <SelectTrigger className="w-[180px]">
                                         <SelectValue placeholder="Select Overflow" />
@@ -578,6 +606,7 @@ const SettingsTab = () => {
                                             },
                                         })
                                     }
+                                    value={getStyleValue("overflowY").toString()}
                                 >
                                     <SelectTrigger className="w-[180px]">
                                         <SelectValue placeholder="Select Overflow" />
@@ -612,6 +641,7 @@ const SettingsTab = () => {
                                 },
                             })
                         }
+                        value={getStyleValue("position").toString()}
                     >
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Select a Position" />
@@ -636,7 +666,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="top"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.top || ""}
+                                        value={getStyleValue("top").toString()}
                                     />
                                 </div>
                                 <div>
@@ -645,7 +675,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="bottom"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.bottom || ""}
+                                        value={getStyleValue("bottom").toString()}
                                     />
                                 </div>
                             </div>
@@ -656,7 +686,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="left"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.left || ""}
+                                        value={getStyleValue("left").toString()}
                                     />
                                 </div>
                                 <div>
@@ -665,7 +695,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="right"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.right || ""}
+                                        value={getStyleValue("right").toString()}
                                     />
                                 </div>
                             </div>
@@ -677,7 +707,7 @@ const SettingsTab = () => {
                             placeholder="0"
                             id="zIndex"
                             onChange={handleOnChanges}
-                            value={state.editor.selectedElement.styles.zIndex || ""}
+                            value={getStyleValue("zIndex").toString()}
                         />
                     </div>
                 </AccordionContent>
@@ -694,15 +724,15 @@ const SettingsTab = () => {
                         <Label className="text-muted-foreground">Opacity</Label>
                         <div className="flex items-center justify-end">
                             <small className="p-2">
-                                {typeof state.editor.selectedElement.styles?.opacity ===
-                                    'number'
-                                    ? state.editor.selectedElement.styles?.opacity
-                                    : parseFloat(
-                                        (
-                                            state.editor.selectedElement.styles?.opacity || '0'
-                                        ).replace('%', '')
-                                    ) || 0}
-                                %
+                                {(() => {
+                                    const opacityValue = getStyleValue('opacity');
+                                    const numericOpacity =
+                                        typeof opacityValue === 'number'
+                                            ? opacityValue
+                                            : parseFloat((opacityValue || '0').toString().replace('%', ''));
+
+                                    return `${numericOpacity}%`;
+                                })()}
                             </small>
                         </div>
                         <Slider
@@ -715,56 +745,63 @@ const SettingsTab = () => {
                                 })
                             }}
                             defaultValue={[
-                                typeof state.editor.selectedElement.styles?.opacity === 'number'
-                                    ? state.editor.selectedElement.styles?.opacity
-                                    : parseFloat(
-                                        (
-                                            state.editor.selectedElement.styles?.opacity || '0'
-                                        ).replace('%', '')
-                                    ) || 0,
+                                (() => {
+                                    const opacityValue = getStyleValue('opacity');
+                                    return typeof opacityValue === 'number'
+                                        ? opacityValue
+                                        : parseFloat((opacityValue || '0').toString().replace('%', '')) || 0;
+                                })(),
                             ]}
                             max={100}
                             step={1}
                         />
                     </div>
-                    <div>
-                        <Label className="text-muted-foreground">Border Radius</Label>
-                        <div className="flex items-center justify-end">
-                            <small className="">
-                                {typeof state.editor.selectedElement.styles?.borderRadius ===
-                                    'number'
-                                    ? state.editor.selectedElement.styles?.borderRadius
-                                    : parseFloat(
-                                        (
-                                            state.editor.selectedElement.styles?.borderRadius || '0'
-                                        ).replace('px', '')
-                                    ) || 0}
-                                px
-                            </small>
+                    <div className="flex flex-col gap-2">
+                        <p>Border Radius px</p>
+                        <div className="flex gap-4 flex-col">
+                            <div className="flex gap-4">
+                                <div>
+                                    <Label className="text-muted-foreground">Top Left</Label>
+                                    <Input
+                                        placeholder="px"
+                                        id="borderTopLeftRadius"
+                                        onChange={handleOnChanges}
+                                        value={getStyleValue("borderTopLeftRadius").toString()}
+                                    />
+                                </div>
+                                <div>
+                                    <Label className="text-muted-foreground">Top Right</Label>
+                                    <Input
+                                        placeholder="px"
+                                        id="borderTopRightRadius"
+                                        onChange={handleOnChanges}
+                                        value={getStyleValue("borderTopRightRadius").toString()}
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex gap-4">
+                                <div>
+                                    <Label className="text-muted-foreground">Bottom Left</Label>
+                                    <Input
+                                        placeholder="px"
+                                        id="borderBottomLeftRadius"
+                                        onChange={handleOnChanges}
+                                        value={getStyleValue("borderBottomLeftRadius").toString()}
+                                    />
+                                </div>
+                                <div>
+                                    <Label className="text-muted-foreground">Bottom Right</Label>
+                                    <Input
+                                        placeholder="px"
+                                        id="borderBottomRightRadius"
+                                        onChange={handleOnChanges}
+                                        value={getStyleValue("borderBottomRightRadius").toString()}
+                                    />
+                                </div>
+                            </div>
                         </div>
-                        <Slider
-                            onValueChange={(e) => {
-                                handleOnChanges({
-                                    target: {
-                                        id: 'borderRadius',
-                                        value: `${e[0]}px`,
-                                    },
-                                })
-                            }}
-                            defaultValue={[
-                                typeof state.editor.selectedElement.styles?.borderRadius ===
-                                    'number'
-                                    ? state.editor.selectedElement.styles?.borderRadius
-                                    : parseFloat(
-                                        (
-                                            state.editor.selectedElement.styles?.borderRadius || '0'
-                                        ).replace('%', '')
-                                    ) || 0,
-                            ]}
-                            max={100}
-                            step={1}
-                        />
                     </div>
+
                     <div className="flex flex-col gap-2 mt-2">
                         <p>Border Width</p>
                         <div className="flex gap-4 flex-col">
@@ -775,7 +812,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="borderTopWidth"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.borderTopWidth || ""}
+                                        value={getStyleValue("borderTopWidth").toString()}
                                     />
                                 </div>
                                 <div>
@@ -784,7 +821,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="borderBottomWidth"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.borderBottomWidth || ""}
+                                        value={getStyleValue("borderBottomWidth").toString()}
                                     />
                                 </div>
                             </div>
@@ -795,7 +832,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="borderLeftWidth"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.borderLeftWidth || ""}
+                                        value={getStyleValue("borderLeftWidth").toString()}
                                     />
                                 </div>
                                 <div>
@@ -804,7 +841,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="borderRightWidth"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.borderRightWidth || ""}
+                                        value={getStyleValue("borderRightWidth").toString()}
                                     />
                                 </div>
                             </div>
@@ -816,17 +853,17 @@ const SettingsTab = () => {
                             placeholder="16/9 | 4/3 ..."
                             id="aspectRatio"
                             onChange={handleOnChanges}
-                            value={state.editor.selectedElement.styles.aspectRatio || ""}
+                            value={getStyleValue("aspectRatio").toString()}
                         />
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label className="text-muted-foreground">Background Color</Label>
-                        <div className="flex  border-[1px] rounded-md overflow-clip">
+                        <div className="flex border-[1px] rounded-md overflow-clip">
                             <div
                                 className="w-12 "
                                 style={{
                                     backgroundColor:
-                                        state.editor.selectedElement.styles.backgroundColor || "",
+                                        getStyleValue("backgroundColor").toString(),
                                 }}
                             />
                             <Input
@@ -834,7 +871,7 @@ const SettingsTab = () => {
                                 className="!border-y-0 rounded-none !border-r-0 mr-2"
                                 id="backgroundColor"
                                 onChange={handleOnChanges}
-                                value={state.editor.selectedElement.styles.backgroundColor || ""}
+                                value={getStyleValue("backgroundColor").toString()}
                             />
                         </div>
                     </div>
@@ -845,15 +882,15 @@ const SettingsTab = () => {
                                 className="w-12 "
                                 style={{
                                     backgroundImage:
-                                        state.editor.selectedElement.styles.backgroundImage || "",
+                                        getStyleValue("backgroundImage").toString(),
                                 }}
                             />
                             <Input
-                                placeholder="url()"
+                                placeholder="url('/path/to/image')"
                                 className="!border-y-0 rounded-none !border-r-0 mr-2"
                                 id="backgroundImage"
                                 onChange={handleOnChanges}
-                                value={state.editor.selectedElement.styles.backgroundImage || ""}
+                                value={getStyleValue("backgroundImage").toString()}
                             />
                         </div>
                     </div>
@@ -868,7 +905,7 @@ const SettingsTab = () => {
                                     },
                                 })
                             }
-                            value={state.editor.selectedElement.styles.backgroundSize?.toString() || ""}
+                            value={getStyleValue("backgroundSize").toString()}
                         >
                             <TabsList className="flex items-center flex-row justify-between border-[1px] rounded-md bg-transparent h-fit gap-4">
                                 <TabsTrigger
@@ -903,9 +940,10 @@ const SettingsTab = () => {
                                     },
                                 })
                             }
+                            value={getStyleValue("cursor").toString()}
                         >
                             <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Select a Cursore type" />
+                                <SelectValue placeholder="Select a Cursor type" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
@@ -945,6 +983,7 @@ const SettingsTab = () => {
                                     },
                                 })
                             }
+                            value={getStyleValue("backgroundRepeat").toString()}
                         >
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Select a Repeat Type" />
@@ -981,6 +1020,7 @@ const SettingsTab = () => {
                                     },
                                 })
                             }
+                            value={getStyleValue("display").toString()}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Select display" />
@@ -1007,7 +1047,7 @@ const SettingsTab = () => {
                                 },
                             })
                         }
-                        value={state.editor.selectedElement.styles.justifyContent}
+                        value={getStyleValue("justifyContent").toString()}
                     >
                         <TabsList className="flex items-center flex-row justify-between border-[1px] rounded-md bg-transparent h-fit gap-4">
                             <TabsTrigger
@@ -1052,7 +1092,7 @@ const SettingsTab = () => {
                                 },
                             })
                         }
-                        value={state.editor.selectedElement.styles.alignItems}
+                        value={getStyleValue("alignItems").toString()}
                     >
                         <TabsList className="flex items-center flex-row justify-between border-[1px] rounded-md bg-transparent h-fit gap-4">
                             <TabsTrigger
@@ -1092,6 +1132,7 @@ const SettingsTab = () => {
                                     },
                                 })
                             }
+                            value={getStyleValue("flexDirection").toString()}
                         >
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Select a Direction" />
@@ -1115,7 +1156,7 @@ const SettingsTab = () => {
                                     id="columnGap"
                                     placeholder="px"
                                     onChange={handleOnChanges}
-                                    value={state.editor.selectedElement.styles.columnGap || ""}
+                                    value={getStyleValue("columnGap").toString()}
                                 />
                             </div>
                             <div>
@@ -1124,7 +1165,7 @@ const SettingsTab = () => {
                                     placeholder="px"
                                     id="rowGap"
                                     onChange={handleOnChanges}
-                                    value={state.editor.selectedElement.styles.rowGap || ""}
+                                    value={getStyleValue("rowGap").toString()}
                                 />
                             </div>
                         </div>
