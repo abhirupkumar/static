@@ -191,7 +191,7 @@ const SettingsTab = () => {
                                     id="href"
                                     placeholder="https:domain.example.com/pathname"
                                     onChange={handleChangeCustomValues}
-                                    value={state.editor.selectedElement.content.href}
+                                    value={state.editor.selectedElement.content.href || ""}
                                 />
                             </div>
                         )}
@@ -202,7 +202,7 @@ const SettingsTab = () => {
                                 id="src"
                                 placeholder="https://domain.example.com/pathname"
                                 onChange={handleChangeCustomValues}
-                                value={state.editor.selectedElement.content.src}
+                                value={state.editor.selectedElement.content.src || ""}
                             />
                         </div>
                     )}
@@ -214,7 +214,7 @@ const SettingsTab = () => {
                                     id="formTitle"
                                     placeholder="Want a free quote? We can help you"
                                     onChange={handleChangeCustomValues}
-                                    value={state.editor.selectedElement.content.formTitle}
+                                    value={state.editor.selectedElement.content.formTitle || ""}
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
@@ -224,7 +224,7 @@ const SettingsTab = () => {
                                     placeholder="Get in touch with our team"
                                     onChange={handleChangeCustomValues}
                                     value={
-                                        state.editor.selectedElement.content.formDescription
+                                        state.editor.selectedElement.content.formDescription || ""
                                     }
                                 />
                             </div>
@@ -234,7 +234,7 @@ const SettingsTab = () => {
                                     id="formButton"
                                     placeholder="Submit"
                                     onChange={handleChangeCustomValues}
-                                    value={state.editor.selectedElement.content.formButton}
+                                    value={state.editor.selectedElement.content.formButton || ""}
                                 />
                             </div>
                         </div>
@@ -247,7 +247,7 @@ const SettingsTab = () => {
                                     id="src"
                                     placeholder="https://domain.example.com/pathname"
                                     onChange={handleChangeCustomValues}
-                                    value={state.editor.selectedElement.content.src}
+                                    value={state.editor.selectedElement.content.src || ""}
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
@@ -257,7 +257,7 @@ const SettingsTab = () => {
                                     placeholder="Image description"
                                     onChange={handleChangeCustomValues}
                                     value={
-                                        state.editor.selectedElement.content.alt
+                                        state.editor.selectedElement.content.alt || ""
                                     }
                                 />
                             </div>
@@ -284,7 +284,7 @@ const SettingsTab = () => {
                                     },
                                 })
                             }
-                            value={state.editor.selectedElement.styles.textAlign}
+                            value={state.editor.selectedElement.styles.textAlign || ""}
                         >
                             <TabsList className="flex items-center flex-row justify-between border-[1px] rounded-md bg-transparent h-fit gap-4">
                                 <TabsTrigger
@@ -319,7 +319,7 @@ const SettingsTab = () => {
                         <Input
                             id="DM Sans"
                             onChange={handleOnChanges}
-                            value={state.editor.selectedElement.styles.fontFamily}
+                            value={state.editor.selectedElement.styles.fontFamily || ""}
                         />
                     </div>
                     <div className="flex flex-col gap-2">
@@ -327,7 +327,7 @@ const SettingsTab = () => {
                         <Input
                             id="color"
                             onChange={handleOnChanges}
-                            value={state.editor.selectedElement.styles.color}
+                            value={state.editor.selectedElement.styles.color || ""}
                         />
                     </div>
                     <div className="flex gap-4">
@@ -368,7 +368,7 @@ const SettingsTab = () => {
                                 placeholder="px"
                                 id="fontSize"
                                 onChange={handleOnChanges}
-                                value={state.editor.selectedElement.styles.fontSize}
+                                value={state.editor.selectedElement.styles.fontSize || ""}
                             />
                         </div>
                     </div>
@@ -392,7 +392,7 @@ const SettingsTab = () => {
                                             id="height"
                                             placeholder="px"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.height}
+                                            value={state.editor.selectedElement.styles.height || ""}
                                         />
                                     </div>
                                     <div>
@@ -401,7 +401,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="width"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.width}
+                                            value={state.editor.selectedElement.styles.width || ""}
                                         />
                                     </div>
                                 </div>
@@ -414,7 +414,7 @@ const SettingsTab = () => {
                                             id="maxHeight"
                                             placeholder="px"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.maxHeight}
+                                            value={state.editor.selectedElement.styles.maxHeight || ""}
                                         />
                                     </div>
                                     <div>
@@ -423,7 +423,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="maxWidth"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.maxWidth}
+                                            value={state.editor.selectedElement.styles.maxWidth || ""}
                                         />
                                     </div>
                                 </div>
@@ -436,7 +436,7 @@ const SettingsTab = () => {
                                             id="minHeight"
                                             placeholder="px"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.minHeight}
+                                            value={state.editor.selectedElement.styles.minHeight || ""}
                                         />
                                     </div>
                                     <div>
@@ -445,7 +445,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="minWidth"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.minWidth}
+                                            value={state.editor.selectedElement.styles.minWidth || ""}
                                         />
                                     </div>
                                 </div>
@@ -459,7 +459,7 @@ const SettingsTab = () => {
                                             id="marginTop"
                                             placeholder="px"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.marginTop}
+                                            value={state.editor.selectedElement.styles.marginTop || ""}
                                         />
                                     </div>
                                     <div>
@@ -468,7 +468,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="marginBottom"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.marginBottom}
+                                            value={state.editor.selectedElement.styles.marginBottom || ""}
                                         />
                                     </div>
                                 </div>
@@ -479,7 +479,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="marginLeft"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.marginLeft}
+                                            value={state.editor.selectedElement.styles.marginLeft || ""}
                                         />
                                     </div>
                                     <div>
@@ -488,7 +488,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="marginRight"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.marginRight}
+                                            value={state.editor.selectedElement.styles.marginRight || ""}
                                         />
                                     </div>
                                 </div>
@@ -504,7 +504,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="paddingTop"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.paddingTop}
+                                            value={state.editor.selectedElement.styles.paddingTop || ""}
                                         />
                                     </div>
                                     <div>
@@ -513,7 +513,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="paddingBottom"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.paddingBottom}
+                                            value={state.editor.selectedElement.styles.paddingBottom || ""}
                                         />
                                     </div>
                                 </div>
@@ -524,7 +524,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="paddingLeft"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.paddingLeft}
+                                            value={state.editor.selectedElement.styles.paddingLeft || ""}
                                         />
                                     </div>
                                     <div>
@@ -533,7 +533,7 @@ const SettingsTab = () => {
                                             placeholder="px"
                                             id="paddingRight"
                                             onChange={handleOnChanges}
-                                            value={state.editor.selectedElement.styles.paddingRight}
+                                            value={state.editor.selectedElement.styles.paddingRight || ""}
                                         />
                                     </div>
                                 </div>
@@ -636,7 +636,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="top"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.top}
+                                        value={state.editor.selectedElement.styles.top || ""}
                                     />
                                 </div>
                                 <div>
@@ -645,7 +645,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="bottom"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.bottom}
+                                        value={state.editor.selectedElement.styles.bottom || ""}
                                     />
                                 </div>
                             </div>
@@ -656,7 +656,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="left"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.left}
+                                        value={state.editor.selectedElement.styles.left || ""}
                                     />
                                 </div>
                                 <div>
@@ -665,7 +665,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="right"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.right}
+                                        value={state.editor.selectedElement.styles.right || ""}
                                     />
                                 </div>
                             </div>
@@ -677,7 +677,7 @@ const SettingsTab = () => {
                             placeholder="0"
                             id="zIndex"
                             onChange={handleOnChanges}
-                            value={state.editor.selectedElement.styles.zIndex}
+                            value={state.editor.selectedElement.styles.zIndex || ""}
                         />
                     </div>
                 </AccordionContent>
@@ -775,7 +775,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="borderTopWidth"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.borderTopWidth}
+                                        value={state.editor.selectedElement.styles.borderTopWidth || ""}
                                     />
                                 </div>
                                 <div>
@@ -784,7 +784,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="borderBottomWidth"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.borderBottomWidth}
+                                        value={state.editor.selectedElement.styles.borderBottomWidth || ""}
                                     />
                                 </div>
                             </div>
@@ -795,7 +795,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="borderLeftWidth"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.borderLeftWidth}
+                                        value={state.editor.selectedElement.styles.borderLeftWidth || ""}
                                     />
                                 </div>
                                 <div>
@@ -804,7 +804,7 @@ const SettingsTab = () => {
                                         placeholder="px"
                                         id="borderRightWidth"
                                         onChange={handleOnChanges}
-                                        value={state.editor.selectedElement.styles.borderRightWidth}
+                                        value={state.editor.selectedElement.styles.borderRightWidth || ""}
                                     />
                                 </div>
                             </div>
@@ -816,7 +816,7 @@ const SettingsTab = () => {
                             placeholder="16/9 | 4/3 ..."
                             id="aspectRatio"
                             onChange={handleOnChanges}
-                            value={state.editor.selectedElement.styles.aspectRatio}
+                            value={state.editor.selectedElement.styles.aspectRatio || ""}
                         />
                     </div>
                     <div className="flex flex-col gap-2">
@@ -826,7 +826,7 @@ const SettingsTab = () => {
                                 className="w-12 "
                                 style={{
                                     backgroundColor:
-                                        state.editor.selectedElement.styles.backgroundColor,
+                                        state.editor.selectedElement.styles.backgroundColor || "",
                                 }}
                             />
                             <Input
@@ -834,7 +834,7 @@ const SettingsTab = () => {
                                 className="!border-y-0 rounded-none !border-r-0 mr-2"
                                 id="backgroundColor"
                                 onChange={handleOnChanges}
-                                value={state.editor.selectedElement.styles.backgroundColor}
+                                value={state.editor.selectedElement.styles.backgroundColor || ""}
                             />
                         </div>
                     </div>
@@ -845,7 +845,7 @@ const SettingsTab = () => {
                                 className="w-12 "
                                 style={{
                                     backgroundImage:
-                                        state.editor.selectedElement.styles.backgroundImage,
+                                        state.editor.selectedElement.styles.backgroundImage || "",
                                 }}
                             />
                             <Input
@@ -853,7 +853,7 @@ const SettingsTab = () => {
                                 className="!border-y-0 rounded-none !border-r-0 mr-2"
                                 id="backgroundImage"
                                 onChange={handleOnChanges}
-                                value={state.editor.selectedElement.styles.backgroundImage}
+                                value={state.editor.selectedElement.styles.backgroundImage || ""}
                             />
                         </div>
                     </div>
@@ -868,7 +868,7 @@ const SettingsTab = () => {
                                     },
                                 })
                             }
-                            value={state.editor.selectedElement.styles.backgroundSize?.toString()}
+                            value={state.editor.selectedElement.styles.backgroundSize?.toString() || ""}
                         >
                             <TabsList className="flex items-center flex-row justify-between border-[1px] rounded-md bg-transparent h-fit gap-4">
                                 <TabsTrigger
@@ -1115,7 +1115,7 @@ const SettingsTab = () => {
                                     id="columnGap"
                                     placeholder="px"
                                     onChange={handleOnChanges}
-                                    value={state.editor.selectedElement.styles.columnGap}
+                                    value={state.editor.selectedElement.styles.columnGap || ""}
                                 />
                             </div>
                             <div>
@@ -1124,7 +1124,7 @@ const SettingsTab = () => {
                                     placeholder="px"
                                     id="rowGap"
                                     onChange={handleOnChanges}
-                                    value={state.editor.selectedElement.styles.rowGap}
+                                    value={state.editor.selectedElement.styles.rowGap || ""}
                                 />
                             </div>
                         </div>
