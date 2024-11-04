@@ -26,6 +26,18 @@ const ContactFormComponent = (props: Props) => {
     const { dispatch, state, projectId, siteId, pageDetails } = useEditor()
     const router = useRouter()
 
+    const getStyles = () => {
+        const styles = props.element.styles as { [key: string]: React.CSSProperties }
+        const deviceType = state.editor.device;
+        if (deviceType === 'Tablet') {
+            return styles['@media (max-width: 768px)'] || styles;
+        }
+        if (deviceType === 'Mobile') {
+            return styles['@media (max-width: 480px)'] || styles;
+        }
+        return styles;
+    }
+
     const handleDragStart = (e: React.DragEvent, type: EditorBtns) => {
         if (state.editor.previewMode || state.editor.liveMode) return;
         if (type === null) return
@@ -122,7 +134,7 @@ const ContactFormComponent = (props: Props) => {
                 title={props.element.content.formTitle as string}
                 subTitle={props.element.content.formDescription as string}
                 buttonText={props.element.content.formButton as string}
-                styles={props.element.styles}
+                styles={getStyles()}
                 apiCall={onFormSubmit}
             />)}
             {state.editor.selectedElement.id === props.element.id &&

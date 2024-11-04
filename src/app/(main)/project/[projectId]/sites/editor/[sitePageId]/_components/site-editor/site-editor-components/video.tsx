@@ -4,7 +4,7 @@ import { EditorBtns } from '@/lib/constants'
 import { EditorElement, useEditor } from '@/providers/editor/editor-provider'
 import clsx from 'clsx'
 import { Trash } from 'lucide-react'
-import React from 'react'
+import React, { CSSProperties } from 'react'
 
 type Props = {
     element: EditorElement
@@ -12,7 +12,30 @@ type Props = {
 
 const VideoComponent = (props: Props) => {
     const { dispatch, state } = useEditor()
-    const styles = props.element.styles
+    const styles = props.element.styles as { [key: string]: CSSProperties }
+
+    const getStyles = () => {
+        const deviceType = state.editor.device;
+        if (deviceType === 'Tablet') {
+            return styles['@media (max-width: 768px)'] || styles;
+        }
+        if (deviceType === 'Mobile') {
+            return styles['@media (max-width: 480px)'] || styles;
+        }
+        return styles;
+    }
+
+    const getStyleValue = (styleName: keyof CSSProperties) => {
+        const deviceType = state.editor.device
+
+        if (deviceType === 'Tablet') {
+            return styles['@media (max-width: 768px)']?.[styleName] || styles[styleName] || "";
+        }
+        if (deviceType === 'Mobile') {
+            return styles['@media (max-width: 480px)']?.[styleName] || styles[styleName] || "";
+        }
+        return styles[styleName] || "";
+    };
 
     const handleDragStart = (e: React.DragEvent, type: EditorBtns) => {
         if (type === null) return
@@ -41,7 +64,7 @@ const VideoComponent = (props: Props) => {
 
     return (
         <div
-            style={styles}
+            style={getStyles()}
             draggable={!state.editor.previewMode || !state.editor.liveMode}
             onDragStart={(e) => handleDragStart(e, 'video')}
             onClick={handleOnClick}
@@ -64,8 +87,8 @@ const VideoComponent = (props: Props) => {
 
             {!Array.isArray(props.element.content) && (
                 <iframe
-                    width={props.element.styles.width || '560'}
-                    height={props.element.styles.height || '315'}
+                    width={getStyleValue("width").toString() || '560'}
+                    height={getStyleValue("height").toString() || '315'}
                     src={props.element.content.src}
                     title="YouTube video player"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
