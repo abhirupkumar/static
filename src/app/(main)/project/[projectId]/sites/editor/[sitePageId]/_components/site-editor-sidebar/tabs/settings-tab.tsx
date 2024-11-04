@@ -1033,6 +1033,7 @@ const SettingsTab = () => {
                                     <SelectItem value="inline">Inline</SelectItem>
                                     <SelectItem value="block">Block</SelectItem>
                                     <SelectItem value="inline-block">Inline Block</SelectItem>
+                                    <SelectItem value="none">None</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
