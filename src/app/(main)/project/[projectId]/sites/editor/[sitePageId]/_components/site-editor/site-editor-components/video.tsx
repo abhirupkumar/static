@@ -64,8 +64,7 @@ const VideoComponent = (props: Props) => {
 
             {!Array.isArray(props.element.content) && (
                 <iframe
-                    width={props.element.styles.width || '560'}
-                    height={props.element.styles.height || '315'}
+                    style={styles}
                     src={props.element.content.src}
                     title="YouTube video player"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
