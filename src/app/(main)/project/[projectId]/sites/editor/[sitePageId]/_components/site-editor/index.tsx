@@ -53,7 +53,7 @@ const SiteEditor = ({ sitePageId, sitePageData, liveMode }: Props) => {
     return (
         <div
             className={clsx(
-                'use-automation-zoom-in h-full mr-[385px] bg-background transition-all rounded-md',
+                'use-automation-zoom-in h-full mr-[305px] bg-background transition-all rounded-md',
                 {
                     '!p-0 !mr-0':
                         state.editor.previewMode === true || state.editor.liveMode === true,
