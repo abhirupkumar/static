@@ -20,6 +20,9 @@ const TextComponent = (props: Props) => {
         })
     }
     const styles = props.element.styles
+    if (!Array.isArray(props.element.content) && props.element.content.innerText == "Stories & Insights") {
+        console.log(styles)
+    }
 
     const handleOnClickBody = (e: React.MouseEvent) => {
         e.stopPropagation()
