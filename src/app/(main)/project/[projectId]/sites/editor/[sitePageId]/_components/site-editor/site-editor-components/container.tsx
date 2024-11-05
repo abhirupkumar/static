@@ -301,7 +301,7 @@ const Container = ({ element }: Props) => {
                 'h-fit': type === 'container',
                 'h-full': type === '__body',
                 'p-4': type === '__body',
-                'flex flex-col md:!flex-row': type === '2Col' || type === '3Col',
+                'flex flex-col md:flex-row': type === '2Col' || type === '3Col',
                 '!border-blue-600':
                     state.editor.selectedElement.id === id &&
                     !state.editor.liveMode &&

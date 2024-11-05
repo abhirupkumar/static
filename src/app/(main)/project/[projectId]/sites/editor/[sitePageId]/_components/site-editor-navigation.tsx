@@ -154,7 +154,7 @@ const SiteEditorNavigation = ({
     <TooltipProvider>
       <nav
         className={clsx(
-          'border-b-[1px] flex items-center justify-between p-6 gap-2 transition-all',
+          'border-b-[1px] flex items-center justify-between px-6 py-2 gap-2 transition-all',
           { '!h-0 !p-0 !overflow-hidden': state.editor.previewMode }
         )}
       >
@@ -165,10 +165,10 @@ const SiteEditorNavigation = ({
           <div className="flex flex-col w-full ">
             <Input
               defaultValue={sitePageDetails.name}
-              className="border-none h-5 m-0 p-0 text-lg"
+              className="border-none h-5 m-0 p-0"
               onBlur={handleOnBlurTitleChange}
             />
-            <span className="text-sm text-muted-foreground">
+            <span className="text-xs text-muted-foreground">
               Path: /{sitePageDetails.pathName}
             </span>
           </div>
@@ -258,7 +258,7 @@ const SiteEditorNavigation = ({
             <Redo2 />
           </Button>
           <div className="flex flex-col item-center mr-4">
-            <div className="flex flex-row items-center gap-4">
+            <div className="flex flex-row items-center gap-4 text-sm">
               Draft
               <Switch
                 checked={sitePageDetails.isPublished}
@@ -266,7 +266,7 @@ const SiteEditorNavigation = ({
               />
               Publish
             </div>
-            <span className="text-muted-foreground text-sm">
+            <span className="text-muted-foreground text-xs">
               Last updated {sitePageDetails.updatedAt.toLocaleDateString()}
             </span>
           </div>
