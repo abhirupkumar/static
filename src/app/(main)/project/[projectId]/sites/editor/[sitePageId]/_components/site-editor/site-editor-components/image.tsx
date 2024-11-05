@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { CSSProperties } from "react";
+import React from "react";
 import { Trash } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -16,19 +16,6 @@ interface ImageProps {
 const ImageComponent: React.FC<ImageProps> = ({ element }) => {
     const { dispatch, state } = useEditor();
     const { editor } = state;
-
-    const styles = element.styles as { [key: string]: CSSProperties }
-
-    const getStyles = () => {
-        const deviceType = state.editor.device;
-        if (deviceType === 'Tablet') {
-            return styles['@media (max-width: 768px)'] || styles;
-        }
-        if (deviceType === 'Mobile') {
-            return styles['@media (max-width: 480px)'] || styles;
-        }
-        return styles;
-    }
 
     const handleOnClickBody = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -52,7 +39,7 @@ const ImageComponent: React.FC<ImageProps> = ({ element }) => {
 
     return (
         <div
-            style={getStyles()}
+            style={element.styles}
             draggable={!state.editor.previewMode || !state.editor.liveMode}
             onClick={handleOnClickBody}
             className={cn("p-0.5 w-full m-1 relative min-h-7 transition-all", {
@@ -70,7 +57,7 @@ const ImageComponent: React.FC<ImageProps> = ({ element }) => {
                 <img
                     src={element.content.src}
                     alt={element.content.alt as string}
-                    style={getStyles()}
+                    style={element.styles}
                 />
             )}
             {editor.selectedElement.id === element.id && !editor.liveMode && (

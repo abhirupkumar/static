@@ -19,18 +19,7 @@ const TextComponent = (props: Props) => {
             payload: { elementDetails: props.element },
         })
     }
-    const styles = props.element.styles as { [key: string]: CSSProperties }
-
-    const getStyles = () => {
-        const deviceType = state.editor.device;
-        if (deviceType === 'Tablet') {
-            return styles['@media (max-width: 768px)'] || styles;
-        }
-        if (deviceType === 'Mobile') {
-            return styles['@media (max-width: 480px)'] || styles;
-        }
-        return styles;
-    }
+    const styles = props.element.styles
 
     const handleOnClickBody = (e: React.MouseEvent) => {
         e.stopPropagation()
@@ -45,7 +34,7 @@ const TextComponent = (props: Props) => {
     const Tagtype = (!Array.isArray(props.element.content) && props.element.content.tagType) || 'div'
     return (
         <div
-            style={getStyles()}
+            style={styles}
             className={clsx(
                 'p-[2px] w-full m-[5px] relative text-[16px] transition-all',
                 {
