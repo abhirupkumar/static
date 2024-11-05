@@ -11,8 +11,20 @@ import { Trash } from 'lucide-react'
 type Props = { element: EditorElement }
 
 const Container = ({ element }: Props) => {
-    const { id, content, name, styles, type } = element
+    const { id, content, name, type } = element
+    const styles = element.styles as { [key: string]: React.CSSProperties };
     const { dispatch, state } = useEditor()
+
+    const getStyles = () => {
+        const deviceType = state.editor.device;
+        if (deviceType === 'Tablet') {
+            return { ...styles, ...styles['@media (max-width: 768px)'] };
+        }
+        if (deviceType === 'Mobile') {
+            return { ...styles, ...styles['@media (max-width: 480px)'] };
+        }
+        return styles;
+    }
 
     const handleOnDrop = (e: React.DragEvent, type: string) => {
         e.stopPropagation()
@@ -283,7 +295,7 @@ const Container = ({ element }: Props) => {
 
     return (
         <div
-            style={styles}
+            style={getStyles()}
             className={clsx('relative transition-all group', {
                 'max-w-full w-full': type === 'container' || type === '2Col' || type === '3Col',
                 'h-fit': type === 'container',

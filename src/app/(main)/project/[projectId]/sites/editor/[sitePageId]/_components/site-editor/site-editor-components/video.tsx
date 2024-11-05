@@ -12,7 +12,18 @@ type Props = {
 
 const VideoComponent = (props: Props) => {
     const { dispatch, state } = useEditor()
-    const styles = props.element.styles
+    const styles = props.element.styles as { [key: string]: React.CSSProperties }
+
+    const getStyles = () => {
+        const deviceType = state.editor.device;
+        if (deviceType === 'Tablet') {
+            return { ...styles, ...styles['@media (max-width: 768px)'] };
+        }
+        if (deviceType === 'Mobile') {
+            return { ...styles, ...styles['@media (max-width: 480px)'] };
+        }
+        return styles;
+    }
 
     const handleDragStart = (e: React.DragEvent, type: EditorBtns) => {
         if (type === null) return
@@ -41,7 +52,7 @@ const VideoComponent = (props: Props) => {
 
     return (
         <div
-            style={styles}
+            style={getStyles()}
             draggable={!state.editor.previewMode || !state.editor.liveMode}
             onDragStart={(e) => handleDragStart(e, 'video')}
             onClick={handleOnClick}
@@ -64,7 +75,7 @@ const VideoComponent = (props: Props) => {
 
             {!Array.isArray(props.element.content) && (
                 <iframe
-                    style={styles}
+                    style={getStyles()}
                     src={props.element.content.src}
                     title="YouTube video player"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

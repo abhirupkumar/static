@@ -19,9 +19,17 @@ const TextComponent = (props: Props) => {
             payload: { elementDetails: props.element },
         })
     }
-    const styles = props.element.styles
-    if (!Array.isArray(props.element.content) && props.element.content.innerText == "Stories & Insights") {
-        console.log(props.element)
+    const styles = props.element.styles as { [key: string]: CSSProperties }
+
+    const getStyles = () => {
+        const deviceType = state.editor.device;
+        if (deviceType === 'Tablet') {
+            return { ...styles, ...styles['@media (max-width: 768px)'] };
+        }
+        if (deviceType === 'Mobile') {
+            return { ...styles, ...styles['@media (max-width: 480px)'] };
+        }
+        return styles;
     }
 
     const handleOnClickBody = (e: React.MouseEvent) => {
@@ -37,7 +45,7 @@ const TextComponent = (props: Props) => {
     const Tagtype = (!Array.isArray(props.element.content) && props.element.content.tagType) || 'div'
     return (
         <div
-            style={styles}
+            style={getStyles()}
             className={clsx(
                 'p-[2px] w-full m-[5px] relative text-[16px] transition-all',
                 {

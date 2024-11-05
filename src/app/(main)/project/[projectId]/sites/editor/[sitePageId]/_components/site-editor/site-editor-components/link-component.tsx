@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import { Trash } from 'lucide-react'
 import Link from 'next/link'
 
-import React, { useRef } from 'react'
+import React, { CSSProperties, useRef } from 'react'
 
 type Props = {
     element: EditorElement
@@ -33,7 +33,18 @@ const LinkComponent = (props: Props) => {
         })
     }
 
-    const styles = props.element.styles
+    const styles = props.element.styles as { [key: string]: CSSProperties }
+
+    const getStyles = () => {
+        const deviceType = state.editor.device;
+        if (deviceType === 'Tablet') {
+            return { ...styles, ...styles['@media (max-width: 768px)'] };
+        }
+        if (deviceType === 'Mobile') {
+            return { ...styles, ...styles['@media (max-width: 480px)'] };
+        }
+        return styles;
+    }
 
     const handleDeleteElement = () => {
         if (state.editor.previewMode || state.editor.liveMode) return;
@@ -45,7 +56,7 @@ const LinkComponent = (props: Props) => {
 
     return (
         <div
-            style={styles}
+            style={getStyles()}
             draggable={!state.editor.previewMode || !state.editor.liveMode}
             onDragStart={(e) => handleDragStart(e, 'text')}
             onClick={handleOnClickBody}
