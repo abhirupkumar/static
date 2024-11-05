@@ -48,7 +48,7 @@ const SiteEditorSidebar = ({ projectId }: Props) => {
                     showX={false}
                     side="right"
                     className={clsx(
-                        'mt-[97px] w-60 z-[40] shadow-none p-0 mr-16 bg-background h-full transition-all overflow-hidden ',
+                        'mt-[97px] w-80 z-[40] shadow-none p-0 mr-16 bg-background h-full transition-all overflow-hidden ',
                         { hidden: state.editor.previewMode }
                     )}
                 >
