@@ -70,6 +70,9 @@ const ImageComponent: React.FC<ImageProps> = ({ element }) => {
                 <img
                     src={element.content.src}
                     alt={element.content.alt as string}
+                    width={element.content.width || "auto"}
+                    height={element.content.height || "auto"}
+                    loading={element.content.imageLoading as "lazy" | "eager" || "lazy"}
                     style={getStyles()}
                 />
             )}

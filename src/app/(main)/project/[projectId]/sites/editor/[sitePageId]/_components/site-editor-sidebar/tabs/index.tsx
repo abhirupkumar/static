@@ -1,6 +1,6 @@
 import React from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Database, Plus, SettingsIcon, SquareStackIcon } from 'lucide-react'
+import { TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Component, Database, Layers3, PaintRoller, SettingsIcon } from 'lucide-react'
 
 type Props = {}
 
@@ -14,10 +14,16 @@ const TabList = (props: Props) => {
         <SettingsIcon />
       </TabsTrigger>
       <TabsTrigger
+        value="Styles"
+        className="w-10 h-10 p-0 data-[state=active]:bg-muted"
+      >
+        <PaintRoller />
+      </TabsTrigger>
+      <TabsTrigger
         value="Components"
         className="data-[state=active]:bg-muted w-10 h-10 p-0"
       >
-        <Plus />
+        <Component className='rotate-45' />
       </TabsTrigger>
       <TabsTrigger
         value="Media"
@@ -29,7 +35,7 @@ const TabList = (props: Props) => {
         value="Layers"
         className="w-10 h-10 p-0 data-[state=active]:bg-muted"
       >
-        <SquareStackIcon />
+        <Layers3 />
       </TabsTrigger>
     </TabsList>
   )

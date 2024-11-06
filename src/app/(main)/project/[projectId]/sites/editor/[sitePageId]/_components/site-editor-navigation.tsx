@@ -1,4 +1,5 @@
 'use client'
+import { ModeToggle } from '@/components/global/mode-toggle'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
@@ -273,7 +274,9 @@ const SiteEditorNavigation = ({
           <Button
             onClick={handleOnSave}
             disabled={isLoading}
+            className='mr-4'
           >{isLoading ? <Loader2 className='animate-spin h-4 w-4' /> : "Save"}</Button>
+          <ModeToggle />
         </aside>
       </nav>
     </TooltipProvider>

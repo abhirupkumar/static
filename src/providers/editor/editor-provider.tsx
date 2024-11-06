@@ -20,6 +20,9 @@ export type EditorElement = {
         formDescription?: string;
         formButton?: string;
         alt?: string;
+        width?: string;
+        height?: string;
+        imageLoading?: string;
         tagType?: string;
     };
 };

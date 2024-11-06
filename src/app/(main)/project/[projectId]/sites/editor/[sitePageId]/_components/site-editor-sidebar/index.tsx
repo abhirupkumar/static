@@ -17,6 +17,7 @@ import SettingsTab from './tabs/settings-tab'
 import MediaBucketTab from './tabs/media-bucket-tab'
 import ComponentsTab from './tabs/components-tab'
 import LayersTab from './tabs/layers-tab'
+import StylesTab from './tabs/styles-tab'
 
 type Props = {
     projectId: string
@@ -55,13 +56,22 @@ const SiteEditorSidebar = ({ projectId }: Props) => {
                     <div className="grid gap-4 h-full pb-36 overflow-scroll">
                         <TabsContent value="Settings">
                             <SheetHeader className="text-left p-6">
+                                <SheetTitle>Settings</SheetTitle>
+                                <SheetDescription>
+                                    Customize the component based on your interest.
+                                </SheetDescription>
+                            </SheetHeader>
+                            <SettingsTab />
+                        </TabsContent>
+                        <TabsContent value="Styles">
+                            <SheetHeader className="text-left p-6">
                                 <SheetTitle>Styles</SheetTitle>
                                 <SheetDescription>
                                     Show your creativity! You can customize every component as you
                                     like.
                                 </SheetDescription>
                             </SheetHeader>
-                            <SettingsTab />
+                            <StylesTab />
                         </TabsContent>
                         <TabsContent value="Media">
                             <MediaBucketTab projectId={projectId} />
