@@ -27,22 +27,17 @@ const DomainPage: React.FC<DomainPageProps> = async ({ params }) => {
     await updateSitePageVisits(pageData.id);
 
     return (
-        <>
-            <Head >
-                <link rel="icon" type="image/x-icon" href="https://cdn.iconscout.com/icon/free/png-256/free-a-icon-download-in-svg-png-gif-file-formats--button-blood-type-symbols-pack-sign-icons-37808.png?f=ico" />
-            </Head>
-            <EditorProvider
-                projectId={domainData.projectId}
-                pageDetails={pageData}
-                siteId={domainData.id}
-            >
-                <SiteEditor
-                    sitePageId={pageData.id}
-                    sitePageData={pageData}
-                    liveMode={true}
-                />
-            </EditorProvider>
-        </>
+        <EditorProvider
+            projectId={domainData.projectId}
+            pageDetails={pageData}
+            siteId={domainData.id}
+        >
+            <SiteEditor
+                sitePageId={pageData.id}
+                sitePageData={pageData}
+                liveMode={true}
+            />
+        </EditorProvider>
     );
 };
 
@@ -66,6 +61,14 @@ export async function generateMetadata({ params }: { params: { domain: string | 
         title: title,
         description: description,
         keywords: keywords,
+        icons: {
+            icon: [
+                {
+                    url: domainData.favicon || domainData.Project.projectLogo || '/assets/images/logo.png',
+                    href: domainData.favicon || domainData.Project.projectLogo || '/assets/images/logo.png',
+                },
+            ],
+        },
         openGraph: {
             title: title,
             description: description,

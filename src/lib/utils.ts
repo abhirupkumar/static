@@ -19,6 +19,14 @@ export function constructMetadata({
   return {
     title,
     description,
+    icons: {
+      icon: [
+        {
+          url: image,
+          href: image,
+        },
+      ],
+    },
     openGraph: {
       title,
       description,
@@ -34,7 +42,6 @@ export function constructMetadata({
       title,
       description,
       images: [image],
-      creator: "@Abhirup_2003",
     },
     metadataBase: new URL("https://static.tech"),
   };

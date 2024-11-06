@@ -34,7 +34,6 @@ export default clerkMiddleware((auth, req) => {
         url.pathname === "/" ||
         (url.pathname === "/site" && url.host === process.env.NEXT_PUBLIC_DOMAIN)
     ) {
-        console.log("site")
         return NextResponse.rewrite(new URL("/site", req.url));
     }
 

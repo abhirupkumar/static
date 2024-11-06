@@ -4,7 +4,7 @@ import { currentUser } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import React from 'react'
 import localFont from "next/font/local";
-import { cn } from '@/lib/utils'
+import { cn, constructMetadata } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import Image from 'next/image'
 
@@ -69,3 +69,9 @@ const Navigation = async () => {
 }
 
 export default Navigation
+
+export const metadata = constructMetadata({
+  title: "Static - No Code Website Builder",
+  description: "Static - Create Stunning Websites Without Writing Code",
+  image: "/assets/logo.png",
+});

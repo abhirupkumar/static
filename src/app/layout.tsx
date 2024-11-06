@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import ModalProvider from "@/providers/modal-provider";
+import { constructMetadata } from "@/lib/utils";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -16,10 +17,7 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-export const metadata: Metadata = {
-  title: 'Static',
-  description: 'All in one Workspace Solution',
-}
+export const metadata = constructMetadata()
 
 export default function RootLayout({
   children,
