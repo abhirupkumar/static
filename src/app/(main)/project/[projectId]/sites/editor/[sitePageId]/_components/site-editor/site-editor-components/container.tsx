@@ -299,8 +299,6 @@ const Container = ({ element }: Props) => {
             className={clsx('relative transition-all group', {
                 'max-w-full w-full': type === 'container' || type === '2Col' || type === '3Col',
                 'h-fit': type === 'container',
-                'h-full': type === '__body',
-                'p-4': type === '__body',
                 'flex flex-col md:flex-row': type === '2Col' || type === '3Col',
                 '!border-blue-600':
                     state.editor.selectedElement.id === id &&
@@ -310,7 +308,7 @@ const Container = ({ element }: Props) => {
                     state.editor.selectedElement.id === id &&
                     !state.editor.liveMode &&
                     state.editor.selectedElement.type === '__body',
-                '!border-solid':
+                '!border-solid border':
                     state.editor.selectedElement.id === id && !state.editor.liveMode,
                 'border-dashed border-[1px] border-slate-300': !state.editor.liveMode,
             })}

@@ -28,7 +28,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import SiteStepCard from './site-step-card'
-import WebpagePreviewImage from '@/components/global/WebpagePreviewImage '
 
 type Props = {
   site: SitesForProject
@@ -178,8 +177,7 @@ const SiteSteps = ({ site, siteId, pages, projectId }: Props) => {
                       className="relative group"
                     >
                       <div className="cursor-pointer group-hover:opacity-30 w-full">
-                        {/* <SitePagePlaceholder /> */}
-                        <WebpagePreviewImage url={`${process.env.NEXT_PUBLIC_SCHEME}${site?.subDomainName}.${process.env.NEXT_PUBLIC_DOMAIN}/${clickedPage?.pathName}`} />
+                        <SitePagePlaceholder />
                       </div>
                       <LucideEdit
                         size={50}

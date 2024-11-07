@@ -104,6 +104,8 @@ const LinkComponent = (props: Props) => {
                             })
                         }
                     }}
+                    suppressContentEditableWarning={true}
+                    suppressHydrationWarning={true}
                     onClick={(e) => e.preventDefault()}
                 >
                     {!Array.isArray(props.element.content) &&
