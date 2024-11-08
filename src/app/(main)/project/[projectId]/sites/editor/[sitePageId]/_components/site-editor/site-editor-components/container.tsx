@@ -104,35 +104,6 @@ const Container = ({ element }: Props) => {
                     },
                 })
                 break
-            case 'button':
-                dispatch({
-                    type: 'ADD_ELEMENT',
-                    payload: {
-                        containerId: id,
-                        elementDetails: {
-                            content: {
-                                innerText: 'Button Element',
-                                href: '#',
-                                event: 'link',
-                            },
-                            id: v4(),
-                            name: 'Button',
-                            styles: {
-                                backgroundColor: '#00FFFF',
-                                paddingLeft: '10px',
-                                paddingRight: '10px',
-                                paddingTop: '5px',
-                                paddingBottom: '5px',
-                                color: '#000000',
-                                height: 'fit-content',
-                                width: 'fit-content',
-                                ...defaultStyles,
-                            },
-                            type: 'button',
-                        },
-                    },
-                })
-                break
             case 'video':
                 dispatch({
                     type: 'ADD_ELEMENT',

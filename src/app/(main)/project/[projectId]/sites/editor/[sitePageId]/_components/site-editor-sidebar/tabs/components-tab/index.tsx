@@ -16,7 +16,6 @@ import ThreeColumnsPlaceholder from './three-columns-placeholder'
 import ImagePlaceholder from './image-placeholder'
 import HeadingPlaceholder from './heading-placeholder'
 import ParagraphPlaceholder from './paragraph-placeholder'
-import ButtonPlaceholder from './button-placeholder'
 
 type Props = {}
 
@@ -79,12 +78,6 @@ const ComponentsTab = (props: Props) => {
         Component: <VideoPlaceholder />,
         label: 'Video',
         id: 'video',
-        group: 'elements',
-      },
-      {
-        Component: <ButtonPlaceholder />,
-        label: 'Button',
-        id: 'button',
         group: 'elements',
       },
       {
