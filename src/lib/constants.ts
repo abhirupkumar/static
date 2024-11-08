@@ -223,6 +223,8 @@ export type EditorBtns =
     | '__body'
     | 'image'
     | '3Col'
+    | 'sidebar'
+    | 'button'
     | null
 
 export const defaultStyles: React.CSSProperties = {

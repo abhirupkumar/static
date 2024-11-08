@@ -24,6 +24,8 @@ export type EditorElement = {
         height?: string;
         imageLoading?: string;
         tagType?: string;
+        event?: string;
+        target?: string;
     };
 };
 

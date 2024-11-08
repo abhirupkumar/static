@@ -6,6 +6,7 @@ import VideoComponent from './video'
 import LinkComponent from './link-component'
 import ContactFormComponent from './contact-form-component'
 import ImageComponent from './image'
+import ButtonComponent from './button'
 
 type Props = {
     element: EditorElement
@@ -21,6 +22,8 @@ const Recursive = ({ element }: Props) => {
             return <VideoComponent element={element} />
         case 'image':
             return <ImageComponent element={element} />
+        case 'button':
+            return <ButtonComponent element={element} />
         case 'contactForm':
             return <ContactFormComponent element={element} />
         case '2Col':

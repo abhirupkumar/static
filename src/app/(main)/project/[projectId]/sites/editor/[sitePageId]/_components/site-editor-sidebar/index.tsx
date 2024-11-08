@@ -33,7 +33,7 @@ const SiteEditorSidebar = ({ projectId }: Props) => {
         >
             <Tabs
                 className="w-full "
-                defaultValue="Settings"
+                defaultValue="Styles"
             >
                 <SheetContent
                     showX={false}

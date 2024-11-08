@@ -16,6 +16,7 @@ import ThreeColumnsPlaceholder from './three-columns-placeholder'
 import ImagePlaceholder from './image-placeholder'
 import HeadingPlaceholder from './heading-placeholder'
 import ParagraphPlaceholder from './paragraph-placeholder'
+import ButtonPlaceholder from './button-placeholder'
 
 type Props = {}
 
@@ -24,7 +25,7 @@ const ComponentsTab = (props: Props) => {
     Component: React.ReactNode
     label: string
     id: EditorBtns
-    group: 'layout' | 'elements'
+    group: 'layout' | 'elements' | 'components'
   }[] = [
       {
         Component: <TextPlaceholder />,
@@ -63,6 +64,12 @@ const ComponentsTab = (props: Props) => {
         group: 'layout',
       },
       {
+        Component: <LinkPlaceholder />,
+        label: 'Link',
+        id: 'link',
+        group: 'elements',
+      },
+      {
         Component: <ImagePlaceholder />,
         label: 'Image',
         id: 'image',
@@ -75,16 +82,16 @@ const ComponentsTab = (props: Props) => {
         group: 'elements',
       },
       {
-        Component: <ContactFormComponentPlaceholder />,
-        label: 'Contact',
-        id: 'contactForm',
+        Component: <ButtonPlaceholder />,
+        label: 'Button',
+        id: 'button',
         group: 'elements',
       },
       {
-        Component: <LinkPlaceholder />,
-        label: 'Link',
-        id: 'link',
-        group: 'elements',
+        Component: <ContactFormComponentPlaceholder />,
+        label: 'Contact',
+        id: 'contactForm',
+        group: 'components',
       },
     ]
 
@@ -92,7 +99,7 @@ const ComponentsTab = (props: Props) => {
     <Accordion
       type="multiple"
       className="w-full"
-      defaultValue={['Layout', 'Elements']}
+      defaultValue={['Layout', 'Elements', 'Components']}
     >
       <AccordionItem
         value="Layout"
@@ -121,6 +128,25 @@ const ComponentsTab = (props: Props) => {
         <AccordionContent className="flex flex-wrap gap-2 ">
           {elements
             .filter((element) => element.group === 'elements')
+            .map((element) => (
+              <div
+                key={element.id}
+                className="flex-col items-center justify-center flex"
+              >
+                {element.Component}
+                <span className="text-muted-foreground">{element.label}</span>
+              </div>
+            ))}
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem
+        value="Components"
+        className="px-6 py-0 "
+      >
+        <AccordionTrigger className="!no-underline">Components</AccordionTrigger>
+        <AccordionContent className="flex flex-wrap gap-2 ">
+          {elements
+            .filter((element) => element.group === 'components')
             .map((element) => (
               <div
                 key={element.id}

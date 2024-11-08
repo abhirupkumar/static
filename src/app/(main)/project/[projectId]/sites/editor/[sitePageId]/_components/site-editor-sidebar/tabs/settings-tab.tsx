@@ -251,7 +251,7 @@ const SettingsTab = () => {
                             </div>
                         </div>
                     )}
-                    {!Array.isArray(state.editor.selectedElement.content) && (state.editor.selectedElement.type === "text" || state.editor.selectedElement.type === "heading" || state.editor.selectedElement.type === "paragraph" || state.editor.selectedElement.type === "link") && (
+                    {!Array.isArray(state.editor.selectedElement.content) && (state.editor.selectedElement.type === "text" || state.editor.selectedElement.type === "heading" || state.editor.selectedElement.type === "paragraph" || state.editor.selectedElement.type === "link" || state.editor.selectedElement.type === "button") && (
                         <div className="flex flex-col gap-2">
                             <Label>Text</Label>
                             <Textarea
