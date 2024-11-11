@@ -13,10 +13,11 @@ interface DomainPageProps {
 
 const DomainPage: React.FC<DomainPageProps> = async ({ params }) => {
     const { domain } = params;
+    console.log(domain)
 
     if (!domain) notFound();
 
-    const domainData = await getDomainContent(domain.slice(0, -1));
+    const domainData = await getDomainContent(domain);
 
     if (!domainData) notFound();
 

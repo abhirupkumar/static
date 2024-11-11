@@ -21,7 +21,7 @@ export default clerkMiddleware((auth, req) => {
 
     if (customSubDomain) {
         return NextResponse.rewrite(
-            new URL(`/${customSubDomain}${pathWithSearchParams}`, req.url)
+            new URL(`/${customSubDomain.slice(0, -1)}${pathWithSearchParams}`, req.url)
         );
     }
 
