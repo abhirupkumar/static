@@ -12,7 +12,7 @@ const content = [
         description: (
             <>
                 <p>
-                    The Website Builder for Workspace CRM is a powerful tool designed to
+                    The Website Builder for Workspace is a powerful tool designed to
                     streamline the process of creating and managing websites for workspaces.
                 </p>
                 <p>
@@ -21,8 +21,7 @@ const content = [
                     extensive coding knowledge.
                 </p>
                 <p>
-                    From drag-and-drop functionality to seamless integration with CRM
-                    systems, this tool empowers workspaces to deliver stunning websites
+                    From drag-and-drop functionality to seamless UI changes, this tool empowers workspaces to deliver stunning websites
                     efficiently and effectively, ultimately enhancing client satisfaction
                     and driving business growth.
                 </p>
@@ -31,38 +30,7 @@ const content = [
         content: (
             <div className="h-full w-full rounded-md flex items-center justify-center text-white">
                 <Image
-                    src="https://utfs.io/f/30845fe9-f07d-49a4-8072-112bb8152111-euyk0.png"
-                    fill
-                    className="h-full w-full object-fit rounded-md border"
-                    alt="Feature"
-                />
-            </div>
-        ),
-    },
-    {
-        title: "Kanban Board",
-        description: (
-            <>
-                <p>
-                    The Kanban Board for pipelines in Workspace CRM offers a visual and
-                    efficient way for workspaces to manage their workspaces and workflows.
-                </p>
-                <p>
-                    By organizing tasks into customizable pipelines, workspaces can easily
-                    track the progress of workspaces from start to finish.
-                </p>
-                <p>
-                    With features like drag-and-drop functionality and customizable
-                    columns, this tool enables teams to prioritize tasks, collaborate
-                    effectively, and stay organized, ultimately improving productivity and
-                    workspace delivery.
-                </p>
-            </>
-        ),
-        content: (
-            <div className="h-full w-full  flex items-center justify-center text-white">
-                <Image
-                    src="https://utfs.io/f/76fb5e37-fa30-46e2-94c7-d664b516a67f-mc721d.png"
+                    src="/assets/preview.png"
                     fill
                     className="h-full w-full object-fit rounded-md border"
                     alt="Feature"
@@ -75,7 +43,7 @@ const content = [
         description: (
             <>
                 <p>
-                    Team Access for Workspace CRM provides secure and seamless access control
+                    Team Access for Workspace provides secure and seamless access control
                     for workspace teams, ensuring efficient collaboration and data
                     management.
                 </p>
@@ -103,29 +71,23 @@ const content = [
         ),
     },
     {
-        title: "Leads Dashboard",
+        title: "Seo Dashboard",
         description: (
             <>
                 <p>
-                    The Leads Dashboard for Workspace CRM offers a comprehensive overview of
-                    potential opportunities and client interactions, empowering workspaces
-                    to effectively manage their sales pipeline.
+                    The Seo Dashboard for Workspace offers a comprehensive overview of
+                    Site details and keywords, empowering workspaces
+                    to effectively manage their site seo.
                 </p>
                 <p>
-                    With real-time updates and customizable filters, workspaces can track
-                    leads, prioritize follow-ups, and analyze conversion rates with ease.
-                </p>
-                <p>
-                    This feature enhances sales performance by providing actionable
-                    insights, enabling workspaces to make informed decisions and drive
-                    business growth.
+                    This feature enhances site performance, enabling workspaces to rank better in web browsers.
                 </p>
             </>
         ),
         content: (
             <div className="h-full w-full rounded-md flex items-center justify-center text-white">
                 <Image
-                    src="/assets/preview.png"
+                    src="/assets/seopreview.png"
                     fill
                     className="h-full w-full object-fit rounded-md border"
                     alt="Feature"

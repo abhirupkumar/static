@@ -15,25 +15,22 @@ export const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
 }) => {
     const words = [
         {
-            text: "Run",
+            text: "Build",
         },
         {
             text: "your",
         },
         {
-            text: "workspace",
+            text: "landing",
         },
         {
-            text: "in",
+            text: "page",
         },
         {
-            text: "just",
+            text: "within",
         },
         {
-            text: "one",
-        },
-        {
-            text: "place.",
+            text: "minutes",
             className: "text-blue-500 dark:text-blue-500",
         },
     ];

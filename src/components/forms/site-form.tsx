@@ -121,7 +121,7 @@ const SiteForm: React.FC<CreateSiteProps> = ({
                                 </FormItem>
                             )}
                         />
-                        <FormField
+                        {/* <FormField
                             disabled={isLoading}
                             control={form.control}
                             name="domain"
@@ -136,7 +136,7 @@ const SiteForm: React.FC<CreateSiteProps> = ({
                                     </FormControl>
                                 </FormItem>
                             )}
-                        />
+                        /> */}
                         <FormField
                             disabled={isLoading}
                             control={form.control}

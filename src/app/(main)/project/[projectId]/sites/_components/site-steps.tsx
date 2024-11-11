@@ -187,14 +187,12 @@ const SiteSteps = ({ site, siteId, pages, projectId }: Props) => {
 
                     <Link
                       target="_blank"
-                      href={`${process.env.NEXT_PUBLIC_SCHEME}${site?.subDomainName}.${process.env.NEXT_PUBLIC_DOMAIN}/${clickedPage?.pathName}`}
+                      href={`${process.env.NEXT_PUBLIC_URL}${site?.subDomainName}/${clickedPage?.pathName}`}
                       className="group flex items-center justify-start p-2 gap-2 hover:text-primary transition-colors duration-200"
                     >
                       <ExternalLink size={15} />
                       <div className="w-64 overflow-hidden overflow-ellipsis ">
-                        {process.env.NEXT_PUBLIC_SCHEME}
-                        {site?.subDomainName}.{process.env.NEXT_PUBLIC_DOMAIN}/
-                        {clickedPage?.pathName}
+                        {process.env.NEXT_PUBLIC_URL}{site?.subDomainName}/{clickedPage?.pathName}
                       </div>
                     </Link>
                   </div>
