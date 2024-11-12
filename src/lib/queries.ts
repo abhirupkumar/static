@@ -318,16 +318,6 @@ export const upsertProject = async (project: Project) => {
             SidebarOption: {
                 create: [
                     {
-                        name: 'Launchpad',
-                        icon: 'clipboardIcon',
-                        link: `/project/${project.id}/launchpad`,
-                    },
-                    {
-                        name: 'Settings',
-                        icon: 'settings',
-                        link: `/project/${project.id}/settings`,
-                    },
-                    {
                         name: 'Sites',
                         icon: 'pipelines',
                         link: `/project/${project.id}/sites`,
@@ -336,16 +326,6 @@ export const upsertProject = async (project: Project) => {
                         name: 'Media',
                         icon: 'database',
                         link: `/project/${project.id}/media`,
-                    },
-                    {
-                        name: 'Automations',
-                        icon: 'chip',
-                        link: `/project/${project.id}/automations`,
-                    },
-                    {
-                        name: 'Contacts',
-                        icon: 'person',
-                        link: `/project/${project.id}/contacts`,
                     },
                     {
                         name: 'Dashboard',
