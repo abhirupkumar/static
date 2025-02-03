@@ -1,0 +1,25 @@
+services:
+  app:
+    build: .
+    container_name: static-web-builder-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    env_file: .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: "npm run build && npm start"
+
+  db:
+    image: postgres:16
+    container_name: static-web-builder-db
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
